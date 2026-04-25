@@ -1,0 +1,595 @@
+{
+  "cookbook_title": "Lilani's Cookbook",
+  "cookbook_subtitle": "Recipes passed down through generations",
+  "author_name": "Lilani Abeygunawardane",
+  "dedication_text": "This is my first cook book.. lets see how it looks!!!  For my family!",
+  "cover_style": "classic",
+  "style_hint": "Serif typography (Cormorant / Playfair). Warm cream background (#f5ecd9). Ornamental rule under title.",
+  "include_toc": true,
+  "include_profile_page": true,
+  "include_qr_codes": true,
+  "preface": {
+    "enabled": true,
+    "source": "profile_story",
+    "title": "Preface",
+    "body": "Being a wife , a mother a mother-in-law and a grandmother in a family where food plays of significant part in our lives it has become necessary that I need to record the well loved  recipes with everyone including my grandchildren who are now old enough to cook and experiment with different recipes and also are involved in cooking in our kitchens. actually they have been the biggest inspiration in this task . Innitially my idea was to write four recipe books for them and then Amali and Lasith have come up with this very efficient way of creating a family recipe book using the latest technology and Lasith has been able to give  life to this recipe book creator . \nI'm all excited and ready to put together the family recipes i have been handed down from my family . I am sure that my children and grandchildren will continue to cook in the same way as I have cooked for them over the years and do the same when their time is up to carry family traditions. ",
+    "photo": {
+      "enabled": true,
+      "source": "profile_avatar",
+      "url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/avatars/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/avatar_1775721894308.jpeg?width=1000&height=1000&resize=contain&quality=75",
+      "layout_hint": "photo_above_text",
+      "style_hint": "Center the photo above the preface body, max-width 60% of page width."
+    },
+    "style_hint": "Use serif italic for body text, generous top margin (~30mm)."
+  },
+  "creator_profile": {
+    "full_name": "Lilani Abeygunawardane",
+    "family_name": null,
+    "story_preface": "Being a wife , a mother a mother-in-law and a grandmother in a family where food plays of significant part in our lives it has become necessary that I need to record the well loved  recipes with everyone including my grandchildren who are now old enough to cook and experiment with different recipes and also are involved in cooking in our kitchens. actually they have been the biggest inspiration in this task . Innitially my idea was to write four recipe books for them and then Amali and Lasith have come up with this very efficient way of creating a family recipe book using the latest technology and Lasith has been able to give  life to this recipe book creator . \nI'm all excited and ready to put together the family recipes i have been handed down from my family . I am sure that my children and grandchildren will continue to cook in the same way as I have cooked for them over the years and do the same when their time is up to carry family traditions. ",
+    "avatar_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/avatars/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/avatar_1775721894308.jpeg?width=600&height=600&resize=contain&quality=75"
+  },
+  "table_of_contents": {
+    "grouped": true,
+    "entries": [
+      {
+        "chapter_name": "Lumprais",
+        "accent_colour": "olive",
+        "page": 7,
+        "recipes": [
+          {
+            "title": "Brinjal pickle or batu moju",
+            "page": 8
+          },
+          {
+            "title": "Frikadellars or meatballs for the lamprais packets",
+            "page": 11
+          },
+          {
+            "title": "Ghee Rice for the lamprais parcels",
+            "page": 14
+          },
+          {
+            "title": "Lamprais parcels",
+            "page": 17
+          },
+          {
+            "title": "Lilani’s version of Lankan Lamprais",
+            "page": 20
+          },
+          {
+            "title": "Yellow Rice",
+            "page": 23
+          }
+        ]
+      },
+      {
+        "chapter_name": "Treat",
+        "accent_colour": "terracotta",
+        "page": 26,
+        "recipes": [
+          {
+            "title": "Gnanakatha Lankan Rock Cookies",
+            "page": 27
+          },
+          {
+            "title": "Mash mellows",
+            "page": 30
+          },
+          {
+            "title": "Milk Toffee",
+            "page": 33
+          }
+        ]
+      },
+      {
+        "chapter_name": "Other",
+        "accent_colour": "ink",
+        "page": 36,
+        "recipes": [
+          {
+            "title": "Frozen potato chip curry / my substitute for the ash plantain curry",
+            "page": 37
+          },
+          {
+            "title": "Kiri bath ( milk rice)",
+            "page": 40
+          },
+          {
+            "title": "Prawn Blachan sambol",
+            "page": 43
+          }
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "chapter_id": "227e5b1e-b56d-484a-a9af-78dbadc84224",
+      "name": "Lumprais",
+      "accent_colour": "olive",
+      "divider_page": true,
+      "style_hint": "Use accent colour \"olive\" for chapter divider, dropcaps, and section headings within this chapter.",
+      "recipes": [
+        {
+          "recipe_id": "5fafe98a-dcfa-4e88-bc4e-25ede9fcfb05",
+          "chapter_id": "227e5b1e-b56d-484a-a9af-78dbadc84224",
+          "recipe_title": "Brinjal pickle or batu moju",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/5fafe98a-dcfa-4e88-bc4e-25ede9fcfb05/hero_1777107497851.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/5fafe98a-dcfa-4e88-bc4e-25ede9fcfb05",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Batumooju is believed to have come from the Malay kitchen to ours. The Malay community in Sri Lanka were brought to Sri Lanka during the Dutch colonial period. They have a lot of different cooking methods and recipes which have now been adopted fully into the Lankan cuisine, and they are very popular among all communities in Sri Lanka."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 4 large eggplants cut into 1-inch cubes\n- 2 tablespoons salt\n- 2 teaspoons turmeric\n- oil for deep frying\n- 2 tablespoons mustard seeds\n- 3/4 cup organic apple cider vinegar\n- 2 onions chopped\n- 4 garlic cloves chopped\n- 1 tablespoon chopped ginger\n- 1 tablespoon chili pieces\n- 1 heap tablespoon raw curry powder\n- 1 tablespoon sugar\n- 3 to 4 green onions sliced and seeded\n- curry leaves\n- 1 cinnamon stick crushed"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Preparing the Eggplant\n\n1. Cut the eggplant into cubes.\n2. Rub the eggplant with salt and turmeric.\n3. Leave the eggplant in a colander for at least half an hour.\n4. Drain the eggplant on paper towels.\n5. Either deep fry the eggplant in oil or mix with some oil and oven bake or air fry according to instructions.\n\nMaking the Pickle\n\n1. Powder the mustard.\n2. Blend the garlic and ginger.\n3. Add a little oil into a pan and saute the chopped onions and curry leaves.\n4. Add the cinnamon and green chilies.\n5. Turn the heat very low and add the curry powder, chili pieces, and lastly the mustard powder and vinegar.\n6. Add the salt and the sugar to taste.\n7. Take it off the fire and add the fried eggplants.\n8. Mix well and taste.\n9. Keep in an airtight container for flavors to develop."
+            }
+          ]
+        },
+        {
+          "recipe_id": "0f8df586-58ea-42af-abd2-48b3ccc1405f",
+          "chapter_id": "227e5b1e-b56d-484a-a9af-78dbadc84224",
+          "recipe_title": "Frikadellars or meatballs for the lamprais packets",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/0f8df586-58ea-42af-abd2-48b3ccc1405f/hero_1777100720546.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/0f8df586-58ea-42af-abd2-48b3ccc1405f",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Frikadeller is a pan-fried meatball. This is a staple of Danish and Northern German cuisine. It is a vital component of our Lamrais packets. This represents European comfort food with added local spices."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "- 1 kilo of ground pork, beef, and lamb\n- 2 small brown onions chopped finely\n- ½ cup milk\n- ¾ cup of fresh breadcrumbs\n- 2 large eggs\n- 2 tablespoons of flour\n- Salt and pepper to taste\n- ½ teaspoon of all spices\n- Chili flakes to taste"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Preparing the Meat Mixture\n\n1. Combine the ground meats with the chopped onions in a large bowl.\n2. Mix the milk and the breadcrumbs separately.\n3. Add the milk-soaked breadcrumbs, egg, flour, salt, pepper, spices, and the chili pieces if you are using to the meat mixture.\n4. Use your fingers to mix this thoroughly until the mixture is sticky.\n5. Cover the bowl and refrigerate for about half an hour.\n\nCooking the Frikadelas\n\n1. Once chilled, take handfuls of the mixture and make small balls and flatten them to about the size of a golf ball.\n2. Heat a generous amount of oil in a pan.\n3. Cook the meatballs on each side for two, four, maybe four to five minutes on a low heat.\n4. Make sure to leave space between the balls and adjust the heat so you do not burn them.\n5. Once cooked, transfer onto a plate with a paper towel underneath to soak up the extra fat."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "Here's a helpful tip for preparing the items for your lamprai packets:\n\nYou can make some of the components in advance. Once they've cooled down, store them in a container with a lid. You can refrigerate these items until you are ready to assemble your lamprai packets."
+            }
+          ]
+        },
+        {
+          "recipe_id": "89ed545f-667c-4f2c-9a38-b77b70567756",
+          "chapter_id": "227e5b1e-b56d-484a-a9af-78dbadc84224",
+          "recipe_title": "Ghee Rice for the lamprais parcels",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/89ed545f-667c-4f2c-9a38-b77b70567756/hero_1777108427435.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/89ed545f-667c-4f2c-9a38-b77b70567756",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Ghee rice originated in the Malabar region of Kerala, or South India. It's a traditional staple deeply rooted in the cultural cuisine of the Muslim community, typically prepared for weddings and special occasions. It has been fully adopted by Lankan cooking as well, and now it has become a staple with festive cooking."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 8 cups basmati rice\n- 3 tablespoons ghee or butter\n- 2 large onions chopped\n- 6 cardamom pods\n- 6 cloves\n- 1 large cinnamon stick\n- 2 pandan leaves\n- Curry leaves\n- Turmeric to suit the color you want\n- Salt\n- Stock from the meat (extra stock is needed to supplement, as we don't use water)"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Preparing the Aromatic Base\n\n1. Wash the rice and drain it well.\n2. Sauté the onions, curry, and pandan leaves.\n3. Add cardamom, cloves, and cinnamon, and turmeric.\n4. Once the aroma is coming from the spices, add the rice and sauté it.\n\nCooking the Rice\n\n1. Transfer the rice into a rice cooker.\n2. Add the stock, and the extra stock as well.\n3. Add more salt to taste if needed.\n4. Cook the rice well done, like you normally do."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "Make sure the rice is the last thing you cook. By the time it's done, have all the other components out of the refrigerator and ready to assemble the parcels."
+            }
+          ]
+        },
+        {
+          "recipe_id": "5edf7bec-cefc-4699-abda-ec3fd73fd8c7",
+          "chapter_id": "227e5b1e-b56d-484a-a9af-78dbadc84224",
+          "recipe_title": "Lamprais parcels",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/5edf7bec-cefc-4699-abda-ec3fd73fd8c7/hero_1777109119064.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/5edf7bec-cefc-4699-abda-ec3fd73fd8c7",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Lamprais is a signature Lankan dish introduced by the Dutch, combining their own , the Indonesian and Lankan culinary influences. I've gone through many recipes published on this yummy recipe and have adopted my own version of it to suit us and to be possible to cook in my kitchen.\n\nAll the dishes that we have been doing before are served onto a banana leaf and folded. This is ideal for parties or special occasions. They freeze well up to about two months or even more. Heat in a moderate oven at 170 degrees for about 40 minutes frozen, or about 20 minutes from thawed in the fridge."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Equipment:\n- banana leaves\n- sink\n- tin foil\n- newspaper\n\nIngredients:\n- the meat curry\n- fricadels \n- belachan\n- potato or the ash plantain curry\n- brinjal moju \n- 1 can of thick coconut milk",
+              "sub_sections": [
+                {
+                  "header": "Equipment",
+                  "items": [
+                    "banana leaves",
+                    "sink",
+                    "tin foil",
+                    "newspaper"
+                  ]
+                },
+                {
+                  "header": "Ingredients",
+                  "items": [
+                    "the meat curry",
+                    "fricadels",
+                    "belachan",
+                    "potato or the ash plantain curry",
+                    "brinjal moju",
+                    "1 can of thick coconut milk"
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Preparing the Banana Leaves\n\n1. Strip the banana leaves from the center rib.\n2. Cut the leaves into pieces about thirty to forty centimeters long.\n3. Wash the leaves well in a sink filled with water to get rid of the chemicals if brought from the shops \n4. Pat the leaves dry on tea towels.\n5. Heat the leaves over a gas stove flame for a few seconds on each side to make them pliable and easy to fold without ripping.\n\nAssembling the Parcels\n\n1. Place a clean piece of paper or foil on a bench top.\n2. Put banana leaves on top of the paper or foil.\n3. Arrange one good size cup of ghee rice and form it into a cup shape.\n4. Place two tablespoons of meat curry on the rice.\n5. Add two fricadels \n6. Put one spoon of brinjal pahi.\n7. Add one spoon of shrimp blachan .\n8. Place two spoons of potato curry.\n9. Pour two tablespoons of coconut milk on the rice.\n\nFinishing the Parcels\n\n1. Fold the banana leaf into a nice parcel.\n2. Secure the parcel with the foil or the paper.\n3. Freeze or eat fresh after baking the parcels in the oven."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "When making lamprai parcels, the best advice is to do it in a few steps, maybe over a couple of days or at least three days time to take it easy.\n\nOnce you parcel them, you can freeze them and keep them for up to two months or even a little bit more, depending on your freezer temperature and how you store it.\n\nWhen heating them in the oven, make sure to bake them until you get a nice fragrance coming out of the oven. Remember to take the paper layer off when you are baking."
+            }
+          ]
+        },
+        {
+          "recipe_id": "840a72af-6bb8-4fc2-a575-6de042a977b9",
+          "chapter_id": "227e5b1e-b56d-484a-a9af-78dbadc84224",
+          "recipe_title": "Lilani’s version of Lankan Lamprais",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/840a72af-6bb8-4fc2-a575-6de042a977b9/hero_1777099534133.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/840a72af-6bb8-4fc2-a575-6de042a977b9",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": " lamprai is a dish from the Dutch Burgher community of Sri Lanka. The name comes from the Dutch word, lompregist, which means parcel of food. I have looked at a few recipes and have come out with my own version of lamprai.\n\nSo the main items going into the rice packet wrapped in a banana leaf consists of ghee rice, mixed meat curry, ash plantain curry, and my substitute is frozen chip curry because we can't find ash plantains here often. Frikadelas, or Danish meatballs . it's a staple in their cuisine. Blachan and eggplant pehi or batu mojo. So the first thing to be done is the meat curry."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 500 grams chuck steak\n- 500 grams diced leg of lamb or mutton\n- 500 grams chicken thighs\n- 500 grams pork chop with a little fat or belly\n- 10 cardamom pods\n- 2 heaped tablespoons of peppercorns\n- 2 tablespoons of ghee\n- 2 tablespoons of oil\n- 4 onions chopped\n- 10 garlic cloves finely chopped\n- 2 tablespoons chopped fresh ginger\n- 4 long sprigs of curry leaves\n- 3 pandan leaves\n- 3 stems of lemongrass bruised\n- 2 strips of lemon zest\n- 1 teaspoon of fenugreek seeds\n- 4 to 5 heaped tablespoons of raw curry powder\n- 2 teaspoons turmeric powder\n- 1 to 2 tablespoons of chili pieces\n- 1 cinnamon stick crushed\n- 2 teaspoons of cardamom and cloves\n- Juice of a big lemon\n- 2 1/2 to 3 cups of coconut milk\n- Salt to taste"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Preparing the Meats\n\n1. Put the steak, lamb or mutton in a large saucepan with enough cold water to cover.\n2. Add some salt, the cinnamon, the cardamom pods and the peppercorns and simmer for 30 minutes.\n3. Add the chicken thighs and simmer for another 15 minutes.\n4. Allow to cool, then strain the liquid and save for the rice.\n5. When cool, place the pot in the fridge and remove the fat that comes to the top before adding to cook the rice because it's too fatty.\n6. Cut the meat into small dice size pieces and discard the bones.\n\nCooking the Curry\n\n1. Heat the ghee and the oil in a large pan over medium heat.\n2. Add onion, garlic, ginger, curry leaves, one pandan leaf cut into pieces, fenugreek seeds, cinnamon.\n3. When the onions are beginning to color, add the turmeric, chili pieces, curry powder and the pork pieces.\n4. Add the cardamom and cloves powder and lemongrass, lemon rind.\n5. When the pork is browning, add some coconut milk and simmer for half an hour.\n6. Return the other meats into the pan.\n7. Add the remaining coconut milk, salt and cook over slow heat for half an hour to 45 minutes uncovered.\n8. Taste until the meat is tender and the sauce is thick.\n9. Add the lemon juice and let it stand till it's cold."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "Meal Prep Tips:\n* The whole process takes a bit of time. The best thing to do is do the meat curry first.\n* You can prepare this dish over two to three days, depending on your schedule.\n* Have the meat curry ready first and keep it in the fridge until the other items are ready."
+            }
+          ]
+        },
+        {
+          "recipe_id": "9a198792-8afc-4fd2-94c5-b027832386bf",
+          "chapter_id": "227e5b1e-b56d-484a-a9af-78dbadc84224",
+          "recipe_title": "Yellow Rice",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/9a198792-8afc-4fd2-94c5-b027832386bf/hero_1777090508290.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/9a198792-8afc-4fd2-94c5-b027832386bf",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Yellow rice is normally cooked as a special dish, to be served on a special occasion, and it is quite richer than a normal plain rice."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 4 cups of basmati or samba\n- 2 cups of coconut milk\n- 1 teaspoon of turmeric powder\n- 5 to 6 cardamom pods\n- 5 to 6 cloves\n- a good size cinnamon stick\n- some curry leaves\n- rampe or pandan leaves\n- a big brown onion chopped finely\n- 3 heaped teaspoons of ghee or butter\n- salt to taste"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Making the Yellow Rice\n\n1. Wash the rice and drain well in a colander until all the water is drained and it is very dry.\n2. Sauté the onions, curry leaves, and pandan leaves in butter or ghee.\n3. Add the cardamom, cloves, cinnamon, and turmeric into the mixture.\n4. Once they start giving that aroma, add the drained rice and let it sauté as well until the rice is a little bit fried and looks very dry.\n5. Transfer the rice into a rice cooker.\n6. Add water and the coconut milk if using, together with salt, and let the rice cook until well done.\n\nServing Suggestions\n\n1. You can use fried onions, roasted cashew nuts, boiled green peas, or egg slices to garnish once served into a rice bowl or open dish."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "Tips\n\n* If your rice looks dry after cooking, you can add a little bit more ghee or butter and mix it with a spoon. This will make it fluffy and a bit oily, adding more flavor and aroma."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "ef78fe58-e796-4a0e-bd7f-b3e6a786df0d",
+      "name": "Treat",
+      "accent_colour": "terracotta",
+      "divider_page": true,
+      "style_hint": "Use accent colour \"terracotta\" for chapter divider, dropcaps, and section headings within this chapter.",
+      "recipes": [
+        {
+          "recipe_id": "29779ffe-40e9-44dd-b5ea-b0abba3a6dff",
+          "chapter_id": "ef78fe58-e796-4a0e-bd7f-b3e6a786df0d",
+          "recipe_title": "Gnanakatha Lankan Rock Cookies",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/29779ffe-40e9-44dd-b5ea-b0abba3a6dff/hero_1776483051400.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/29779ffe-40e9-44dd-b5ea-b0abba3a6dff",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Jnana Katha, the traditional Lankan rock cookies, can be referred to as Lankan rock cookies or sugar-dipped cookies. It is a traditional, nostalgic tea time biscuit with a rich history, dating back to the Portuguese rule in the 1500s. These have been a staple in the village shops and at homes for generations.\n\nFor me, Jnana Katha brings back memories of huge glass jars in small village shops, with children often sharing them on the way back from school. When I visited my sister back home last year, she had a jar of these made at home and she made some nice cups of tea using tea leaves from a neighboring tea factory. We had some good old yarns over these favorite teatime snacks and warm cups of tea.\n\nToday, I'm happy to make them with Shayan  showing him how to make them all by himself."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 100 grams of butter\n- 250 grams of sugar\n- 2 eggs\n- 450 grams of plain flour\n- 2 and a half teaspoons of baking powder\n- Half a teaspoon of baking soda\n- 2 teaspoons of vanilla essence"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Making the Batter\n\n1. Beat the butter and sugar together, starting with the sugar in the mixer.\n2. Slowly plop in bits of butter into the mixer while it's beating on medium speed.\n3. Add the eggs one at a time; crack them into a separate bowl first to avoid shells.\n4. Sift the flour with the baking powder and soda. \n5. Add the flour into the mixing bowl and beat until all combined.\n5. Using your fingers gather the mixture into a ball.\n6. Then break this into small pieces and form into small balls .\n7. Flatten them on your palm .\n8. Have some sugar in a plate and press one side of the cookie onto the sugar to cover one side completely.\n9. Arrange them on a greased tray and bake for about 20-25 minutes in a 180 degree oven until they begin to turn golden in colour.\n10. Remove from oven and once cool store them in an air tight container for freshness. \n11. Enjoy !!!\n",
+              "photos": [
+                {
+                  "url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/29779ffe-40e9-44dd-b5ea-b0abba3a6dff/preparation/1776482226468.jpeg?width=1000&height=750&resize=contain&quality=70",
+                  "description": ""
+                }
+              ]
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "Sure, here are some tips and variations based on the provided transcript:\n\nTips:\n\n  Instead of measuring spoons, you can use the cap of the vanilla essence bottle for two teaspoons."
+            },
+            {
+              "label": "Final Thoughts",
+              "type": "final_thoughts",
+              "content": "Okay. Now what you need to do now is, uh, using your fingers, form into, mix into a b- big bowl. Now can you take it, all that out? Yeah. I'm trying. (plate clanking) It's sticking to the bowl, though. Yeah. Take all this out here. Oh, easy this way. Yeah. Yeah. That's enough. Yeah, I'll, I'll fix all that. All right, now, now then come here. Now what you need to do is now form into small balls. Uh, well, yeah. Like, yeah, like that. I think that's kind of obvious, like for the cookies. Yeah. No, no, you do that. Yeah. Now start doing it. Me? You want me- Yeah. How small? Bigger. Yeah. Like about that small? Uh, that's too big, no, because when they bake, they will be too big. No, this would be reasonable, I guess. I mean, come on. You want bigger, bigger cookies, do you? Uh, can I go toilet quick? Okay. God! (laughs)",
+              "photos": [
+                {
+                  "url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/29779ffe-40e9-44dd-b5ea-b0abba3a6dff/final_thoughts/1776482442636.jpeg?width=1000&height=750&resize=contain&quality=70",
+                  "description": "The finished gnanakatha or Lankan rock cookies"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "recipe_id": "262d247d-dc86-427a-993d-fb9c1a34ac50",
+          "chapter_id": "ef78fe58-e796-4a0e-bd7f-b3e6a786df0d",
+          "recipe_title": "Mash mellows",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/262d247d-dc86-427a-993d-fb9c1a34ac50/hero_1775711000518.jpg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/262d247d-dc86-427a-993d-fb9c1a34ac50",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Marshmallows. This recipe has been passed down from my mother to my sister and then to me, which I have given to my family.\n\nI cannot recall a single birthday party or any other celebration without these much adored sweets decorating the party table."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 500 grams of white sugar\n- 30 grams or nine teaspoons of gelatin powder\n- two cups of cold water\n- vanilla essence or any other flavor that you prefer\n- a couple of pastel shades of food coloring\n- sieved icing sugar for coating\n\nEquipment:\n- a mixer or a beater\n- a saucepan",
+              "sub_sections": [
+                {
+                  "header": "Ingredients",
+                  "items": [
+                    "500 grams of white sugar",
+                    "30 grams or nine teaspoons of gelatin powder",
+                    "two cups of cold water",
+                    "vanilla essence or any other flavor that you prefer",
+                    "a couple of pastel shades of food coloring",
+                    "sieved icing sugar for coating"
+                  ]
+                },
+                {
+                  "header": "Equipment",
+                  "items": [
+                    "a mixer or a beater",
+                    "a saucepan"
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Preparing the Gelatin\n\n1. In a large bowl or jug, place one cup of cold water and sprinkle the gelatin on top.\n2. Mix the gelatin and water well, and let it soak.\n\nMaking the Marshmallow Mixture\n\n1. In the meantime, boil the sugar in a saucepan with one cup of water.\n2. When the sugar water starts boiling, add the soaked gelatin into the sugar mixture.\n3. Keep the mixture on the fire until it gets thick and blobs start forming. This is the point where you need to get the recipe right, because you need to get the blobs going really well, otherwise the marshmallows get watery.\n4. Turn the heat off and let the mixture cool a little bit.\n5. Pour the cooled mixture into a mixing bowl and beat until the color turns to white.\n6. Add vanilla or any other preferred essence.\n7. Mix until combined.\n8. From here, you can add one single color to the whole lot, or divide it into two parts and add two different colors, or even make it like a rainbow. It's up to you to do what you like at this stage.\n\nSetting the Marshmallows\n\n1. Pour the mixture into a buttered dish.\n2. If you're using two colors, let one color set for about five minutes and then pour the next one on top of it.\n3. Let this set for a few hours, either in the fridge or a cool place.\n\nFinishing and Storing\n\n1. When set, sprinkle some icing sugar on top.\n2. Loosen and remove the whole block onto a board, maybe sprinkled with icing sugar instead of buttered. Make sure that all the sides are covered.\n3. Cut into pieces, using a ruler or any other straight line, and then into squares.\n4. Make sure that you sprinkle icing sugar and coat all sides. Continue doing this and make sure the pieces are covered in icing sugar very well.\n5. Place them in a container and keep the lid off the container overnight so that the marshmallows get stiffened and have a sugary coating.\n6. It's ready to eat."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "Tips for Making Homemade Marshmallows:\n\n  When boiling the sugar and gelatin mixture, check the texture by tipping a spoon up. You want to see blobs falling off the spoon, not a thick line.\n\n  All equipment you use, including bowls, mixers, and spoons, must be completely water-free. If there's any water, the marshmallows will become watery."
+            },
+            {
+              "label": "Final Thoughts",
+              "type": "final_thoughts",
+              "content": "So this is a recipe, this is a dish, a sweet dish, that you can use for any birthday parties, as a dessert. You can use this as a dessert with some chocolate sauce or just plain.\n\nIt is a much adored all-time recipe."
+            }
+          ]
+        },
+        {
+          "recipe_id": "902678d6-5ff3-4487-8050-ef918b13fbeb",
+          "chapter_id": "ef78fe58-e796-4a0e-bd7f-b3e6a786df0d",
+          "recipe_title": "Milk Toffee",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/902678d6-5ff3-4487-8050-ef918b13fbeb/hero_1775774318774.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/902678d6-5ff3-4487-8050-ef918b13fbeb",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Microwave milk toffee. This is an easy version of the traditional milk toffee made on the stovetop, taking a lot of time. Using a microwave oven takes only about ten to twelve minutes, and is less messy and easy to make.\n\nMilk toffee has been a staple in our pantry when shop-bought sweets and chocolates were barely existing. Even today, the grandkids, when they're at our place, when they go searching for a nibble and opening a tin and taking a couple of these and munching away has always been fun to watch, and I know that they enjoy eating this."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 398 or 400 gram sweetened condensed milk, 1 tin\n- 250 grams of white sugar\n- 30 grams of butter\n- Half to 1 cup of chopped cashew nuts\n- vanilla essence\n\nEquipment:\n- microwave\n- heatproof deep dish\n- spatula",
+              "sub_sections": [
+                {
+                  "header": "Ingredients",
+                  "items": [
+                    "398 or 400 gram sweetened condensed milk, 1 tin",
+                    "250 grams of white sugar",
+                    "30 grams of butter",
+                    "Half to 1 cup of chopped cashew nuts",
+                    "vanilla essence"
+                  ]
+                },
+                {
+                  "header": "Equipment",
+                  "items": [
+                    "microwave",
+                    "heatproof deep dish",
+                    "spatula"
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Making the Toffee\n\n1. Add the condensed milk and the sugar into the bowl.\n2. Add half of the butter.\n3. Place the bowl in the microwave and mix well, then heat up for five minutes initially.\n4. Remove the mixture, and using a spatula, mix the contents really well.\n5. Heat for another five minutes and take it out again.\n6. Add the cashew nuts, vanilla, and the rest of the butter.\n7. Again, mix well and heat up to a further three minutes and check to see whether the consistency is right.\n8. If needed, heat up to another two minutes, depending on your microwave.\n\nFinishing Up\n\n1. Pour the mixture into a buttered dish or a tray.\n2. Using a bit of foil, flatten it into a square shape, making it square so it's easy to cut.\n3. Let it cool."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "Tips:\n\n  Be careful when handling the bowl after the first five minutes in the microwave, as it gets very hot. Use oven mitts or a good tea towel.\n\n  Regarding consistency, especially between the last three minutes, it's something you learn with practice. You want it to be quite thick, not too sticky, and that's when you should take it out of the microwave."
+            },
+            {
+              "label": "Final Thoughts",
+              "type": "final_thoughts",
+              "content": "For a variation, you can add some cocoa powder at the stage we are using the cashew nuts for the chocolatey flavor. Or you can add some chopped dates or some sultanas, or sultanas and dates together, to give it a fruity flavor.\n\nYou can store this. Once it is cut into squares, you can store it in an airtight container and it can be kept for more than two weeks. So enjoy."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "6d9e1521-0b0c-40de-981b-e13938735e33",
+      "name": "Other",
+      "accent_colour": "ink",
+      "divider_page": true,
+      "style_hint": "Use accent colour \"ink\" for chapter divider, dropcaps, and section headings within this chapter.",
+      "recipes": [
+        {
+          "recipe_id": "48f5543e-c963-40aa-bf70-6f1a9a14dd9a",
+          "chapter_id": "6d9e1521-0b0c-40de-981b-e13938735e33",
+          "recipe_title": "Frozen potato chip curry / my substitute for the ash plantain curry",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/48f5543e-c963-40aa-bf70-6f1a9a14dd9a/hero_1777103349385.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/48f5543e-c963-40aa-bf70-6f1a9a14dd9a",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "The original recipe for this component is made with ash plantains or green bananas. \nThis original recipe has been passed down for many generations in Lankan cooking . We have been compelled to use the frozen chips as a substitute for availability and convenience. "
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 500 grams of potato wedges of any brand and flavor, for oven bake\n- 1 cup of coconut milk\n- ½ cup of water\n- 2 tablespoons of curry powder\n- 1 large onion chopped\n- A good amount of curry leaves\n- 2 sticks of cinnamon\n- 1 spoon of fenugreek seeds\n- 1 teaspoon of turmeric powder\n- 1 tablespoon chili pieces, optional\n- 1 tablespoon of oil\n- Salt to taste"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Making the Curry Base\n\n1. Oven bake the potato wedges until they are well done and leave them to cool.\n2. Heat the oil in a pan.\n3. Add the curry leaves, fenugreek seeds, cinnamon, and onion.\n4. Once slightly colored, add the curry powder, chili pieces, and turmeric.\n5. Add the coconut milk and the water.\n6. Let it simmer until all the spices start to give their aroma.\n7. Add the cooled potatoes wedges to the sauce and once starting to simmer check for the taste of salt and add some lemon juice .\n8. Simmer until the sauce is soaked up into the potato. \n9 leave aside to cool "
+            }
+          ]
+        },
+        {
+          "recipe_id": "725764c4-9aae-4d38-abf7-2073af103f2d",
+          "chapter_id": "6d9e1521-0b0c-40de-981b-e13938735e33",
+          "recipe_title": "Kiri bath ( milk rice)",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/725764c4-9aae-4d38-abf7-2073af103f2d/hero_1777091492256.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/725764c4-9aae-4d38-abf7-2073af103f2d",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Kiri Bath, or milk rice, we normally cook this for special occasions like the first of January or the Sinhala New Year, first day of school, or any other special occasion, or any other milestone, or just as a hearty breakfast.\n\nSo this is a traditional dish which can be eaten at any mealtime. It's normally a breakfast, but you can eat it for lunch or dinner."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 3 heaped cups of white rice\n- 4 cups of thick coconut milk\n- 5 to 6 cardamom pods crushed\n- Salt to taste\n- Pandan leaf if you have any"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Cooking the Rice\n\n1. Wash the rice with cold water.\n2. Add water sufficiently for the rice to cook until soft and turn the rice cooker on, or cook in a pot on a stove.\n\nInfusing with Coconut Milk\n\n1. Once the rice is done and really soft, add the coconut milk with a little bit more salt added to it. It should cover the rice completely.\n2. Turn the rice cooker on again, or if cooking on a stovetop, reduce the heat and let it simmer until it boils and the coconut milk gets soaked into the rice completely.\n3. If doing it on the stove, keep it on the fire until all the rice is soaked in the coconut milk.\n4. If it's in the rice cooker, wait until it is turned off and in the warm setting for about five to ten minutes.\n\nServing\n\n1. Spread the cooked milk rice onto a plate and flatten it.\n2. Let it cool down a little bit.\n3. Cut it into squares or triangles – the traditional way is into triangles.\n4. Serve it in the same dish or arrange it in a different tray, and enjoy it with your favorite accompaniment like a chicken curry, lunu miris, or even pani pol."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "Here are some tips and variations for kiri bath:\n\n* Instead of using all white rice, you can use half red rice and half white rice.\n* If you're using kiri bath as a sweetmeat or to decorate a special table, you can add a tiny bit of food coloring to match your other dishes.\n* When serving, try using a large muffin tray. Put a spoonful of kiri bath at the bottom, then add pineapples or luna millies, and top with more kiri bath. Flatten it well with a rolling pin or even some foil with your palm to make it tight. Then, invert it onto a board that fits the muffin tray, and you'll have muffin-shaped kiri bath to serve. This is traditionally called imali kiri bath."
+            },
+            {
+              "label": "Final Thoughts",
+              "type": "final_thoughts",
+              "content": "Kiri bath is very easy to make and I think all of you will make it into a family staple, rather than keeping it for special occasions. It's nourishing and quite filling as well.\n\nSo you can make it for a weekend breakfast, lunch, or dinner, depending. And also you can pick the accompaniments depending on the time. Make it and enjoy."
+            }
+          ]
+        },
+        {
+          "recipe_id": "f21b50c2-9615-473d-972c-d0f6812c36ae",
+          "chapter_id": "6d9e1521-0b0c-40de-981b-e13938735e33",
+          "recipe_title": "Prawn Blachan sambol",
+          "category_tags": null,
+          "recorded_date": "April 2026",
+          "hero_image_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/f21b50c2-9615-473d-972c-d0f6812c36ae/hero_1777102397888.jpeg?width=1200&height=900&resize=contain&quality=75",
+          "recipe_url": "https://www.thefamilytable.com.au/family/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/recipe/f21b50c2-9615-473d-972c-d0f6812c36ae",
+          "sections": [
+            {
+              "label": "The Story",
+              "type": "backstory",
+              "content": "Interestingly, Blachan Sambal originates from Southeast Asia. It is a part of Malaysian, Indonesian, and Singaporean cuisine. So you can see how versatile our lamprai packets are with a few cultural influences packeted together."
+            },
+            {
+              "label": "What You'll Need",
+              "type": "ingredients",
+              "content": "Ingredients:\n- 1 cup powdered shrimp (heat slightly on very low heat before making into a powder)\n- ½ cup desiccated coconut (heated till slightly brown)\n- Salt to taste\n- 2 teaspoons chili pieces\n- 2 onions chopped\n- 5 cloves of garlic chopped\n- A small piece of ginger chopped\n- ⅔ cups lemon juice"
+            },
+            {
+              "label": "How to Make It",
+              "type": "preparation",
+              "content": "Bringing It All Together\n\n1. Combine the coconut and the shrimp powder together.\n2. Put the remaining ingredients into a food processor and blend till smooth.\n3. Add the shrimp and the coconut into that mix.\n4. Add a little water to bind the ingredients.\n5. Leave it covered till you have got the other parts of the recipe done."
+            },
+            {
+              "label": "Tips & Variations",
+              "type": "tips",
+              "content": "- The ingredients listed will make about 18-20 portions.\n- Preparation time is around 15 minutes.\n- It's advisable to make this sambol beforehand and store it in an airtight container in the fridge."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "recipes": null,
+  "acknowledgements": null,
+  "recipe_count": 12,
+  "chapter_count": 3,
+  "page_count": 46
+}
