@@ -1,0 +1,262 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+{% assign style = cover_style | default: "classic" %}
+{% assign default_cover_photo = default_cover_photo_url | default: "" %}
+
+<div class="cookbook style-{{ style }}">
+
+  <section class="book-page title-page">
+    <div class="book-ornament top"></div>
+    <p class="eyebrow">The Family Table Cookbook</p>
+    <h1 class="cookbook-title">{{ cookbook_title | default: "Family Cookbook" }}</h1>
+    {% if cookbook_subtitle and cookbook_subtitle != "" %}
+      <p class="cookbook-subtitle">{{ cookbook_subtitle }}</p>
+    {% endif %}
+    {% if author_name and author_name != "" %}
+      <p class="cookbook-author">by {{ author_name }}</p>
+    {% endif %}
+    <div class="book-ornament bottom"></div>
+  </section>
+
+  {% if dedication_text and dedication_text != "" %}
+    <section class="book-page dedication-page">
+      <div class="quiet-label">Dedication</div>
+      <p class="dedication-text">{{ dedication_text }}</p>
+    </section>
+  {% endif %}
+
+  {% if preface and preface.enabled and preface.body and preface.body != "" %}
+    <section class="book-page preface-page">
+      <h2 class="page-title">{{ preface.title | default: "Preface" }}</h2>
+      {% if preface.photo and preface.photo.enabled and preface.photo.url and preface.photo.url != "" %}
+        <div class="profile-photo-wrap">
+          <img src="{{ preface.photo.url }}" alt="{{ author_name | default: cookbook_title }}" class="profile-photo">
+        </div>
+      {% elsif include_profile_page and creator_profile and creator_profile.avatar_url and creator_profile.avatar_url != "" %}
+        <div class="profile-photo-wrap">
+          <img src="{{ creator_profile.avatar_url }}" alt="{{ creator_profile.full_name | default: author_name }}" class="profile-photo">
+        </div>
+      {% endif %}
+      {% assign preface_paragraphs = preface.body | newline_to_br | split: '<br />' %}
+      <div class="body-copy intro-copy">
+        {% for para in preface_paragraphs %}
+          {% assign trimmed = para | strip %}
+          {% if trimmed != "" %}<p>{{ trimmed }}</p>{% endif %}
+        {% endfor %}
+      </div>
+    </section>
+  {% elsif include_profile_page and creator_profile and creator_profile.story_preface and creator_profile.story_preface != "" %}
+    <section class="book-page preface-page">
+      <h2 class="page-title">{{ creator_profile.full_name | default: author_name | default: "Family Story" }}</h2>
+      {% if creator_profile.avatar_url and creator_profile.avatar_url != "" %}
+        <div class="profile-photo-wrap">
+          <img src="{{ creator_profile.avatar_url }}" alt="{{ creator_profile.full_name | default: author_name }}" class="profile-photo">
+        </div>
+      {% endif %}
+      {% assign story_paragraphs = creator_profile.story_preface | newline_to_br | split: '<br />' %}
+      <div class="body-copy intro-copy">
+        {% for para in story_paragraphs %}
+          {% assign trimmed = para | strip %}
+          {% if trimmed != "" %}<p>{{ trimmed }}</p>{% endif %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if include_toc and table_of_contents and table_of_contents.entries and table_of_contents.entries.size > 0 %}
+    <section class="book-page toc-page">
+      <h2 class="page-title">Contents</h2>
+      <div class="toc-list">
+        {% for chapter in table_of_contents.entries %}
+          <div class="toc-chapter accent-{{ chapter.accent_colour | default: 'olive' }}">
+            <div class="toc-chapter-row">
+              <span class="toc-chapter-name">{{ chapter.chapter_name | default: "Recipes" }}</span>
+              {% if chapter.page %}<span class="toc-page-number">{{ chapter.page }}</span>{% endif %}
+            </div>
+            {% if chapter.recipes and chapter.recipes.size > 0 %}
+              {% for item in chapter.recipes %}
+                <div class="toc-recipe-row">
+                  <span class="toc-recipe-title">{{ item.title }}</span>
+                  <span class="toc-dots"></span>
+                  {% if item.page %}<span class="toc-page-number">{{ item.page }}</span>{% endif %}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% for chapter in chapters %}
+    {% assign chapter_accent = chapter.accent_colour | default: "olive" %}
+    {% if chapter.divider_page %}
+      <section class="book-page chapter-divider accent-{{ chapter_accent }}">
+        <p class="eyebrow">Chapter</p>
+        <h2>{{ chapter.name | default: "Recipes" }}</h2>
+      </section>
+    {% endif %}
+
+    {% for recipe in chapter.recipes %}
+      <article class="book-page recipe-page accent-{{ chapter_accent }}">
+        <header class="recipe-title-block">
+          <p class="eyebrow">A Recipe from The Family Table</p>
+          <h2 class="recipe-title">{{ recipe.recipe_title | default: "Untitled Recipe" }}</h2>
+          {% if recipe.category_tags and recipe.category_tags != "" %}
+            <p class="category-tags">{{ recipe.category_tags }}</p>
+          {% elsif chapter.name and chapter.name != "" %}
+            <p class="category-tags">{{ chapter.name }}</p>
+          {% endif %}
+        </header>
+
+        {% if recipe.hero_image_url and recipe.hero_image_url != "" %}
+          <div class="hero-container"><img src="{{ recipe.hero_image_url }}" alt="{{ recipe.recipe_title }}" class="hero-image"></div>
+        {% elsif default_cover_photo != "" %}
+          <div class="hero-container hero-fallback"><img src="{{ default_cover_photo }}" alt="The Family Table" class="hero-image"></div>
+        {% endif %}
+
+        {% for section in recipe.sections %}
+          {% assign section_content = section.content | default: "" %}
+          {% if section_content != "" or section.sub_sections.size > 0 or section.photos.size > 0 %}
+            <section class="recipe-section section-{{ section.type | default: 'general' }}">
+              {% if section.label and section.label != "" %}
+                <div class="section-header"><span>{{ section.label }}</span></div>
+              {% endif %}
+
+              {% if section.type == "ingredients" %}
+                <div class="ingredients-box">
+                  {% if section.sub_sections and section.sub_sections.size > 0 %}
+                    {% for group in section.sub_sections %}
+                      {% assign item_count = 0 %}
+                      {% for item in group.items %}
+                        {% assign trimmed_item = item | strip %}
+                        {% if trimmed_item != "" %}{% assign item_count = item_count | plus: 1 %}{% endif %}
+                      {% endfor %}
+                      {% if item_count > 0 %}
+                        <div class="ingredient-group">
+                          {% if group.header and group.header != "" %}<p class="ingredient-group-header">{{ group.header }}</p>{% endif %}
+                          <ul class="ingredients-list {% if item_count >= 8 %}two-columns{% endif %}">
+                            {% for item in group.items %}
+                              {% assign trimmed_item = item | strip %}
+                              {% if trimmed_item != "" %}<li>{{ trimmed_item }}</li>{% endif %}
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    {% assign ingredient_lines = section_content | newline_to_br | split: '<br />' %}
+                    {% assign ingredient_count = 0 %}
+                    {% for line in ingredient_lines %}
+                      {% assign trimmed = line | strip %}
+                      {% if trimmed != "" %}{% assign ingredient_count = ingredient_count | plus: 1 %}{% endif %}
+                    {% endfor %}
+                    <ul class="ingredients-list {% if ingredient_count >= 8 %}two-columns{% endif %}">
+                      {% for line in ingredient_lines %}
+                        {% assign trimmed = line | strip %}
+                        {% if trimmed != "" %}
+                          {% assign clean = trimmed | remove_first: "- " | remove_first: "• " | remove_first: "* " %}
+                          <li>{{ clean }}</li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+
+              {% elsif section.type == "preparation" %}
+                {% assign prep_lines = section_content | newline_to_br | split: '<br />' %}
+                {% assign step_num = 0 %}
+                <div class="method-list">
+                {% for line in prep_lines %}
+                  {% assign trimmed = line | strip %}
+                  {% if trimmed != "" %}
+                    {% assign first_char = trimmed | slice: 0, 1 %}
+                    {% assign is_digit = false %}
+                    {% if first_char == "1" or first_char == "2" or first_char == "3" or first_char == "4" or first_char == "5" or first_char == "6" or first_char == "7" or first_char == "8" or first_char == "9" %}{% assign is_digit = true %}{% endif %}
+                    {% if is_digit %}
+                      {% assign step_num = step_num | plus: 1 %}
+                      {% assign step_text = trimmed
+                        | replace_first: "1. ", "" | replace_first: "2. ", "" | replace_first: "3. ", "" | replace_first: "4. ", "" | replace_first: "5. ", ""
+                        | replace_first: "6. ", "" | replace_first: "7. ", "" | replace_first: "8. ", "" | replace_first: "9. ", "" | replace_first: "10. ", ""
+                        | replace_first: "1) ", "" | replace_first: "2) ", "" | replace_first: "3) ", "" | replace_first: "4) ", "" | replace_first: "5) ", ""
+                        | replace_first: "6) ", "" | replace_first: "7) ", "" | replace_first: "8) ", "" | replace_first: "9) ", "" | replace_first: "10) ", "" %}
+                      <div class="step"><span class="step-number">{{ step_num }}</span><span class="step-text">{{ step_text }}</span></div>
+                    {% else %}
+                      {% assign step_num = 0 %}
+                      <p class="sub-section-header">{{ trimmed }}</p>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+                </div>
+
+              {% else %}
+                {% assign prose_lines = section_content | newline_to_br | split: '<br />' %}
+                <div class="body-copy">
+                  {% for para in prose_lines %}
+                    {% assign trimmed = para | strip %}
+                    {% if trimmed != "" %}<p class="{% if forloop.first %}drop-cap{% endif %}">{{ trimmed }}</p>{% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              {% if section.photos and section.photos.size > 0 %}
+                <div class="photo-strip photo-count-{{ section.photos.size }}">
+                  {% for photo in section.photos limit: 4 %}
+                    {% if photo.url and photo.url != "" %}
+                      <figure class="polaroid {% cycle 'tilt-left', 'tilt-right' %}">
+                        <img src="{{ photo.url }}" alt="{{ photo.description | default: recipe.recipe_title }}" class="polaroid-img">
+                        {% if photo.description and photo.description != "" %}<figcaption>{{ photo.description }}</figcaption>{% endif %}
+                      </figure>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </section>
+          {% endif %}
+        {% endfor %}
+
+        {% if include_qr_codes and recipe.recipe_url and recipe.recipe_url != "" %}
+          <footer class="recipe-footer">
+            <div class="mini-qr" data-qr="{{ recipe.recipe_url }}"></div>
+            <div>
+              <p class="qr-heading">Scan for the digital recipe</p>
+              <p class="qr-url">{{ recipe.recipe_url }}</p>
+            </div>
+          </footer>
+        {% endif %}
+      </article>
+    {% endfor %}
+  {% endfor %}
+
+  {% if acknowledgements and acknowledgements != "" %}
+    <section class="book-page acknowledgements-page">
+      <h2 class="page-title">Acknowledgements</h2>
+      {% assign ack_paragraphs = acknowledgements | newline_to_br | split: '<br />' %}
+      <div class="body-copy intro-copy">
+        {% for para in ack_paragraphs %}
+          {% assign trimmed = para | strip %}
+          {% if trimmed != "" %}<p>{{ trimmed }}</p>{% endif %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <section class="book-page closing-page">
+    <img class="closing-logo" src="https://nldppctlsbazaleojhyc.supabase.co/storage/v1/object/public/brand-assets/final-logo.svg" alt="The Family Table">
+    <p>Preserved with The Family Table</p>
+  </section>
+
+</div>
+
+<script>
+  (function () {
+    function renderQR(el) {
+      var text = el.getAttribute('data-qr');
+      if (!text || typeof QRCode === 'undefined') return;
+      new QRCode(el, { text: text, width: 54, height: 54, correctLevel: QRCode.CorrectLevel.M });
+    }
+    var targets = document.querySelectorAll('[data-qr]');
+    for (var i = 0; i < targets.length; i++) renderQR(targets[i]);
+  })();
+</script>
