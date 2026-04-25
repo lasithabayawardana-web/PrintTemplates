@@ -1,0 +1,552 @@
+@page {
+  size: A4;
+  margin: 8mm;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.page {
+  font-family: 'Lora', serif;
+  color: #2d1f14;
+  padding: 5mm 14mm 5mm 14mm;
+  background: radial-gradient(ellipse at center, #faf6f0 35%, #e6d5be 100%);
+  min-height: 100%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.title-block {
+  text-align: center;
+  margin-bottom: 4pt;
+  margin-top: 20pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.eyebrow {
+  font-family: 'Playfair Display', serif;
+  font-size: 7pt;
+  letter-spacing: 3pt;
+  color: #6b7f4a;
+  text-transform: uppercase;
+  margin: 3pt 0;
+}
+
+.recipe-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 24pt;
+  font-weight: 700;
+  color: #2d1f14;
+  margin: 2pt 0;
+  line-height: 1.15;
+}
+
+.creator-name {
+  font-family: 'Lora', serif;
+  font-size: 8pt;
+  color: #7a6652;
+  margin: 1pt 0 2pt;
+  font-style: italic;
+}
+
+.category-tags {
+  font-family: 'Lora', serif;
+  font-size: 7pt;
+  color: #9a8b7a;
+  letter-spacing: 1.5pt;
+  font-style: italic;
+  margin: 2pt 0;
+}
+
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+}
+
+.rule-line {
+  flex: 1;
+  background: #b8a080;
+}
+
+.rule-line.thick {
+  height: 1.5pt;
+  background: #6b7f4a;
+}
+
+.rule-line.thin {
+  height: 0.5pt;
+  background: #6b7f4a;
+}
+
+.rule-star,
+.rule-diamond,
+.section-mark,
+.diamond {
+  display: inline-block;
+  background: #6b7f4a;
+  transform: rotate(45deg);
+}
+
+.rule-star {
+  width: 7pt;
+  height: 7pt;
+  flex: 0 0 7pt;
+}
+
+.rule-diamond {
+  width: 5pt;
+  height: 5pt;
+  flex: 0 0 5pt;
+  background: #b8a080;
+}
+
+.thin-rule {
+  height: 0.5pt;
+  background: #c4b396;
+  margin: 0 auto 5pt;
+  width: 80%;
+}
+
+.thin-rule.bottom {
+  margin: 5pt auto 0;
+}
+
+.hero-container {
+  margin: 8pt auto 8pt;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  height: 220pt;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  background: #f6eee3;
+}
+
+.hero-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 20pt 10pt rgba(250, 246, 240, 0.55);
+  pointer-events: none;
+}
+
+.recipe-section {
+  page-break-inside: auto;
+  break-inside: auto;
+  margin-top: 16pt;
+  margin-bottom: 6pt;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+  margin: 18pt 0 8pt;
+  page-break-after: avoid;
+  break-after: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6pt;
+  font-family: 'Playfair Display', serif;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #5c3d2e;
+  letter-spacing: 0.5pt;
+  white-space: nowrap;
+}
+
+.section-mark {
+  width: 5pt;
+  height: 5pt;
+  flex: 0 0 5pt;
+}
+
+.section-label-text {
+  display: inline-block;
+}
+
+.prose {
+  font-family: 'Lora', serif;
+  font-size: 10pt;
+  line-height: 1.72;
+  margin-bottom: 6pt;
+  text-align: justify;
+  orphans: 3;
+  widows: 3;
+}
+
+.prose.drop-cap {
+  min-height: 32pt;
+}
+
+.drop-cap::first-letter {
+  font-family: 'Dancing Script', cursive;
+  font-size: 34pt;
+  float: left;
+  line-height: 0.85;
+  margin-right: 6pt;
+  margin-top: 1pt;
+  margin-bottom: 0;
+  color: #4a2d20;
+  font-weight: 700;
+}
+
+.ingredients-box {
+  border: 1pt solid #d4c5a9;
+  border-radius: 3pt;
+  padding: 8pt 12pt;
+  margin: 6pt 50pt 6pt 50pt;
+  background: #fdf9f3;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ingredients-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  column-gap: 18pt;
+}
+
+.ingredients-list.one-column {
+  columns: 1;
+}
+
+.ingredients-list.two-columns {
+  columns: 2;
+}
+
+.ingredients-list li {
+  padding: 2pt 0;
+  border-bottom: 0.5pt dotted #e0d5c5;
+  font-family: 'Lora', serif;
+  font-size: 10pt;
+  line-height: 1.5;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ingredient-bullet {
+  display: inline-block;
+  width: 3.5pt;
+  height: 3.5pt;
+  margin-right: 7pt;
+  border-radius: 50%;
+  background: #6b7f4a;
+  vertical-align: middle;
+  position: relative;
+  top: -1pt;
+}
+
+.ingredient-groups {
+  display: block;
+}
+
+.ingredient-group + .ingredient-group {
+  margin-top: 10pt;
+  padding-top: 8pt;
+  border-top: 0.5pt solid #e6dccd;
+}
+
+.ingredient-group-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: #5c3d2e;
+  margin: 0 0 5pt 0;
+  letter-spacing: 0.2pt;
+}
+
+
+.sub-section-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: #5c3d2e;
+  margin-top: 12pt;
+  margin-bottom: 7pt;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+.step {
+  display: flex;
+  gap: 6pt;
+  margin-bottom: 6pt;
+  font-family: 'Lora', serif;
+  font-size: 10pt;
+  line-height: 1.6;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 16pt;
+  height: 16pt;
+  border-radius: 50%;
+  background: #5c3d2e;
+  color: #faf6f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7.5pt;
+  font-weight: 700;
+  margin-top: 1pt;
+}
+
+.step-text {
+  flex: 1;
+}
+
+.photo-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10pt;
+  margin-top: 8pt;
+  justify-content: center;
+  align-items: flex-start;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.photo-strip .polaroid {
+  width: calc(50% - 6pt);
+  max-width: 220pt;
+  min-width: 180pt;
+}
+
+.photo-strip.photo-count-1 .polaroid {
+  width: 78%;
+  max-width: 320pt;
+}
+
+.polaroid {
+  background: #fff;
+  padding: 5pt 5pt 9pt;
+  border: 0.6pt solid #d4c5a9;
+  box-shadow: 0 2pt 6pt rgba(92, 61, 46, 0.10);
+  page-break-inside: avoid;
+  break-inside: avoid;
+  overflow: hidden;
+}
+
+.polaroid.tilt-left {
+  transform: rotate(-0.7deg);
+}
+
+.polaroid.tilt-right {
+  transform: rotate(0.6deg);
+}
+
+.polaroid-img {
+  width: 100%;
+  height: 150pt;
+  object-fit: cover;
+  display: block;
+  background: #f6eee3;
+}
+
+.polaroid-caption {
+  font-family: 'Dancing Script', cursive;
+  font-size: 8pt;
+  text-align: center;
+  color: #7a6652;
+  margin-top: 4pt;
+  line-height: 1.2;
+  width: 100%;
+}
+
+.footer {
+  margin-top: 10pt;
+  padding-top: 6pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20pt;
+  margin-top: 10pt;
+  margin-bottom: 6pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.footer-qr {
+  flex-shrink: 0;
+}
+
+.footer-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-logo img {
+  height: 46pt;
+  width: auto;
+  opacity: 1.0;
+  display: block;
+}
+
+.footer-qr-frame {
+  margin: 10pt auto 8pt;
+  max-width: 260pt;
+  padding: 7pt;
+  border: 1.2pt solid #c4b396;
+  border-radius: 6pt;
+  background: #fdf9f3;
+}
+
+.footer-qr-inner {
+  border: 0.5pt dashed #d4c5a9;
+  border-radius: 3pt;
+  padding: 7pt 8pt;
+  position: relative;
+}
+
+.qr-target-large {
+  width: 64pt;
+  height: 64pt;
+  min-width: 64pt;
+}
+
+.qr-target-large img {
+  width: 64pt !important;
+  height: 64pt !important;
+}
+
+.qr-corner {
+  position: absolute;
+  width: 10pt;
+  height: 10pt;
+}
+
+.qr-corner::before,
+.qr-corner::after {
+  content: "";
+  position: absolute;
+  background: #b8a080;
+}
+
+.qr-corner::before {
+  width: 10pt;
+  height: 1pt;
+  top: 0;
+  left: 0;
+}
+
+.qr-corner::after {
+  width: 1pt;
+  height: 10pt;
+  top: 0;
+  left: 0;
+}
+
+.qr-corner.tl {
+  top: -4pt;
+  left: -4pt;
+}
+
+.qr-corner.tr {
+  top: -4pt;
+  right: -4pt;
+  transform: scaleX(-1);
+}
+
+.qr-corner.bl {
+  bottom: -4pt;
+  left: -4pt;
+  transform: scaleY(-1);
+}
+
+.qr-corner.br {
+  bottom: -4pt;
+  right: -4pt;
+  transform: scale(-1);
+}
+
+.footer-qr-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12pt;
+}
+
+.footer-qr-text {
+  text-align: left;
+}
+
+.footer-qr-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 8.5pt;
+  color: #5c3d2e;
+  font-weight: 600;
+  margin-bottom: 2pt;
+}
+
+.footer-qr-sub {
+  font-family: 'Lora', serif;
+  font-size: 6.2pt;
+  font-style: italic;
+  color: #9a8b7a;
+}
+
+.footer-qr-url {
+  font-family: 'Lora', serif;
+  font-size: 4.8pt;
+  color: #b8a080;
+  margin-top: 3pt;
+  word-break: break-all;
+  max-width: 165pt;
+}
+
+.flourish {
+  text-align: center;
+  margin: 6pt 0;
+}
+
+.flourish span {
+  display: inline-block;
+  width: 6pt;
+  height: 6pt;
+  margin: 0 4pt;
+  background: #b8a080;
+  border-radius: 50%;
+}
+
+.date-stamp {
+  font-family: 'Lora', serif;
+  font-size: 5.5pt;
+  font-style: italic;
+  color: #b8a080;
+  text-align: center;
+  margin-top: 2pt;
+}
