@@ -1,0 +1,32 @@
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { margin: 0; }
+.cover-page {
+  --bg: #f5ecd9;
+  --ink: #1a1a1a;
+  --accent: #6b7f4a;
+  width: 210mm;
+  height: 297mm;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Lora', serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+.cover-page.style-modern { --bg: #f8f4ef; --ink: #182230; --accent: #b75d3b; font-family: 'Inter', sans-serif; }
+.cover-page.style-minimalist, .cover-page.style-minimilalist { --bg: #ffffff; --ink: #151515; --accent: #151515; font-family: 'Inter', sans-serif; }
+.front-cover { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; padding: 22mm; }
+.cover-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.cover-tint { position: absolute; inset: 0; background: rgba(245,236,217,0.52); z-index: 2; }
+.style-modern .cover-tint { background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.82)); }
+.style-minimalist .cover-tint, .style-minimilalist .cover-tint { background: rgba(255,255,255,0.86); }
+.front-title-block { position: relative; z-index: 3; max-width: 155mm; padding: 14mm 12mm; background: rgba(255,250,242,0.72); border: 1pt solid rgba(107,127,74,0.45); }
+.style-modern .front-title-block { border: 0; border-radius: 14pt; background: rgba(255,255,255,0.82); box-shadow: 0 8pt 30pt rgba(0,0,0,0.12); }
+.style-minimalist .front-title-block, .style-minimilalist .front-title-block { border: 0; background: transparent; box-shadow: none; }
+.eyebrow { font-family: 'Inter', sans-serif; font-size: 8pt; letter-spacing: 3pt; text-transform: uppercase; color: var(--accent); margin-bottom: 10pt; }
+h1 { font-family: 'Playfair Display', serif; font-size: 42pt; line-height: 1.03; color: var(--ink); }
+.style-classic h1 { font-family: 'Dancing Script', cursive; font-size: 50pt; }
+.style-modern h1 { font-family: 'Playfair Display', serif; letter-spacing: -0.6pt; }
+.style-minimalist h1, .style-minimilalist h1 { font-family: 'Inter', sans-serif; font-size: 36pt; letter-spacing: -1.2pt; font-weight: 600; }
+.subtitle { margin-top: 10pt; font-size: 13pt; line-height: 1.45; color: var(--ink); opacity: 0.85; font-style: italic; }
+.author { margin-top: 20pt; font-size: 11pt; color: var(--ink); opacity: 0.78; }
