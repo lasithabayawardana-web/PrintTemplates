@@ -1,0 +1,31 @@
+@page { size: 9.2mm 297mm; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { margin: 0; }
+.spine {
+  width: 9.2mm;
+  height: 297mm;
+  overflow: hidden;
+  background: #f5ecd9;
+  color: #1a1a1a;
+  font-family: 'Lora', serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spine.style-modern { background: #b75d3b; color: #ffffff; font-family: 'Inter', sans-serif; }
+.spine.style-minimalist, .spine.style-minimilalist { background: #151515; color: #ffffff; font-family: 'Inter', sans-serif; }
+.spine-text {
+  transform: rotate(90deg);
+  transform-origin: center center;
+  white-space: nowrap;
+  width: 260mm;
+  text-align: center;
+  font-size: 9pt;
+  letter-spacing: 0.8pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10mm;
+}
+.spine-title { font-weight: 700; }
+.spine-author { opacity: 0.78; }
