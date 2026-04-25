@@ -1,0 +1,23 @@
+{
+  "cookbook_title": "Lilani's Cookbook",
+  "cookbook_subtitle": "Recipes passed down through generations",
+  "author_name": "Lilani Abeygunawardane",
+  "cover_style": "classic",
+  "style_hint": "Serif typography (Cormorant / Playfair). Warm cream background (#f5ecd9). Ornamental rule under title.",
+  "cover_layout": "template",
+  "front_cover_photo_url": null,
+  "back_cover_photo_url": null,
+  "back_cover_blurb": "This is my first cook book.. lets see how it looks!!!  For my family!",
+  "title_block": {
+    "position": "template_default",
+    "overlay_opacity": 0,
+    "overlay_colour": "#1a1a1a",
+    "text_colour": "#1a1a1a"
+  },
+  "spine_width_mm": 9.2,
+  "page_count": 46,
+  "front_width_mm": 210,
+  "back_width_mm": 210,
+  "height_mm": 297,
+  "bleed_mm": 3
+}
