@@ -1,0 +1,8 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+{% assign style = cover_style | default: "classic" %}
+<div class="spine style-{{ style }}">
+  <div class="spine-text">
+    <span class="spine-title">{{ cookbook_title | default: "Family Cookbook" }}</span>
+    {% if author_name and author_name != "" %}<span class="spine-author">{{ author_name }}</span>{% endif %}
+  </div>
+</div>
