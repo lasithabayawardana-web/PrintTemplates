@@ -1,0 +1,20 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+{% assign style = cover_style | default: "classic" %}
+{% assign front_photo = front_cover_photo_url | default: default_cover_photo_url %}
+{% assign back_photo = back_cover_photo_url | default: "" %}
+
+<div class="cover-page style-{{ style }}">
+  <section class="front-cover">
+    {% if front_photo and front_photo != "" %}
+      <img class="cover-photo" src="{{ front_photo }}" alt="{{ cookbook_title | default: 'Family Cookbook' }}">
+    {% endif %}
+    <div class="cover-tint"></div>
+    <div class="front-title-block">
+      <p class="eyebrow">The Family Table</p>
+      <h1>{{ cookbook_title | default: "Family Cookbook" }}</h1>
+      {% if cookbook_subtitle and cookbook_subtitle != "" %}<p class="subtitle">{{ cookbook_subtitle }}</p>{% endif %}
+      {% if author_name and author_name != "" %}<p class="author">by {{ author_name }}</p>{% endif %}
+    </div>
+  </section>
+</div>
