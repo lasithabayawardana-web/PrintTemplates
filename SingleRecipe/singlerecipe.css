@@ -199,7 +199,7 @@ body {
 .section-header + * {
   break-before: avoid;
   page-break-before: avoid;
-  min-height: 60pt;
+
 }
 
 .section-label {
