@@ -1,6 +1,13 @@
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ recipe_title | default: "Recipe" }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
 
+{% if recipe_title %}
 <div class="page">
 
   <div class="title-block">
@@ -10,19 +17,14 @@
       <div class="rule-line thick"></div>
     </div>
     <div class="thin-rule"></div>
-
     <p class="eyebrow">A Recipe from The Family Table</p>
-
     <h1 class="recipe-title">{{ recipe_title }}</h1>
-
     {% if creator_name %}
       <p class="creator-name">by {{ creator_name }}</p>
     {% endif %}
-
-    {% if category_tags and category_tags != "" %}
+    {% if category_tags != blank %}
       <p class="category-tags">{{ category_tags }}</p>
     {% endif %}
-
     <div class="thin-rule bottom"></div>
     <div class="ornament-rule">
       <div class="rule-line thick"></div>
@@ -34,163 +36,196 @@
   {% if hero_image_url %}
     <div class="hero-container">
       <img src="{{ hero_image_url }}" alt="{{ recipe_title }}" class="hero-image">
-      <div class="hero-overlay"></div>
+      <div class="hero-overlay" aria-hidden="true"></div>
     </div>
   {% endif %}
 
-  {% for section in sections %}
-    <div class="recipe-section">
+  {% if sections and sections.size > 0 %}
+    {% for section in sections %}
+      <div class="recipe-section">
 
-      <div class="section-header">
-        <div class="rule-line thin"></div>
-        <span class="section-label">
-          <span class="section-mark" aria-hidden="true"></span>
-          <span class="section-label-text">{{ section.label }}</span>
-          <span class="section-mark" aria-hidden="true"></span>
-        </span>
-        <div class="rule-line thin"></div>
-      </div>
+        <div class="section-header">
+          <div class="rule-line thin"></div>
+          <span class="section-label">
+            <span class="section-mark" aria-hidden="true"></span>
+            <span class="section-label-text">{{ section.label }}</span>
+            <span class="section-mark" aria-hidden="true"></span>
+          </span>
+          <div class="rule-line thin"></div>
+        </div>
 
-      {% if section.type == "ingredients" %}
-        <p class="prose drop-cap">Here's everything you'll need to get started:</p>
-      
-        <div class="ingredients-box">
-      
-          {% if section.sub_sections and section.sub_sections.size > 0 %}
-            <div class="ingredient-groups">
+        {% if section.type == "ingredients" %}
+          <p class="prose">Here's everything you'll need to get started:</p>
+          <div class="ingredients-box">
+            {% if section.sub_sections and section.sub_sections.size > 0 %}
+              {% comment %}
+                Layout decision based on group count and group sizes:
+                - 1 group  → single full-width group
+                - 2 groups, both small (<10 items) → side-by-side
+                - 2 groups, any large → stacked
+                - 3+ groups → stacked
+                A group is "large" if it has >= 10 non-empty items.
+              {% endcomment %}
+
+              {% assign group_count = section.sub_sections.size %}
+              {% assign has_large_group = false %}
               {% for group in section.sub_sections %}
-                {% assign item_count = 0 %}
+                {% assign group_item_count = 0 %}
                 {% for item in group.items %}
                   {% assign trimmed_item = item | strip %}
                   {% if trimmed_item != "" %}
-                    {% assign item_count = item_count | plus: 1 %}
+                    {% assign group_item_count = group_item_count | plus: 1 %}
                   {% endif %}
                 {% endfor %}
-      
-                {% if item_count > 0 %}
-                  <div class="ingredient-group">
-                    {% if group.header and group.header != "" %}
-                      <p class="ingredient-group-header">{{ group.header }}</p>
-                    {% endif %}
-      
-                    <ul class="ingredients-list {% if item_count >= 8 %}two-columns{% else %}one-column{% endif %}">
-                      {% for item in group.items %}
-                        {% assign trimmed_item = item | strip %}
-                        {% if trimmed_item != "" %}
-                          <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ trimmed_item }}</li>
-                        {% endif %}
-                      {% endfor %}
-                    </ul>
-                  </div>
+                {% if group_item_count >= 10 %}
+                  {% assign has_large_group = true %}
                 {% endif %}
               {% endfor %}
-            </div>
-      
-          {% else %}
-            {% assign ingredient_lines = section.content | newline_to_br | split: '<br />' %}
-            {% assign ingredient_count = 0 %}
-            {% for line in ingredient_lines %}
-              {% assign trimmed = line | strip %}
-              {% if trimmed != "" %}
-                {% assign ingredient_count = ingredient_count | plus: 1 %}
+
+              {% assign layout_class = "stacked" %}
+              {% if group_count == 2 and has_large_group == false %}
+                {% assign layout_class = "side-by-side" %}
               {% endif %}
-            {% endfor %}
-      
-            <ul class="ingredients-list {% if ingredient_count >= 8 %}two-columns{% else %}one-column{% endif %}">
+
+              <div class="ingredient-groups {{ layout_class }}">
+                {% for group in section.sub_sections %}
+                  {% assign item_count = 0 %}
+                  {% for item in group.items %}
+                    {% assign trimmed_item = item | strip %}
+                    {% if trimmed_item != "" %}
+                      {% assign item_count = item_count | plus: 1 %}
+                    {% endif %}
+                  {% endfor %}
+                  {% if item_count > 0 %}
+                    <div class="ingredient-group">
+                      {% if group.header != blank %}
+                        <p class="ingredient-group-header">{{ group.header }}</p>
+                      {% endif %}
+                      {% comment %}
+                        Within-group columns: only trigger two columns at 10+
+                        items, and only when the group is full-width (i.e. not
+                        already in a side-by-side layout). Two columns inside
+                        a side-by-side cell would create cramped 4-column
+                        compositions.
+                      {% endcomment %}
+                      <ul class="ingredients-list {% if item_count >= 10 and layout_class != 'side-by-side' %}two-columns{% else %}one-column{% endif %}">
+                        {% for item in group.items %}
+                          {% assign trimmed_item = item | strip %}
+                          {% if trimmed_item != "" %}
+                            <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ trimmed_item }}</li>
+                          {% endif %}
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% else %}
+              {% comment %} Legacy fallback: flat content string {% endcomment %}
+              {% assign ingredient_lines = section.content | newline_to_br | split: '<br />' %}
+              {% assign ingredient_count = 0 %}
               {% for line in ingredient_lines %}
                 {% assign trimmed = line | strip %}
                 {% if trimmed != "" %}
-                  {% assign clean = trimmed | remove_first: "- " | remove_first: "• " | remove_first: "* " %}
-                  <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ clean }}</li>
+                  {% assign ingredient_count = ingredient_count | plus: 1 %}
                 {% endif %}
               {% endfor %}
-            </ul>
-          {% endif %}
-      
-        </div>
-        
-      {% elsif section.type == "preparation" %}
-        <p class="prose drop-cap">Follow these steps to bring it all together:</p>
-
-        {% assign prep_lines = section.content | newline_to_br | split: '<br />' %}
-        {% assign step_num = 0 %}
-        {% for line in prep_lines %}
-          {% assign trimmed = line | strip %}
-          {% if trimmed != "" %}
-            {% assign first_char = trimmed | slice: 0, 1 %}
-            {% assign is_digit = false %}
-            {% if first_char == "1" or first_char == "2" or first_char == "3" or first_char == "4" or first_char == "5" or first_char == "6" or first_char == "7" or first_char == "8" or first_char == "9" %}
-              {% assign is_digit = true %}
+              <ul class="ingredients-list {% if ingredient_count >= 10 %}two-columns{% else %}one-column{% endif %}">
+                {% for line in ingredient_lines %}
+                  {% assign trimmed = line | strip %}
+                  {% if trimmed != "" %}
+                    {% assign clean = trimmed | remove_first: "- " | remove_first: "• " | remove_first: "* " %}
+                    <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ clean }}</li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
             {% endif %}
+          </div>
 
-            {% if is_digit %}
-              {% assign step_num = step_num | plus: 1 %}
-              {% assign step_text = trimmed
-                | replace_first: "1. ", ""
-                | replace_first: "2. ", ""
-                | replace_first: "3. ", ""
-                | replace_first: "4. ", ""
-                | replace_first: "5. ", ""
-                | replace_first: "6. ", ""
-                | replace_first: "7. ", ""
-                | replace_first: "8. ", ""
-                | replace_first: "9. ", ""
-                | replace_first: "10. ", ""
-                | replace_first: "1) ", ""
-                | replace_first: "2) ", ""
-                | replace_first: "3) ", ""
-                | replace_first: "4) ", ""
-                | replace_first: "5) ", ""
-                | replace_first: "6) ", ""
-                | replace_first: "7) ", ""
-                | replace_first: "8) ", ""
-                | replace_first: "9) ", ""
-                | replace_first: "10) ", "" %}
-              <div class="step">
-                <span class="step-number">{{ step_num }}</span>
-                <span class="step-text">{{ step_text }}</span>
-              </div>
-            {% else %}
-              {% assign step_num = 0 %}
-              <p class="sub-section-header">{{ trimmed }}</p>
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-
-      {% else %}
-        {% assign prose_lines = section.content | newline_to_br | split: '<br />' %}
-        {% for para in prose_lines %}
-          {% assign trimmed = para | strip %}
-          {% if trimmed != "" %}
-            <p class="prose {% if forloop.first %}drop-cap{% endif %}">{{ trimmed }}</p>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-
-      {% if section.photos and section.photos.size > 0 %}
-        <div class="photo-strip photo-count-{{ section.photos.size }}">
-          {% for photo in section.photos %}
-            <div class="polaroid {% cycle 'tilt-left', 'tilt-right' %}">
-              <img src="{{ photo.url }}" alt="{{ photo.description }}" class="polaroid-img">
-              {% if photo.description and photo.description != "" %}
-                <p class="polaroid-caption">{{ photo.description }}</p>
+        {% elsif section.type == "preparation" %}
+          <p class="prose">Follow these steps to bring it all together:</p>
+          {% if section.steps and section.steps.size > 0 %}
+            {% for step in section.steps %}
+              {% if step.header != blank %}
+                <p class="sub-section-header">{{ step.header }}</p>
+              {% else %}
+                <div class="step">
+                  <span class="step-number">{{ forloop.index }}</span>
+                  <span class="step-text">{{ step.text }}</span>
+                </div>
               {% endif %}
-            </div>
+            {% endfor %}
+          {% else %}
+            {% comment %} Legacy fallback: parse line-prefixed numbered steps {% endcomment %}
+            {% assign prep_lines = section.content | newline_to_br | split: '<br />' %}
+            {% assign step_num = 0 %}
+            {% for line in prep_lines %}
+              {% assign trimmed = line | strip %}
+              {% if trimmed != "" %}
+                {% assign first_char = trimmed | slice: 0, 1 %}
+                {% assign is_digit = false %}
+                {% if first_char == "0" or first_char == "1" or first_char == "2" or first_char == "3" or first_char == "4" or first_char == "5" or first_char == "6" or first_char == "7" or first_char == "8" or first_char == "9" %}
+                  {% assign is_digit = true %}
+                {% endif %}
+                {% if is_digit %}
+                  {% assign step_num = step_num | plus: 1 %}
+                  {% assign step_text = trimmed %}
+                  {% if step_text contains ". " %}
+                    {% assign dot_prefix_size = step_text | split: ". " | first | size %}
+                    {% assign prefix_len = dot_prefix_size | plus: 2 %}
+                    {% assign step_text = step_text | slice: prefix_len, 9999 %}
+                  {% elsif step_text contains ") " %}
+                    {% assign paren_prefix_size = step_text | split: ") " | first | size %}
+                    {% assign prefix_len = paren_prefix_size | plus: 2 %}
+                    {% assign step_text = step_text | slice: prefix_len, 9999 %}
+                  {% endif %}
+                  <div class="step">
+                    <span class="step-number">{{ step_num }}</span>
+                    <span class="step-text">{{ step_text }}</span>
+                  </div>
+                {% else %}
+                  {% assign step_num = 0 %}
+                  <p class="sub-section-header">{{ trimmed }}</p>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+        {% else %}
+          {% assign prose_lines = section.content | newline_to_br | split: '<br />' %}
+          {% for para in prose_lines %}
+            {% assign trimmed = para | strip %}
+            {% if trimmed != "" %}
+              {% assign para_len = trimmed | size %}
+              <p class="prose {% if forloop.first and para_len > 120 %}drop-cap{% endif %}">{{ trimmed }}</p>
+            {% endif %}
           {% endfor %}
-        </div>
-      {% endif %}
+        {% endif %}
 
-    </div>
-  {% endfor %}
+        {% if section.photos and section.photos.size > 0 %}
+          <div class="photo-strip photo-count-{{ section.photos.size }}">
+            {% for photo in section.photos %}
+              <div class="polaroid {% cycle 'tilt-left', 'tilt-right' %}">
+                <img src="{{ photo.url }}" alt="{{ photo.description | default: recipe_title }}" class="polaroid-img">
+                {% if photo.description != blank %}
+                  <p class="polaroid-caption">{{ photo.description }}</p>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
 
-  {% if recipe_url and recipe_url != "" %}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% if recipe_url != blank %}
     <div class="footer">
       <div class="ornament-rule">
         <div class="rule-line thick"></div>
         <span class="rule-star" aria-hidden="true"></span>
         <div class="rule-line thick"></div>
       </div>
-
       <div class="footer-brand">
         <div class="footer-qr">
           <div class="footer-qr-frame">
@@ -199,28 +234,25 @@
               <span class="qr-corner tr" aria-hidden="true"></span>
               <span class="qr-corner bl" aria-hidden="true"></span>
               <span class="qr-corner br" aria-hidden="true"></span>
-      
               <div class="footer-qr-content">
-                <div id="qr-footer" class="qr-target-large"></div>
+                {% if qr_image_url %}
+                  <img src="{{ qr_image_url }}" alt="QR code linking to the full digital recipe" class="qr-target-large">
+                {% endif %}
                 <div class="footer-qr-text">
                   <p class="footer-qr-heading">Scan for the full digital recipe</p>
                   <p class="footer-qr-sub">With all audio, video &amp; photos</p>
-                  <p class="footer-qr-url">{{ recipe_url }}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      
         <div class="footer-logo">
           <img src="https://nldppctlsbazaleojhyc.supabase.co/storage/v1/object/public/brand-assets/final-logo.svg" alt="The Family Table">
         </div>
       </div>
-
       <div class="flourish" aria-hidden="true">
         <span></span><span></span><span></span>
       </div>
-
       {% if recorded_date %}
         <p class="date-stamp">Recorded {{ recorded_date }}</p>
       {% endif %}
@@ -228,20 +260,7 @@
   {% endif %}
 
 </div>
+{% endif %}
 
-<script>
-  (function () {
-    function createQRCode(elementId, text, width, height, level) {
-      var el = document.getElementById(elementId);
-      if (!el || !text) return;
-      new QRCode(el, {
-        text: text,
-        width: width,
-        height: height,
-        correctLevel: level || QRCode.CorrectLevel.M
-      });
-    }
-
-    createQRCode('qr-footer', '{{ recipe_url }}', 64, 64, QRCode.CorrectLevel.M);
-  })();
-</script>
+</body>
+</html>
