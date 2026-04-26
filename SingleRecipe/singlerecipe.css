@@ -1,6 +1,13 @@
+/* ==========================================================================
+   PAGE & PRINT MARGINS
+   12mm top/bottom keeps page 1 title block from feeling cramped while
+   still giving pages 2+ adequate breathing room from the parchment edge.
+   8mm left/right for tighter horizontal rhythm.
+   ========================================================================== */
+
 @page {
   size: A4;
-  margin: 8mm;
+  margin: 10mm;
 }
 
 * {
@@ -9,20 +16,31 @@
   box-sizing: border-box;
 }
 
+html, body {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  background: radial-gradient(ellipse at center, #faf6f0 35%, #e6d5be 100%);
+  background-color: #f4ead9; /* fallback if gradient is dropped */
+  min-height: 100vh;
+}
+
 .page {
   font-family: 'Lora', serif;
   color: #2d1f14;
-  padding: 5mm 14mm 5mm 14mm;
-  background: radial-gradient(ellipse at center, #faf6f0 35%, #e6d5be 100%);
-  min-height: 100%;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+  padding: 8mm 10mm 0;
 }
+
+/* ==========================================================================
+   TITLE BLOCK
+   ========================================================================== */
 
 .title-block {
   text-align: center;
   margin-bottom: 4pt;
-  margin-top: 20pt;
+  margin-top: 4pt;
   page-break-inside: avoid;
   break-inside: avoid;
 }
@@ -61,6 +79,10 @@
   font-style: italic;
   margin: 2pt 0;
 }
+
+/* ==========================================================================
+   DECORATIVE RULES
+   ========================================================================== */
 
 .ornament-rule {
   display: flex;
@@ -116,8 +138,12 @@
   margin: 5pt auto 0;
 }
 
+/* ==========================================================================
+   HERO IMAGE
+   ========================================================================== */
+
 .hero-container {
-  margin: 8pt auto 8pt;
+  margin: 8pt auto;
   text-align: center;
   width: 100%;
   max-width: 100%;
@@ -143,26 +169,37 @@
   left: 0;
   right: 0;
   bottom: 0;
-  box-shadow: inset 0 0 20pt 10pt rgba(250, 246, 240, 0.55);
+  background: radial-gradient(ellipse at center,
+              rgba(250, 246, 240, 0) 55%,
+              rgba(250, 246, 240, 0.45) 100%);
   pointer-events: none;
 }
 
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+
 .recipe-section {
-  page-break-inside: auto;
   break-inside: auto;
-  margin-top: 16pt;
-  margin-bottom: 6pt;
+  margin-top: 20pt;
+  margin-bottom: 4pt;
 }
 
 .section-header {
   display: flex;
   align-items: center;
   gap: 6pt;
-  margin: 18pt 0 8pt;
+  margin: 0 0 8pt;
   page-break-after: avoid;
   break-after: avoid;
   page-break-inside: avoid;
   break-inside: avoid;
+}
+
+.section-header + * {
+  break-before: avoid;
+  page-break-before: avoid;
+  min-height: 60pt;
 }
 
 .section-label {
@@ -170,7 +207,7 @@
   align-items: center;
   gap: 6pt;
   font-family: 'Playfair Display', serif;
-  font-size: 12pt;
+  font-size: 13pt;
   font-weight: 700;
   color: #5c3d2e;
   letter-spacing: 0.5pt;
@@ -187,23 +224,29 @@
   display: inline-block;
 }
 
+/* ==========================================================================
+   PROSE
+   ========================================================================== */
+
 .prose {
   font-family: 'Lora', serif;
-  font-size: 10pt;
+  font-size: 11pt;
   line-height: 1.72;
   margin-bottom: 6pt;
-  text-align: justify;
+  text-align: left;
   orphans: 3;
   widows: 3;
 }
 
 .prose.drop-cap {
   min-height: 32pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .drop-cap::first-letter {
   font-family: 'Dancing Script', cursive;
-  font-size: 34pt;
+  font-size: 36pt;
   float: left;
   line-height: 0.85;
   margin-right: 6pt;
@@ -213,14 +256,78 @@
   font-weight: 700;
 }
 
+/* ==========================================================================
+   INGREDIENTS
+   The .ingredient-groups container takes a layout modifier:
+     .stacked       → groups flow vertically (default for 1 group, 3+ groups,
+                      or when any group has 10+ items)
+     .side-by-side  → groups arrange horizontally in two columns (only used
+                      when there are exactly 2 groups, both with <10 items)
+   Within a group, .ingredients-list can be .one-column or .two-columns.
+   Two-columns is only used inside stacked layouts; side-by-side groups
+   always use one column to avoid cramped 4-column compositions.
+   ========================================================================== */
+
 .ingredients-box {
   border: 1pt solid #d4c5a9;
   border-radius: 3pt;
-  padding: 8pt 12pt;
-  margin: 6pt 50pt 6pt 50pt;
+  padding: 10pt 14pt;
+  margin: 6pt 28pt;
   background: #fdf9f3;
-  page-break-inside: avoid;
-  break-inside: avoid;
+}
+
+.ingredient-groups {
+  display: block;
+}
+
+.ingredient-groups.side-by-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18pt;
+  align-items: start;
+}
+
+/* Stacked layout: divider between groups */
+.ingredient-groups.stacked .ingredient-group + .ingredient-group {
+  margin-top: 12pt;
+  padding-top: 12pt;
+  position: relative;
+}
+
+.ingredient-groups.stacked .ingredient-group + .ingredient-group::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 4pt;
+  height: 4pt;
+  background: #b8a080;
+}
+
+/* Side-by-side layout: vertical rule between groups */
+.ingredient-groups.side-by-side .ingredient-group + .ingredient-group {
+  position: relative;
+  padding-left: 18pt;
+}
+
+.ingredient-groups.side-by-side .ingredient-group + .ingredient-group::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8pt;
+  bottom: 8pt;
+  width: 0.5pt;
+  background: #d4c5a9;
+}
+
+.ingredient-group-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 11pt;
+  font-weight: 700;
+  color: #5c3d2e;
+  margin: 0 0 6pt 0;
+  letter-spacing: 0.2pt;
 }
 
 .ingredients-list {
@@ -228,6 +335,7 @@
   padding: 0;
   margin: 0;
   column-gap: 18pt;
+  column-fill: auto;
 }
 
 .ingredients-list.one-column {
@@ -242,7 +350,7 @@
   padding: 2pt 0;
   border-bottom: 0.5pt dotted #e0d5c5;
   font-family: 'Lora', serif;
-  font-size: 10pt;
+  font-size: 11pt;
   line-height: 1.5;
   page-break-inside: avoid;
   break-inside: avoid;
@@ -260,29 +368,9 @@
   top: -1pt;
 }
 
-.ingredient-groups {
-  display: block;
-}
-
-.ingredient-group + .ingredient-group {
-  margin-top: 10pt;
-  padding-top: 8pt;
-  border-top: 0.5pt solid #e6dccd;
-}
-
-.ingredient-group-header {
-  font-family: 'Playfair Display', serif;
-  font-size: 10pt;
-  font-weight: 700;
-  color: #5c3d2e;
-  margin: 0 0 5pt 0;
-  letter-spacing: 0.2pt;
-}
-
-
 .sub-section-header {
   font-family: 'Playfair Display', serif;
-  font-size: 10pt;
+  font-size: 11pt;
   font-weight: 700;
   color: #5c3d2e;
   margin-top: 12pt;
@@ -291,12 +379,16 @@
   break-after: avoid;
 }
 
+/* ==========================================================================
+   PREPARATION STEPS
+   ========================================================================== */
+
 .step {
   display: flex;
   gap: 6pt;
   margin-bottom: 6pt;
   font-family: 'Lora', serif;
-  font-size: 10pt;
+  font-size: 11pt;
   line-height: 1.6;
   page-break-inside: avoid;
   break-inside: avoid;
@@ -321,6 +413,10 @@
   flex: 1;
 }
 
+/* ==========================================================================
+   POLAROID PHOTOS
+   ========================================================================== */
+
 .photo-strip {
   display: flex;
   flex-wrap: wrap;
@@ -328,8 +424,6 @@
   margin-top: 8pt;
   justify-content: center;
   align-items: flex-start;
-  page-break-inside: avoid;
-  break-inside: avoid;
 }
 
 .photo-strip .polaroid {
@@ -379,13 +473,17 @@
   width: 100%;
 }
 
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
 .footer {
   margin-top: 10pt;
   padding-top: 6pt;
   page-break-inside: avoid;
   break-inside: avoid;
+  break-before: avoid;
 }
-
 
 .footer-brand {
   display: flex;
@@ -394,8 +492,6 @@
   gap: 20pt;
   margin-top: 10pt;
   margin-bottom: 6pt;
-  page-break-inside: avoid;
-  break-inside: avoid;
 }
 
 .footer-qr {
@@ -436,11 +532,7 @@
   width: 64pt;
   height: 64pt;
   min-width: 64pt;
-}
-
-.qr-target-large img {
-  width: 64pt !important;
-  height: 64pt !important;
+  display: block;
 }
 
 .qr-corner {
@@ -470,28 +562,10 @@
   left: 0;
 }
 
-.qr-corner.tl {
-  top: -4pt;
-  left: -4pt;
-}
-
-.qr-corner.tr {
-  top: -4pt;
-  right: -4pt;
-  transform: scaleX(-1);
-}
-
-.qr-corner.bl {
-  bottom: -4pt;
-  left: -4pt;
-  transform: scaleY(-1);
-}
-
-.qr-corner.br {
-  bottom: -4pt;
-  right: -4pt;
-  transform: scale(-1);
-}
+.qr-corner.tl { top: -4pt; left: -4pt; }
+.qr-corner.tr { top: -4pt; right: -4pt; transform: scaleX(-1); }
+.qr-corner.bl { bottom: -4pt; left: -4pt; transform: scaleY(-1); }
+.qr-corner.br { bottom: -4pt; right: -4pt; transform: scale(-1); }
 
 .footer-qr-content {
   display: flex;
@@ -506,7 +580,7 @@
 
 .footer-qr-heading {
   font-family: 'Playfair Display', serif;
-  font-size: 8.5pt;
+  font-size: 9pt;
   color: #5c3d2e;
   font-weight: 600;
   margin-bottom: 2pt;
@@ -514,19 +588,14 @@
 
 .footer-qr-sub {
   font-family: 'Lora', serif;
-  font-size: 6.2pt;
+  font-size: 7pt;
   font-style: italic;
   color: #9a8b7a;
 }
 
-.footer-qr-url {
-  font-family: 'Lora', serif;
-  font-size: 4.8pt;
-  color: #b8a080;
-  margin-top: 3pt;
-  word-break: break-all;
-  max-width: 165pt;
-}
+/* ==========================================================================
+   FLOURISH & DATE STAMP
+   ========================================================================== */
 
 .flourish {
   text-align: center;
@@ -544,7 +613,7 @@
 
 .date-stamp {
   font-family: 'Lora', serif;
-  font-size: 5.5pt;
+  font-size: 7pt;
   font-style: italic;
   color: #b8a080;
   text-align: center;
