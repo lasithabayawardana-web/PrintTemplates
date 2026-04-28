@@ -199,7 +199,6 @@ body {
 .section-header + * {
   break-before: avoid;
   page-break-before: avoid;
-
 }
 
 .section-label {
