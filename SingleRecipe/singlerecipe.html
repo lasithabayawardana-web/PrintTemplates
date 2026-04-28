@@ -1,266 +1,620 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{{ recipe_title | default: "Recipe" }}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-</head>
-<body>
+/* ==========================================================================
+   PAGE & PRINT MARGINS
+   12mm top/bottom keeps page 1 title block from feeling cramped while
+   still giving pages 2+ adequate breathing room from the parchment edge.
+   8mm left/right for tighter horizontal rhythm.
+   ========================================================================== */
 
-{% if recipe_title %}
-<div class="page">
+@page {
+  size: A4;
+  margin: 10mm;
+}
 
-  <div class="title-block">
-    <div class="ornament-rule">
-      <div class="rule-line thick"></div>
-      <span class="rule-star" aria-hidden="true"></span>
-      <div class="rule-line thick"></div>
-    </div>
-    <div class="thin-rule"></div>
-    <p class="eyebrow">A Recipe from The Family Table</p>
-    <h1 class="recipe-title">{{ recipe_title }}</h1>
-    {% if creator_name %}
-      <p class="creator-name">by {{ creator_name }}</p>
-    {% endif %}
-    {% if category_tags != blank %}
-      <p class="category-tags">{{ category_tags }}</p>
-    {% endif %}
-    <div class="thin-rule bottom"></div>
-    <div class="ornament-rule">
-      <div class="rule-line thick"></div>
-      <span class="rule-star" aria-hidden="true"></span>
-      <div class="rule-line thick"></div>
-    </div>
-  </div>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  {% if hero_image_url %}
-    <div class="hero-container">
-      <img src="{{ hero_image_url }}" alt="{{ recipe_title }}" class="hero-image">
-      <div class="hero-overlay" aria-hidden="true"></div>
-    </div>
-  {% endif %}
+html, body {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
 
-  {% if sections and sections.size > 0 %}
-    {% for section in sections %}
-      <div class="recipe-section">
+body {
+  background: radial-gradient(ellipse at center, #faf6f0 35%, #e6d5be 100%);
+  background-color: #f4ead9; /* fallback if gradient is dropped */
+  min-height: 100vh;
+}
 
-        <div class="section-header">
-          <div class="rule-line thin"></div>
-          <span class="section-label">
-            <span class="section-mark" aria-hidden="true"></span>
-            <span class="section-label-text">{{ section.label }}</span>
-            <span class="section-mark" aria-hidden="true"></span>
-          </span>
-          <div class="rule-line thin"></div>
-        </div>
+.page {
+  font-family: 'Lora', serif;
+  color: #2d1f14;
+  padding: 8mm 10mm 0;
+}
 
-        {% if section.type == "ingredients" %}
-          <p class="prose">Here's everything you'll need to get started:</p>
-          <div class="ingredients-box">
-            {% if section.sub_sections and section.sub_sections.size > 0 %}
-              {% comment %}
-                Layout decision based on group count and group sizes:
-                - 1 group  → single full-width group
-                - 2 groups, both small (<10 items) → side-by-side
-                - 2 groups, any large → stacked
-                - 3+ groups → stacked
-                A group is "large" if it has >= 10 non-empty items.
-              {% endcomment %}
+/* ==========================================================================
+   TITLE BLOCK
+   ========================================================================== */
 
-              {% assign group_count = section.sub_sections.size %}
-              {% assign has_large_group = false %}
-              {% for group in section.sub_sections %}
-                {% assign group_item_count = 0 %}
-                {% for item in group.items %}
-                  {% assign trimmed_item = item | strip %}
-                  {% if trimmed_item != "" %}
-                    {% assign group_item_count = group_item_count | plus: 1 %}
-                  {% endif %}
-                {% endfor %}
-                {% if group_item_count >= 10 %}
-                  {% assign has_large_group = true %}
-                {% endif %}
-              {% endfor %}
+.title-block {
+  text-align: center;
+  margin-bottom: 4pt;
+  margin-top: 4pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
 
-              {% assign layout_class = "stacked" %}
-              {% if group_count == 2 and has_large_group == false %}
-                {% assign layout_class = "side-by-side" %}
-              {% endif %}
+.eyebrow {
+  font-family: 'Playfair Display', serif;
+  font-size: 7pt;
+  letter-spacing: 3pt;
+  color: #6b7f4a;
+  text-transform: uppercase;
+  margin: 3pt 0;
+}
 
-              <div class="ingredient-groups {{ layout_class }}">
-                {% for group in section.sub_sections %}
-                  {% assign item_count = 0 %}
-                  {% for item in group.items %}
-                    {% assign trimmed_item = item | strip %}
-                    {% if trimmed_item != "" %}
-                      {% assign item_count = item_count | plus: 1 %}
-                    {% endif %}
-                  {% endfor %}
-                  {% if item_count > 0 %}
-                    <div class="ingredient-group">
-                      {% if group.header != blank %}
-                        <p class="ingredient-group-header">{{ group.header }}</p>
-                      {% endif %}
-                      {% comment %}
-                        Within-group columns: only trigger two columns at 10+
-                        items, and only when the group is full-width (i.e. not
-                        already in a side-by-side layout). Two columns inside
-                        a side-by-side cell would create cramped 4-column
-                        compositions.
-                      {% endcomment %}
-                      <ul class="ingredients-list {% if item_count >= 10 and layout_class != 'side-by-side' %}two-columns{% else %}one-column{% endif %}">
-                        {% for item in group.items %}
-                          {% assign trimmed_item = item | strip %}
-                          {% if trimmed_item != "" %}
-                            <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ trimmed_item }}</li>
-                          {% endif %}
-                        {% endfor %}
-                      </ul>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            {% else %}
-              {% comment %} Legacy fallback: flat content string {% endcomment %}
-              {% assign ingredient_lines = section.content | newline_to_br | split: '<br />' %}
-              {% assign ingredient_count = 0 %}
-              {% for line in ingredient_lines %}
-                {% assign trimmed = line | strip %}
-                {% if trimmed != "" %}
-                  {% assign ingredient_count = ingredient_count | plus: 1 %}
-                {% endif %}
-              {% endfor %}
-              <ul class="ingredients-list {% if ingredient_count >= 10 %}two-columns{% else %}one-column{% endif %}">
-                {% for line in ingredient_lines %}
-                  {% assign trimmed = line | strip %}
-                  {% if trimmed != "" %}
-                    {% assign clean = trimmed | remove_first: "- " | remove_first: "• " | remove_first: "* " %}
-                    <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ clean }}</li>
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </div>
+.recipe-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 24pt;
+  font-weight: 700;
+  color: #2d1f14;
+  margin: 2pt 0;
+  line-height: 1.15;
+}
 
-        {% elsif section.type == "preparation" %}
-          <p class="prose">Follow these steps to bring it all together:</p>
-          {% if section.steps and section.steps.size > 0 %}
-            {% for step in section.steps %}
-              {% if step.header != blank %}
-                <p class="sub-section-header">{{ step.header }}</p>
-              {% else %}
-                <div class="step">
-                  <span class="step-number">{{ forloop.index }}</span>
-                  <span class="step-text">{{ step.text }}</span>
-                </div>
-              {% endif %}
-            {% endfor %}
-          {% else %}
-            {% comment %} Legacy fallback: parse line-prefixed numbered steps {% endcomment %}
-            {% assign prep_lines = section.content | newline_to_br | split: '<br />' %}
-            {% assign step_num = 0 %}
-            {% for line in prep_lines %}
-              {% assign trimmed = line | strip %}
-              {% if trimmed != "" %}
-                {% assign first_char = trimmed | slice: 0, 1 %}
-                {% assign is_digit = false %}
-                {% if first_char == "0" or first_char == "1" or first_char == "2" or first_char == "3" or first_char == "4" or first_char == "5" or first_char == "6" or first_char == "7" or first_char == "8" or first_char == "9" %}
-                  {% assign is_digit = true %}
-                {% endif %}
-                {% if is_digit %}
-                  {% assign step_num = step_num | plus: 1 %}
-                  {% assign step_text = trimmed %}
-                  {% if step_text contains ". " %}
-                    {% assign dot_prefix_size = step_text | split: ". " | first | size %}
-                    {% assign prefix_len = dot_prefix_size | plus: 2 %}
-                    {% assign step_text = step_text | slice: prefix_len, 9999 %}
-                  {% elsif step_text contains ") " %}
-                    {% assign paren_prefix_size = step_text | split: ") " | first | size %}
-                    {% assign prefix_len = paren_prefix_size | plus: 2 %}
-                    {% assign step_text = step_text | slice: prefix_len, 9999 %}
-                  {% endif %}
-                  <div class="step">
-                    <span class="step-number">{{ step_num }}</span>
-                    <span class="step-text">{{ step_text }}</span>
-                  </div>
-                {% else %}
-                  {% assign step_num = 0 %}
-                  <p class="sub-section-header">{{ trimmed }}</p>
-                {% endif %}
-              {% endif %}
-            {% endfor %}
-          {% endif %}
+.creator-name {
+  font-family: 'Lora', serif;
+  font-size: 8pt;
+  color: #7a6652;
+  margin: 1pt 0 2pt;
+  font-style: italic;
+}
 
-        {% else %}
-          {% assign prose_lines = section.content | newline_to_br | split: '<br />' %}
-          {% for para in prose_lines %}
-            {% assign trimmed = para | strip %}
-            {% if trimmed != "" %}
-              {% assign para_len = trimmed | size %}
-              <p class="prose {% if forloop.first and para_len > 120 %}drop-cap{% endif %}">{{ trimmed }}</p>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
+.category-tags {
+  font-family: 'Lora', serif;
+  font-size: 7pt;
+  color: #9a8b7a;
+  letter-spacing: 1.5pt;
+  font-style: italic;
+  margin: 2pt 0;
+}
 
-        {% if section.photos and section.photos.size > 0 %}
-          <div class="photo-strip photo-count-{{ section.photos.size }}">
-            {% for photo in section.photos %}
-              <div class="polaroid {% cycle 'tilt-left', 'tilt-right' %}">
-                <img src="{{ photo.url }}" alt="{{ photo.description | default: recipe_title }}" class="polaroid-img">
-                {% if photo.description != blank %}
-                  <p class="polaroid-caption">{{ photo.description }}</p>
-                {% endif %}
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
+/* ==========================================================================
+   DECORATIVE RULES
+   ========================================================================== */
 
-      </div>
-    {% endfor %}
-  {% endif %}
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+}
 
-  {% if recipe_url != blank %}
-    <div class="footer">
-      <div class="ornament-rule">
-        <div class="rule-line thick"></div>
-        <span class="rule-star" aria-hidden="true"></span>
-        <div class="rule-line thick"></div>
-      </div>
-      <div class="footer-brand">
-        <div class="footer-qr">
-          <div class="footer-qr-frame">
-            <div class="footer-qr-inner">
-              <span class="qr-corner tl" aria-hidden="true"></span>
-              <span class="qr-corner tr" aria-hidden="true"></span>
-              <span class="qr-corner bl" aria-hidden="true"></span>
-              <span class="qr-corner br" aria-hidden="true"></span>
-              <div class="footer-qr-content">
-                {% if qr_image_url %}
-                  <img src="{{ qr_image_url }}" alt="QR code linking to the full digital recipe" class="qr-target-large">
-                {% endif %}
-                <div class="footer-qr-text">
-                  <p class="footer-qr-heading">Scan for the full digital recipe</p>
-                  <p class="footer-qr-sub">With all audio, video &amp; photos</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="footer-logo">
-          <img src="https://nldppctlsbazaleojhyc.supabase.co/storage/v1/object/public/brand-assets/final-logo.svg" alt="The Family Table">
-        </div>
-      </div>
-      <div class="flourish" aria-hidden="true">
-        <span></span><span></span><span></span>
-      </div>
-      {% if recorded_date %}
-        <p class="date-stamp">Recorded {{ recorded_date }}</p>
-      {% endif %}
-    </div>
-  {% endif %}
+.rule-line {
+  flex: 1;
+  background: #b8a080;
+}
 
-</div>
-{% endif %}
+.rule-line.thick {
+  height: 1.5pt;
+  background: #6b7f4a;
+}
 
-</body>
-</html>
+.rule-line.thin {
+  height: 0.5pt;
+  background: #6b7f4a;
+}
+
+.rule-star,
+.rule-diamond,
+.section-mark,
+.diamond {
+  display: inline-block;
+  background: #6b7f4a;
+  transform: rotate(45deg);
+}
+
+.rule-star {
+  width: 7pt;
+  height: 7pt;
+  flex: 0 0 7pt;
+}
+
+.rule-diamond {
+  width: 5pt;
+  height: 5pt;
+  flex: 0 0 5pt;
+  background: #b8a080;
+}
+
+.thin-rule {
+  height: 0.5pt;
+  background: #c4b396;
+  margin: 0 auto 5pt;
+  width: 80%;
+}
+
+.thin-rule.bottom {
+  margin: 5pt auto 0;
+}
+
+/* ==========================================================================
+   HERO IMAGE
+   ========================================================================== */
+
+.hero-container {
+  margin: 8pt auto;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  height: 220pt;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  background: #f6eee3;
+}
+
+.hero-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center,
+              rgba(250, 246, 240, 0) 55%,
+              rgba(250, 246, 240, 0.45) 100%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+
+.recipe-section {
+  break-inside: auto;
+  margin-top: 20pt;
+  margin-bottom: 4pt;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+  margin: 0 0 8pt;
+  page-break-after: avoid;
+  break-after: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.section-header + * {
+  break-before: avoid;
+  page-break-before: avoid;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6pt;
+  font-family: 'Playfair Display', serif;
+  font-size: 13pt;
+  font-weight: 700;
+  color: #5c3d2e;
+  letter-spacing: 0.5pt;
+  white-space: nowrap;
+}
+
+.section-mark {
+  width: 5pt;
+  height: 5pt;
+  flex: 0 0 5pt;
+}
+
+.section-label-text {
+  display: inline-block;
+}
+
+/* ==========================================================================
+   PROSE
+   ========================================================================== */
+
+.prose {
+  font-family: 'Lora', serif;
+  font-size: 11pt;
+  line-height: 1.72;
+  margin-bottom: 6pt;
+  text-align: left;
+  orphans: 3;
+  widows: 3;
+}
+
+.prose.drop-cap {
+  min-height: 32pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.drop-cap::first-letter {
+  font-family: 'Dancing Script', cursive;
+  font-size: 36pt;
+  float: left;
+  line-height: 0.85;
+  margin-right: 6pt;
+  margin-top: 1pt;
+  margin-bottom: 0;
+  color: #4a2d20;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   INGREDIENTS
+   The .ingredient-groups container takes a layout modifier:
+     .stacked       → groups flow vertically (default for 1 group, 3+ groups,
+                      or when any group has 10+ items)
+     .side-by-side  → groups arrange horizontally in two columns (only used
+                      when there are exactly 2 groups, both with <10 items)
+   Within a group, .ingredients-list can be .one-column or .two-columns.
+   Two-columns is only used inside stacked layouts; side-by-side groups
+   always use one column to avoid cramped 4-column compositions.
+   ========================================================================== */
+
+.ingredients-box {
+  border: 1pt solid #d4c5a9;
+  border-radius: 3pt;
+  padding: 10pt 14pt;
+  margin: 6pt 28pt;
+  background: #fdf9f3;
+}
+
+.ingredient-groups {
+  display: block;
+}
+
+.ingredient-groups.side-by-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18pt;
+  align-items: start;
+}
+
+/* Stacked layout: divider between groups */
+.ingredient-groups.stacked .ingredient-group + .ingredient-group {
+  margin-top: 12pt;
+  padding-top: 12pt;
+  position: relative;
+}
+
+.ingredient-groups.stacked .ingredient-group + .ingredient-group::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 4pt;
+  height: 4pt;
+  background: #b8a080;
+}
+
+/* Side-by-side layout: vertical rule between groups */
+.ingredient-groups.side-by-side .ingredient-group + .ingredient-group {
+  position: relative;
+  padding-left: 18pt;
+}
+
+.ingredient-groups.side-by-side .ingredient-group + .ingredient-group::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8pt;
+  bottom: 8pt;
+  width: 0.5pt;
+  background: #d4c5a9;
+}
+
+.ingredient-group-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 11pt;
+  font-weight: 700;
+  color: #5c3d2e;
+  margin: 0 0 6pt 0;
+  letter-spacing: 0.2pt;
+}
+
+.ingredients-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  column-gap: 18pt;
+  column-fill: auto;
+}
+
+.ingredients-list.one-column {
+  columns: 1;
+}
+
+.ingredients-list.two-columns {
+  columns: 2;
+}
+
+.ingredients-list li {
+  padding: 2pt 0;
+  border-bottom: 0.5pt dotted #e0d5c5;
+  font-family: 'Lora', serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ingredient-bullet {
+  display: inline-block;
+  width: 3.5pt;
+  height: 3.5pt;
+  margin-right: 7pt;
+  border-radius: 50%;
+  background: #6b7f4a;
+  vertical-align: middle;
+  position: relative;
+  top: -1pt;
+}
+
+.sub-section-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 11pt;
+  font-weight: 700;
+  color: #5c3d2e;
+  margin-top: 12pt;
+  margin-bottom: 7pt;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+/* ==========================================================================
+   PREPARATION STEPS
+   ========================================================================== */
+
+.step {
+  display: flex;
+  gap: 6pt;
+  margin-bottom: 6pt;
+  font-family: 'Lora', serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 16pt;
+  height: 16pt;
+  border-radius: 50%;
+  background: #5c3d2e;
+  color: #faf6f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7.5pt;
+  font-weight: 700;
+  margin-top: 1pt;
+}
+
+.step-text {
+  flex: 1;
+}
+
+/* ==========================================================================
+   POLAROID PHOTOS
+   ========================================================================== */
+
+.photo-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10pt;
+  margin-top: 8pt;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.photo-strip .polaroid {
+  width: calc(50% - 6pt);
+  max-width: 220pt;
+  min-width: 180pt;
+}
+
+.photo-strip.photo-count-1 .polaroid {
+  width: 78%;
+  max-width: 320pt;
+}
+
+.polaroid {
+  background: #fff;
+  padding: 5pt 5pt 9pt;
+  border: 0.6pt solid #d4c5a9;
+  box-shadow: 0 2pt 6pt rgba(92, 61, 46, 0.10);
+  page-break-inside: avoid;
+  break-inside: avoid;
+  overflow: hidden;
+}
+
+.polaroid.tilt-left {
+  transform: rotate(-0.7deg);
+}
+
+.polaroid.tilt-right {
+  transform: rotate(0.6deg);
+}
+
+.polaroid-img {
+  width: 100%;
+  height: 150pt;
+  object-fit: cover;
+  display: block;
+  background: #f6eee3;
+}
+
+.polaroid-caption {
+  font-family: 'Dancing Script', cursive;
+  font-size: 8pt;
+  text-align: center;
+  color: #7a6652;
+  margin-top: 4pt;
+  line-height: 1.2;
+  width: 100%;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.footer {
+  margin-top: 10pt;
+  padding-top: 6pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  break-before: avoid;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20pt;
+  margin-top: 10pt;
+  margin-bottom: 6pt;
+}
+
+.footer-qr {
+  flex-shrink: 0;
+}
+
+.footer-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-logo img {
+  height: 46pt;
+  width: auto;
+  opacity: 1.0;
+  display: block;
+}
+
+.footer-qr-frame {
+  margin: 10pt auto 8pt;
+  max-width: 260pt;
+  padding: 7pt;
+  border: 1.2pt solid #c4b396;
+  border-radius: 6pt;
+  background: #fdf9f3;
+}
+
+.footer-qr-inner {
+  border: 0.5pt dashed #d4c5a9;
+  border-radius: 3pt;
+  padding: 7pt 8pt;
+  position: relative;
+}
+
+.qr-target-large {
+  width: 64pt;
+  height: 64pt;
+  min-width: 64pt;
+  display: block;
+}
+
+.qr-corner {
+  position: absolute;
+  width: 10pt;
+  height: 10pt;
+}
+
+.qr-corner::before,
+.qr-corner::after {
+  content: "";
+  position: absolute;
+  background: #b8a080;
+}
+
+.qr-corner::before {
+  width: 10pt;
+  height: 1pt;
+  top: 0;
+  left: 0;
+}
+
+.qr-corner::after {
+  width: 1pt;
+  height: 10pt;
+  top: 0;
+  left: 0;
+}
+
+.qr-corner.tl { top: -4pt; left: -4pt; }
+.qr-corner.tr { top: -4pt; right: -4pt; transform: scaleX(-1); }
+.qr-corner.bl { bottom: -4pt; left: -4pt; transform: scaleY(-1); }
+.qr-corner.br { bottom: -4pt; right: -4pt; transform: scale(-1); }
+
+.footer-qr-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12pt;
+}
+
+.footer-qr-text {
+  text-align: left;
+}
+
+.footer-qr-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 9pt;
+  color: #5c3d2e;
+  font-weight: 600;
+  margin-bottom: 2pt;
+}
+
+.footer-qr-sub {
+  font-family: 'Lora', serif;
+  font-size: 7pt;
+  font-style: italic;
+  color: #9a8b7a;
+}
+
+/* ==========================================================================
+   FLOURISH & DATE STAMP
+   ========================================================================== */
+
+.flourish {
+  text-align: center;
+  margin: 6pt 0;
+}
+
+.flourish span {
+  display: inline-block;
+  width: 6pt;
+  height: 6pt;
+  margin: 0 4pt;
+  background: #b8a080;
+  border-radius: 50%;
+}
+
+.date-stamp {
+  font-family: 'Lora', serif;
+  font-size: 7pt;
+  font-style: italic;
+  color: #b8a080;
+  text-align: center;
+  margin-top: 2pt;
+}
