@@ -6,7 +6,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-
 {% if recipe_title %}
 <div class="page">
 
@@ -44,71 +43,112 @@
     {% for section in sections %}
       <div class="recipe-section">
 
-        <div class="section-header">
-          <div class="rule-line thin"></div>
-          <span class="section-label">
-            <span class="section-mark" aria-hidden="true"></span>
-            <span class="section-label-text">{{ section.label }}</span>
-            <span class="section-mark" aria-hidden="true"></span>
-          </span>
-          <div class="rule-line thin"></div>
+        <div class="section-intro-block">
+          <div class="section-header">
+            <div class="rule-line thin"></div>
+            <span class="section-label">
+              <span class="section-mark" aria-hidden="true"></span>
+              <span class="section-label-text">{{ section.label }}</span>
+              <span class="section-mark" aria-hidden="true"></span>
+            </span>
+            <div class="rule-line thin"></div>
+          </div>
+
+          {% if section.type == "ingredients" %}
+            <p class="prose section-intro-line">Here's everything you'll need to get started:</p>
+          {% elsif section.type == "preparation" %}
+            <p class="prose section-intro-line">Follow these steps to bring it all together:</p>
+          {% endif %}
         </div>
 
         {% if section.type == "ingredients" %}
-          <p class="prose">Here's everything you'll need to get started:</p>
-          <div class="ingredients-box">
-            {% if section.sub_sections and section.sub_sections.size > 0 %}
-              {% comment %}
-                Layout decision based on group count and group sizes:
-                - 1 group  → single full-width group
-                - 2 groups, both small (<10 items) → side-by-side
-                - 2 groups, any large → stacked
-                - 3+ groups → stacked
-                A group is "large" if it has >= 10 non-empty items.
-              {% endcomment %}
 
-              {% assign group_count = section.sub_sections.size %}
-              {% assign has_large_group = false %}
-              {% for group in section.sub_sections %}
-                {% assign group_item_count = 0 %}
-                {% for item in group.items %}
-                  {% assign trimmed_item = item | strip %}
-                  {% if trimmed_item != "" %}
-                    {% assign group_item_count = group_item_count | plus: 1 %}
+          {% comment %}
+            ── INGREDIENT LAYOUT ───────────────────────────────────────────
+            We use == 10 flag checks instead of >= comparisons because
+            PDFMonkey Liquid can return strings from | plus: which makes
+            >= unreliable. Once our counter hits exactly 10, we flip a
+            boolean flag that persists for the rest of the template.
+
+            "large" means 10+ items (in a group or in total).
+
+            Layout:  2 small groups → side-by-side; else stacked.
+            Columns: large group in stacked layout → two-columns.
+            Breaks:  large total → .breakable (box can split across pages).
+          {% endcomment %}
+
+          {% if section.sub_sections and section.sub_sections.size > 0 %}
+
+            {% assign group_count = section.sub_sections.size %}
+            {% assign has_large_group = false %}
+            {% assign total_is_large = false %}
+            {% assign t_check = 0 %}
+
+            {% for group in section.sub_sections %}
+              {% assign g_check = 0 %}
+              {% for item in group.items %}
+                {% assign trimmed_item = item | strip %}
+                {% if trimmed_item != "" %}
+                  {% assign g_check = g_check | plus: 1 %}
+                  {% assign t_check = t_check | plus: 1 %}
+                  {% if g_check == 10 %}
+                    {% assign has_large_group = true %}
                   {% endif %}
-                {% endfor %}
-                {% if group_item_count >= 10 %}
-                  {% assign has_large_group = true %}
+                  {% if t_check == 10 %}
+                    {% assign total_is_large = true %}
+                  {% endif %}
                 {% endif %}
               {% endfor %}
+            {% endfor %}
 
-              {% assign layout_class = "stacked" %}
-              {% if group_count == 2 and has_large_group == false %}
+            {% assign layout_class = "stacked" %}
+            {% assign use_side_by_side = false %}
+            {% if group_count == 2 %}
+              {% unless has_large_group %}
                 {% assign layout_class = "side-by-side" %}
-              {% endif %}
+                {% assign use_side_by_side = true %}
+              {% endunless %}
+            {% endif %}
 
+            {% comment %}
+              Only apply .breakable to stacked layouts. Side-by-side is
+              always compact (both groups < 10) and should stay together.
+            {% endcomment %}
+            {% assign apply_breakable = false %}
+            {% if total_is_large %}
+              {% unless use_side_by_side %}
+                {% assign apply_breakable = true %}
+              {% endunless %}
+            {% endif %}
+            <div class="ingredients-box{% if apply_breakable %} breakable{% endif %}">
               <div class="ingredient-groups {{ layout_class }}">
                 {% for group in section.sub_sections %}
                   {% assign item_count = 0 %}
+                  {% assign group_is_large = false %}
                   {% for item in group.items %}
                     {% assign trimmed_item = item | strip %}
                     {% if trimmed_item != "" %}
                       {% assign item_count = item_count | plus: 1 %}
+                      {% if item_count == 10 %}
+                        {% assign group_is_large = true %}
+                      {% endif %}
                     {% endif %}
                   {% endfor %}
+
                   {% if item_count > 0 %}
                     <div class="ingredient-group">
                       {% if group.header != blank %}
                         <p class="ingredient-group-header">{{ group.header }}</p>
                       {% endif %}
-                      {% comment %}
-                        Within-group columns: only trigger two columns at 10+
-                        items, and only when the group is full-width (i.e. not
-                        already in a side-by-side layout). Two columns inside
-                        a side-by-side cell would create cramped 4-column
-                        compositions.
-                      {% endcomment %}
-                      <ul class="ingredients-list {% if item_count >= 10 and layout_class != 'side-by-side' %}two-columns{% else %}one-column{% endif %}">
+
+                      {% assign use_two_cols = false %}
+                      {% if group_is_large %}
+                        {% unless use_side_by_side %}
+                          {% assign use_two_cols = true %}
+                        {% endunless %}
+                      {% endif %}
+
+                      <ul class="ingredients-list {% if use_two_cols %}two-columns{% else %}one-column{% endif %}">
                         {% for item in group.items %}
                           {% assign trimmed_item = item | strip %}
                           {% if trimmed_item != "" %}
@@ -120,17 +160,25 @@
                   {% endif %}
                 {% endfor %}
               </div>
-            {% else %}
-              {% comment %} Legacy fallback: flat content string {% endcomment %}
-              {% assign ingredient_lines = section.content | newline_to_br | split: '<br />' %}
-              {% assign ingredient_count = 0 %}
-              {% for line in ingredient_lines %}
-                {% assign trimmed = line | strip %}
-                {% if trimmed != "" %}
-                  {% assign ingredient_count = ingredient_count | plus: 1 %}
+            </div>
+
+          {% else %}
+            {% comment %} Legacy fallback {% endcomment %}
+            {% assign ingredient_lines = section.content | newline_to_br | split: '<br />' %}
+            {% assign legacy_is_large = false %}
+            {% assign l_check = 0 %}
+            {% for line in ingredient_lines %}
+              {% assign trimmed = line | strip %}
+              {% if trimmed != "" %}
+                {% assign l_check = l_check | plus: 1 %}
+                {% if l_check == 10 %}
+                  {% assign legacy_is_large = true %}
                 {% endif %}
-              {% endfor %}
-              <ul class="ingredients-list {% if ingredient_count >= 10 %}two-columns{% else %}one-column{% endif %}">
+              {% endif %}
+            {% endfor %}
+
+            <div class="ingredients-box{% if legacy_is_large %} breakable{% endif %}">
+              <ul class="ingredients-list {% if legacy_is_large %}two-columns{% else %}one-column{% endif %}">
                 {% for line in ingredient_lines %}
                   {% assign trimmed = line | strip %}
                   {% if trimmed != "" %}
@@ -139,24 +187,25 @@
                   {% endif %}
                 {% endfor %}
               </ul>
-            {% endif %}
-          </div>
+            </div>
+          {% endif %}
 
         {% elsif section.type == "preparation" %}
-          <p class="prose">Follow these steps to bring it all together:</p>
+
           {% if section.steps and section.steps.size > 0 %}
+            {% assign step_counter = 0 %}
             {% for step in section.steps %}
               {% if step.header != blank %}
                 <p class="sub-section-header">{{ step.header }}</p>
               {% else %}
+                {% assign step_counter = step_counter | plus: 1 %}
                 <div class="step">
-                  <span class="step-number">{{ forloop.index }}</span>
+                  <span class="step-number">{{ step_counter }}</span>
                   <span class="step-text">{{ step.text }}</span>
                 </div>
               {% endif %}
             {% endfor %}
           {% else %}
-            {% comment %} Legacy fallback: parse line-prefixed numbered steps {% endcomment %}
             {% assign prep_lines = section.content | newline_to_br | split: '<br />' %}
             {% assign step_num = 0 %}
             {% for line in prep_lines %}
@@ -192,14 +241,44 @@
           {% endif %}
 
         {% else %}
+
           {% assign prose_lines = section.content | newline_to_br | split: '<br />' %}
+          {% assign in_list = false %}
           {% for para in prose_lines %}
             {% assign trimmed = para | strip %}
             {% if trimmed != "" %}
-              {% assign para_len = trimmed | size %}
-              <p class="prose {% if forloop.first and para_len > 120 %}drop-cap{% endif %}">{{ trimmed }}</p>
+              {% assign first_char = trimmed | slice: 0, 1 %}
+              {% assign second_char = trimmed | slice: 1, 1 %}
+              {% assign is_bullet_line = false %}
+              {% if first_char == "-" and second_char == " " %}
+                {% assign is_bullet_line = true %}
+              {% elsif first_char == "*" and second_char == " " %}
+                {% assign is_bullet_line = true %}
+              {% elsif first_char == "•" and second_char == " " %}
+                {% assign is_bullet_line = true %}
+              {% endif %}
+
+              {% if is_bullet_line %}
+                {% unless in_list %}
+                  <ul class="prose-list">
+                  {% assign in_list = true %}
+                {% endunless %}
+                {% assign bullet_text = trimmed | slice: 2, 9999 | strip %}
+                <li>{{ bullet_text }}</li>
+              {% else %}
+                {% if in_list %}
+                  </ul>
+                  {% assign in_list = false %}
+                {% endif %}
+                {% assign para_len = trimmed | size %}
+                <p class="prose {% if forloop.first and para_len > 120 and section.type == "backstory" %}drop-cap{% endif %}">{{ trimmed }}</p>
+              {% endif %}
             {% endif %}
           {% endfor %}
+          {% if in_list %}
+            </ul>
+          {% endif %}
+
         {% endif %}
 
         {% if section.photos and section.photos.size > 0 %}
@@ -261,6 +340,5 @@
 
 </div>
 {% endif %}
-
 </body>
 </html>
