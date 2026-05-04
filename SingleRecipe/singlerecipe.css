@@ -1,8 +1,5 @@
 /* ==========================================================================
    PAGE & PRINT MARGINS
-   12mm top/bottom keeps page 1 title block from feeling cramped while
-   still giving pages 2+ adequate breathing room from the parchment edge.
-   8mm left/right for tighter horizontal rhythm.
    ========================================================================== */
 
 @page {
@@ -23,7 +20,7 @@ html, body {
 
 body {
   background: radial-gradient(ellipse at center, #faf6f0 35%, #e6d5be 100%);
-  background-color: #f4ead9; /* fallback if gradient is dropped */
+  background-color: #f4ead9;
   min-height: 100vh;
 }
 
@@ -183,6 +180,14 @@ body {
   break-inside: auto;
   margin-top: 20pt;
   margin-bottom: 4pt;
+  padding-top: 6pt;
+}
+
+.section-intro-block {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .section-header {
@@ -199,6 +204,12 @@ body {
 .section-header + * {
   break-before: avoid;
   page-break-before: avoid;
+}
+
+.section-intro-line {
+  margin-bottom: 6pt;
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .section-label {
@@ -255,23 +266,69 @@ body {
   font-weight: 700;
 }
 
+.prose-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 6pt 0;
+}
+
+.prose-list li {
+  font-family: 'Lora', serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  padding-left: 14pt;
+  margin-bottom: 4pt;
+  position: relative;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.prose-list li::before {
+  content: "";
+  position: absolute;
+  left: 2pt;
+  top: 8pt;
+  width: 3pt;
+  height: 3pt;
+  border-radius: 50%;
+  background: #6b7f4a;
+}
+
 /* ==========================================================================
    INGREDIENTS
-   The .ingredient-groups container takes a layout modifier:
-     .stacked       → groups flow vertically (default for 1 group, 3+ groups,
-                      or when any group has 10+ items)
-     .side-by-side  → groups arrange horizontally in two columns (only used
-                      when there are exactly 2 groups, both with <10 items)
-   Within a group, .ingredients-list can be .one-column or .two-columns.
-   Two-columns is only used inside stacked layouts; side-by-side groups
-   always use one column to avoid cramped 4-column compositions.
    ========================================================================== */
 
+/* Default: small ingredient lists stay together on one page. */
 .ingredients-box {
   border: 1pt solid #d4c5a9;
   border-radius: 3pt;
   padding: 10pt 14pt;
   margin: 6pt 28pt;
+  background: #fdf9f3;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Large ingredient lists (10+ items) get .breakable from the template.
+   We strip the visible box chrome (border, background, padding) so that
+   when the content splits across pages, there's no empty bordered box
+   sitting at the bottom of a page. The visual styling moves to
+   .ingredient-group inside breakable boxes instead. */
+.ingredients-box.breakable {
+  page-break-inside: auto;
+  break-inside: auto;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 6pt 28pt;
+}
+
+/* When inside a breakable box, each ingredient-group gets the card
+   styling that was previously on the box itself. */
+.ingredients-box.breakable .ingredient-group {
+  border: 1pt solid #d4c5a9;
+  border-radius: 3pt;
+  padding: 10pt 14pt;
   background: #fdf9f3;
 }
 
@@ -327,6 +384,8 @@ body {
   color: #5c3d2e;
   margin: 0 0 6pt 0;
   letter-spacing: 0.2pt;
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .ingredients-list {
@@ -334,37 +393,38 @@ body {
   padding: 0;
   margin: 0;
   column-gap: 18pt;
-  column-fill: auto;
 }
 
 .ingredients-list.one-column {
   columns: 1;
 }
 
+/* Two-column ingredient lists use balanced column fill so left and
+   right columns are roughly the same height. */
 .ingredients-list.two-columns {
   columns: 2;
+  column-fill: balance;
 }
 
 .ingredients-list li {
-  padding: 2pt 0;
+  padding: 2pt 0 2pt 14pt;
   border-bottom: 0.5pt dotted #e0d5c5;
   font-family: 'Lora', serif;
   font-size: 11pt;
   line-height: 1.5;
   page-break-inside: avoid;
   break-inside: avoid;
+  position: relative;
 }
 
 .ingredient-bullet {
-  display: inline-block;
+  position: absolute;
+  left: 2pt;
+  top: 9pt;
   width: 3.5pt;
   height: 3.5pt;
-  margin-right: 7pt;
   border-radius: 50%;
   background: #6b7f4a;
-  vertical-align: middle;
-  position: relative;
-  top: -1pt;
 }
 
 .sub-section-header {
@@ -376,6 +436,13 @@ body {
   margin-bottom: 7pt;
   page-break-after: avoid;
   break-after: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.sub-section-header + .step {
+  page-break-before: avoid;
+  break-before: avoid;
 }
 
 /* ==========================================================================
