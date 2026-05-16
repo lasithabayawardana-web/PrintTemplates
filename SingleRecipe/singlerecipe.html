@@ -110,18 +110,9 @@
               {% endunless %}
             {% endif %}
 
-            {% comment %}
-              Only apply .breakable to stacked layouts. Side-by-side is
-              always compact (both groups < 10) and should stay together.
-            {% endcomment %}
-            {% assign apply_breakable = false %}
-            {% if total_is_large %}
-              {% unless use_side_by_side %}
-                {% assign apply_breakable = true %}
-              {% endunless %}
-            {% endif %}
-            <div class="ingredients-box{% if apply_breakable %} breakable{% endif %}">
-              <div class="ingredient-groups {{ layout_class }}">
+
+          <div class="ingredients-box">
+           <div class="ingredient-groups {{ layout_class }}">
                 {% for group in section.sub_sections %}
                   {% assign item_count = 0 %}
                   {% assign group_is_large = false %}
@@ -177,7 +168,7 @@
               {% endif %}
             {% endfor %}
 
-            <div class="ingredients-box{% if legacy_is_large %} breakable{% endif %}">
+            <div class="ingredients-box">
               <ul class="ingredients-list {% if legacy_is_large %}two-columns{% else %}one-column{% endif %}">
                 {% for line in ingredient_lines %}
                   {% assign trimmed = line | strip %}
