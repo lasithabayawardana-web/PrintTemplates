@@ -309,28 +309,6 @@ body {
   break-inside: avoid;
 }
 
-/* Large ingredient lists (10+ items) get .breakable from the template.
-   We strip the visible box chrome (border, background, padding) so that
-   when the content splits across pages, there's no empty bordered box
-   sitting at the bottom of a page. The visual styling moves to
-   .ingredient-group inside breakable boxes instead. */
-.ingredients-box.breakable {
-  page-break-inside: auto;
-  break-inside: auto;
-  border: none;
-  background: none;
-  padding: 0;
-  margin: 6pt 28pt;
-}
-
-/* When inside a breakable box, each ingredient-group gets the card
-   styling that was previously on the box itself. */
-.ingredients-box.breakable .ingredient-group {
-  border: 1pt solid #d4c5a9;
-  border-radius: 3pt;
-  padding: 10pt 14pt;
-  background: #fdf9f3;
-}
 
 .ingredient-groups {
   display: block;
