@@ -1,21 +1,37 @@
 {
-  "cookbook_title": "Lilani's Cookbook",
-  "cookbook_subtitle": "Recipes passed down through generations",
+  "cookbook_title": "Lilani's Family Cookbook",
+  "cookbook_subtitle": null,
   "author_name": "Lilani Abeygunawardane",
   "cover_style": "classic",
   "style_hint": "Serif typography (Cormorant / Playfair). Warm cream background (#f5ecd9). Ornamental rule under title.",
-  "cover_layout": "template",
-  "front_cover_photo_url": null,
-  "back_cover_photo_url": null,
-  "back_cover_blurb": "This is my first cook book.. lets see how it looks!!!  For my family!",
+  "cover_layout": "photo_full_with_overlay",
+  "front_cover_photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/brand-assets/cookbook-covers/front/farmhouse-feast.jpg?width=2200&height=3000&resize=contain&quality=88",
   "title_block": {
-    "position": "template_default",
-    "overlay_opacity": 0,
+    "position": "centered_overlay",
+    "overlay_opacity": 0.45,
     "overlay_colour": "#1a1a1a",
-    "text_colour": "#1a1a1a"
+    "text_colour": "#ffffff"
   },
-  "spine_width_mm": 9.2,
-  "page_count": 46,
+  "back_cover": {
+    "photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/brand-assets/cookbook-covers/back/wooden-board.jpg?width=2200&height=3000&resize=contain&quality=88",
+    "blurb": "It is such a great pleasure that I am able to pass down my recipes to my next generations.  I hope these are enjoyed by everyone over the years!",
+    "blurb_source": "custom",
+    "author_name": "Lilani Abeygunawardane",
+    "cookbook_title": "Lilani's Family Cookbook",
+    "recipe_count": 15,
+    "chapter_count": 3,
+    "footer_text": "Made with TheFamilyTable.com.au",
+    "title_block": {
+      "position": "bottom",
+      "overlay_opacity": 0.85,
+      "overlay_colour": "#1a1a1a",
+      "text_colour": "#ffffff"
+    }
+  },
+  "back_cover_photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/brand-assets/cookbook-covers/back/wooden-board.jpg?width=2200&height=3000&resize=contain&quality=88",
+  "back_cover_blurb": "It is such a great pleasure that I am able to pass down my recipes to my next generations.  I hope these are enjoyed by everyone over the years!",
+  "spine_width_mm": 9.8,
+  "page_count": 54,
   "front_width_mm": 210,
   "back_width_mm": 210,
   "height_mm": 297,
