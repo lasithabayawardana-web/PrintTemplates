@@ -1,508 +1,762 @@
+/* ==========================================================================
+   COOKBOOK INTERIOR — singlerecipe-interior.css
+   For use with cookbook-interior.html in PDFMonkey.
+   Renderer: Chromium paged media (same engine as single recipe template).
+
+   ARCHITECTURE NOTES:
+   - All colours/fonts reference CSS custom properties (--tokens).
+   - Tokens are injected by the Liquid <style> block in the HTML based
+     on cover_style. Swapping style = swapping :root only.
+   - Page-break rules follow the same principles as the single recipe:
+       margin-top collapses at breaks → use padding-top instead.
+       columns: 2 + page breaks = broken layout → always break-inside: avoid
+       on .ingredients-box.
+   - Accent colours per chapter are applied via .accent-{name} classes.
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE & PRINT MARGINS
+   ========================================================================== */
+
 @page {
   size: A4;
-  margin: 0;
+  margin: 10mm;
 }
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: #f6efe3;
-}
-
-body {
+html, body {
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
-.cookbook {
-  --bg: #efe3d0;
-  --paper: #fffaf2;
-  --ink: #2d1f14;
-  --muted: #7a6652;
-  --line: #d8cbb7;
-  --accent: #6b7f4a;
-  --accent-dark: #4f6238;
-  --accent-soft: #e7ddc8;
-  --brown: #5a3b2f;
-  --shadow: rgba(45, 31, 20, 0.16);
-  font-family: 'Lora', Georgia, serif;
-  color: var(--ink);
+body {
+  background: var(--body-bg);
+  background-color: var(--body-bg-color);
+  min-height: 100vh;
 }
 
-.cookbook.style-classic {
-  --bg: #efe3d0;
-  --paper: #fffaf2;
-  --ink: #2d1f14;
-  --muted: #7a6652;
-  --line: #d8cbb7;
-  --accent: #6b7f4a;
-  --accent-dark: #4f6238;
-  --accent-soft: #e7ddc8;
-  --brown: #5a3b2f;
-  font-family: 'Lora', Georgia, serif;
+/* ==========================================================================
+   PAGE CONTAINER
+   Each logical "page" is a .page div. In paged media, content flows
+   across as many physical pages as needed, but .page gives us a
+   semantic grouping to apply break hints.
+   ========================================================================== */
+
+.page {
+  font-family: var(--font-body);
+  color: var(--body-text);
+  padding: 8mm 10mm 0;
 }
 
-.cookbook.style-modern {
-  --bg: #f7f4ee;
-  --paper: #ffffff;
-  --ink: #1f2933;
-  --muted: #667085;
-  --line: #d0d5dd;
-  --accent: #b75d3b;
-  --accent-dark: #8d4429;
-  --accent-soft: #f1dfd5;
-  font-family: 'Inter', Arial, sans-serif;
-}
-
-.cookbook.style-minimalist,
-.cookbook.style-minimilalist {
-  --bg: #ffffff;
-  --paper: #ffffff;
-  --ink: #151515;
-  --muted: #696969;
-  --line: #d9d9d9;
-  --accent: #151515;
-  --accent-dark: #151515;
-  --accent-soft: #f2f2f2;
-  font-family: 'Inter', Arial, sans-serif;
-}
-
-.book-page {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 18mm 18mm 19mm;
-  background:
-    radial-gradient(circle at center, rgba(255,255,255,0.66) 0%, rgba(255,250,242,0.76) 54%, rgba(239,227,208,0.95) 100%),
-    var(--bg);
-  position: relative;
-  overflow: hidden;
-  page-break-after: always;
-  break-after: page;
-}
-
-.book-page:last-child {
-  page-break-after: auto;
-  break-after: auto;
-}
-
-.page-frame {
-  position: absolute;
-  top: 9mm;
-  right: 9mm;
-  bottom: 9mm;
-  left: 9mm;
-  border: 0.8pt solid rgba(107, 127, 74, 0.16);
-  pointer-events: none;
-}
-
-.title-page,
+/* Dedication and TOC pages start fresh */
 .dedication-page,
-.chapter-divider,
-.closing-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.toc-page,
+.chapter-divider-page {
+  break-before: page;
+}
+
+/* Recipe pages always start on a new page */
+.recipe-page {
+  break-before: page;
+}
+
+/* ==========================================================================
+   CHAPTER ACCENT COLOUR CLASSES
+   Applied as .accent-{name} on .recipe-page and .toc-chapter-row.
+   These override --accent-primary and --accent-secondary locally,
+   letting the same element rules work for all chapters.
+
+   Palette:
+     ink       → deep brown/charcoal  (classic default)
+     olive     → muted green
+     terracotta → warm rust/orange
+   Future colours can be added here without touching HTML or Liquid.
+   ========================================================================== */
+
+.accent-ink,
+.accent-ink .section-label,
+.accent-ink .recipe-title,
+.accent-ink .toc-chapter-name {
+  --accent-primary:   #2d1f14;
+  --accent-secondary: #7a6652;
+  --step-circle:      #2d1f14;
+  --bullet-color:     #2d1f14;
+  --dropcap-color:    #2d1f14;
+}
+
+.accent-olive,
+.accent-olive .section-label,
+.accent-olive .recipe-title,
+.accent-olive .toc-chapter-name {
+  --accent-primary:   #6b7f4a;
+  --accent-secondary: #a8be80;
+  --step-circle:      #4a5e30;
+  --bullet-color:     #6b7f4a;
+  --dropcap-color:    #3d5220;
+}
+
+.accent-terracotta,
+.accent-terracotta .section-label,
+.accent-terracotta .recipe-title,
+.accent-terracotta .toc-chapter-name {
+  --accent-primary:   #c4703f;
+  --accent-secondary: #e0a882;
+  --step-circle:      #a05530;
+  --bullet-color:     #c4703f;
+  --dropcap-color:    #8c3d1a;
+}
+
+/* ==========================================================================
+   DEDICATION PAGE
+   ========================================================================== */
+
+.dedication-page {
   text-align: center;
+  padding-top: 20mm;
 }
 
-.title-rule {
-  width: 88%;
-  height: 10pt;
-  margin: 0 auto 8pt;
-  border-top: 2pt solid var(--accent);
-  border-bottom: 0.8pt solid var(--line);
-  position: relative;
+.dedication-ornament {
+  margin-bottom: 12pt;
 }
 
-.title-rule.bottom {
-  margin: 8pt auto 0;
-  border-top: 0.8pt solid var(--line);
-  border-bottom: 2pt solid var(--accent);
-}
-
-.title-rule span,
-.book-ornament span {
-  width: 8pt;
-  height: 8pt;
-  background: var(--accent);
-  transform: rotate(45deg);
-  position: absolute;
-  left: 50%;
-  top: -5pt;
-  margin-left: -4pt;
-}
-
-.title-rule.bottom span {
-  top: auto;
-  bottom: -5pt;
-}
-
-.book-ornament {
-  width: 72%;
-  height: 1pt;
-  background: var(--accent);
-  margin: 12pt auto 18pt;
-  position: relative;
-}
-
-.book-ornament.short {
-  width: 48%;
-  margin: 6pt auto 14pt;
-}
-
-.eyebrow,
-.quiet-label {
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 7pt;
-  letter-spacing: 3.2pt;
-  text-transform: uppercase;
-  color: var(--accent);
-  line-height: 1.25;
-}
-
-.quiet-label {
-  margin-bottom: 10pt;
-}
-
-.cookbook-title,
-.recipe-title {
-  font-family: 'Dancing Script', 'Brush Script MT', cursive;
-  color: var(--ink);
-  font-weight: 700;
-}
-
-.cookbook-title {
-  font-size: 43pt;
-  line-height: 1.02;
-  max-width: 160mm;
-  margin-top: 5pt;
-}
-
-.cookbook-subtitle {
-  margin-top: 9pt;
-  font-size: 13pt;
-  color: var(--muted);
-  font-style: italic;
-  max-width: 140mm;
-  line-height: 1.35;
-}
-
-.cookbook-author,
-.recipe-author {
-  margin-top: 7pt;
-  font-size: 9.5pt;
-  color: var(--muted);
-  font-style: italic;
-}
-
-.dedication-text {
-  font-family: 'Lora', Georgia, serif;
-  font-size: 16pt;
-  line-height: 1.65;
-  font-style: italic;
-  max-width: 125mm;
-  color: var(--ink);
-}
-
-.page-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 28pt;
-  line-height: 1.1;
-  text-align: center;
-  margin: 2mm 0 0;
-  color: var(--ink);
-}
-
-.profile-photo-wrap {
-  text-align: center;
-  margin: 0 auto 11mm;
-  page-break-inside: avoid;
+.dedication-block {
+  margin: 24pt auto;
+  max-width: 75%;
   break-inside: avoid;
 }
 
-.profile-photo {
-  width: 58mm;
-  height: 58mm;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3pt solid #fff;
-  box-shadow: 0 2pt 8pt var(--shadow);
+.dedication-text {
+  font-family: var(--font-display);
+  font-size: 18pt;
+  font-weight: 700;
+  color: var(--header-text);
+  line-height: 1.4;
+  font-style: italic;
 }
 
-.body-copy {
-  font-size: 10.4pt;
-  line-height: 1.62;
-  color: var(--ink);
+/* ==========================================================================
+   PREFACE (on dedication page)
+   ========================================================================== */
+
+.preface-photo-wrap {
+  text-align: center;
+  margin: 12pt auto 10pt;
+  break-inside: avoid;
 }
 
-.body-copy p + p {
-  margin-top: 8pt;
+.preface-photo {
+  width: 60%;
+  max-width: 220pt;
+  border-radius: 3pt;
+  display: inline-block;
+  border: 1pt solid var(--ingredient-border);
 }
 
-.intro-copy {
-  max-width: 150mm;
-  margin: 0 auto;
+.preface-header {
+  margin: 10pt 0 8pt;
 }
 
-.toc-list {
-  max-width: 160mm;
-  margin: 0 auto;
+.preface-prose {
+  font-style: italic;
   font-size: 10pt;
+  text-align: left;
+  line-height: 1.65;
+  margin-bottom: 5pt;
 }
 
-.toc-chapter {
-  margin: 0 0 9mm;
-  page-break-inside: avoid;
+.preface-signature {
+  font-family: var(--font-display);
+  font-size: 13pt;
+  color: var(--header-text);
+  text-align: right;
+  margin-top: 10pt;
+  font-style: normal;
+}
+
+/* ==========================================================================
+   TABLE OF CONTENTS PAGE
+   ========================================================================== */
+
+.toc-page {
+  text-align: center;
+  padding-top: 8mm;
+}
+
+.toc-title {
+  font-family: var(--font-title);
+  font-size: 22pt;
+  font-weight: 700;
+  color: var(--header-text);
+  margin: 8pt 0 6pt;
+  letter-spacing: 1pt;
+}
+
+.toc-entries {
+  text-align: left;
+  margin-top: 14pt;
+}
+
+.toc-chapter-block {
+  margin-bottom: 14pt;
   break-inside: avoid;
 }
 
 .toc-chapter-row {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
-  border-bottom: 1.4pt solid var(--accent);
-  padding-bottom: 3pt;
+  gap: 4pt;
   margin-bottom: 5pt;
+  padding-bottom: 3pt;
+  border-bottom: 1pt solid var(--rule-light);
 }
 
 .toc-chapter-name {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 15pt;
+  font-family: var(--font-accent);
+  font-size: 13pt;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--toc-chapter-color);
+  flex-shrink: 0;
 }
+
+/* Chapter accent override for TOC rows */
+.toc-chapter-row.accent-ink .toc-chapter-name   { color: #2d1f14; }
+.toc-chapter-row.accent-olive .toc-chapter-name  { color: #6b7f4a; }
+.toc-chapter-row.accent-terracotta .toc-chapter-name { color: #c4703f; }
 
 .toc-recipe-row {
   display: flex;
   align-items: baseline;
-  gap: 5pt;
-  font-size: 9.4pt;
-  padding: 2.2pt 0;
-  color: var(--muted);
+  gap: 4pt;
+  padding: 2pt 0 2pt 14pt;
 }
 
-.toc-recipe-title {
+.toc-recipe-bullet {
   flex-shrink: 0;
-  max-width: 130mm;
+  color: var(--accent-secondary);
+  font-size: 9pt;
+}
+
+.toc-recipe-name {
+  font-family: var(--font-body);
+  font-size: 10pt;
+  color: var(--body-text);
+  flex-shrink: 0;
+  max-width: 72%;
 }
 
 .toc-dots {
   flex: 1;
-  border-bottom: 0.5pt dotted var(--line);
-  position: relative;
-  top: -2pt;
+  border-bottom: 1pt dotted var(--rule-light);
+  margin: 0 4pt 3pt;
+  min-width: 12pt;
 }
 
-.toc-page-number {
-  min-width: 12mm;
-  text-align: right;
-  color: var(--muted);
+.toc-page-num {
+  font-family: var(--font-accent);
+  font-size: 10pt;
+  color: var(--header-text);
+  flex-shrink: 0;
 }
 
-.chapter-divider {
-  background:
-    radial-gradient(circle at center, rgba(255,255,255,0.42), rgba(231,221,200,0.94)),
-    var(--accent-soft);
+/* ==========================================================================
+   CHAPTER DIVIDER PAGE
+   Full page with dark background, chapter name centred.
+   accent-bg-{name} sets background + text colours.
+   ========================================================================== */
+
+.chapter-divider-page {
+  min-height: 257mm; /* A4 minus margins */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  break-inside: avoid;
 }
 
-.chapter-divider h2 {
-  font-family: 'Dancing Script', 'Brush Script MT', cursive;
-  font-size: 46pt;
-  line-height: 1;
-  color: var(--ink);
-  max-width: 160mm;
+/* Classic default (ink) */
+.chapter-divider-page {
+  background: var(--chapter-divider-bg);
 }
 
-.accent-olive { --accent: #6b7f4a; --accent-dark: #4f6238; --accent-soft: #e7eddc; }
-.accent-terracotta { --accent: #b75d3b; --accent-dark: #8d4429; --accent-soft: #f1dfd5; }
-.accent-ink { --accent: #2d3748; --accent-dark: #1a202c; --accent-soft: #e4e7eb; }
-.accent-gold { --accent: #b08d46; --accent-dark: #80672f; --accent-soft: #f3ead4; }
+/* Per-accent overrides */
+.accent-bg-ink        { background: #2d1f14 !important; }
+.accent-bg-olive      { background: #3d5220 !important; }
+.accent-bg-terracotta { background: #8c3d1a !important; }
 
-.recipe-page {
-  padding-top: 15mm;
-}
-
-.recipe-header {
+.chapter-divider-inner {
   text-align: center;
-  margin-bottom: 9pt;
+  padding: 20mm;
+  width: 100%;
+}
+
+.chapter-divider-name {
+  font-family: var(--font-title);
+  font-size: 36pt;
+  font-weight: 700;
+  color: var(--chapter-divider-text);
+  letter-spacing: 2pt;
+  margin: 16pt 0;
+  line-height: 1.2;
+}
+
+.chapter-recipe-list {
+  list-style: none;
+  margin-top: 20pt;
+  padding: 0;
+}
+
+.chapter-recipe-list li {
+  font-family: var(--font-body);
+  font-size: 9.5pt;
+  color: rgba(250, 246, 240, 0.7);
+  line-height: 1.9;
+  letter-spacing: 0.5pt;
+}
+
+/* Light ornament rules on dark divider pages */
+.ornament-rule.light {
+  gap: 6pt;
+}
+
+.rule-line.thick.light {
+  background: rgba(250, 246, 240, 0.4);
+}
+
+.rule-star.light {
+  background: rgba(250, 246, 240, 0.6);
+}
+
+/* ==========================================================================
+   SMALL PAGE FOOTER (brand logo on non-recipe pages)
+   ========================================================================== */
+
+.page-footer-brand {
+  text-align: center;
+  margin-top: 12pt;
+  padding-top: 8pt;
+  border-top: 0.5pt solid var(--rule-light);
+}
+
+.footer-logo-small {
+  height: 22pt;
+  width: auto;
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   TITLE BLOCK (per recipe)
+   ========================================================================== */
+
+.title-block {
+  text-align: center;
+  margin-bottom: 4pt;
+  margin-top: 4pt;
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
-.recipe-title {
-  font-size: 27pt;
-  line-height: 1.04;
-  margin-top: 3pt;
+.eyebrow {
+  font-family: var(--font-accent);
+  font-size: 6.5pt;
+  letter-spacing: 3pt;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  margin: 3pt 0;
 }
+
+/* Recipe titles use chapter accent colour */
+.recipe-title {
+  font-family: var(--font-title);
+  font-size: 22pt;
+  font-weight: 700;
+  color: var(--body-text);
+  margin: 2pt 0;
+  line-height: 1.15;
+}
+
+/* Accent-coloured recipe titles */
+.accent-ink .recipe-title        { color: #2d1f14; }
+.accent-olive .recipe-title      { color: #3d5220; }
+.accent-terracotta .recipe-title { color: #8c3d1a; }
 
 .category-tags {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 7pt;
-  letter-spacing: 3pt;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 5pt;
+  color: #9a8b7a;
+  letter-spacing: 1.5pt;
+  font-style: italic;
+  margin: 2pt 0;
 }
 
+/* ==========================================================================
+   DECORATIVE RULES
+   (Identical to single recipe template)
+   ========================================================================== */
+
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+}
+
+.rule-line {
+  flex: 1;
+  background: var(--accent-secondary);
+}
+
+.rule-line.thick {
+  height: 1.5pt;
+  background: var(--rule-heavy);
+}
+
+.rule-line.thin {
+  height: 0.5pt;
+  background: var(--rule-heavy);
+}
+
+.rule-star,
+.section-mark {
+  display: inline-block;
+  background: var(--rule-heavy);
+  transform: rotate(45deg);
+}
+
+.rule-star {
+  width: 7pt;
+  height: 7pt;
+  flex: 0 0 7pt;
+}
+
+.thin-rule {
+  height: 0.5pt;
+  background: var(--rule-light);
+  margin: 0 auto 5pt;
+  width: 80%;
+}
+
+.thin-rule.bottom {
+  margin: 5pt auto 0;
+}
+
+/* ==========================================================================
+   HERO IMAGE
+   ========================================================================== */
+
 .hero-container {
+  margin: 6pt auto;
+  text-align: center;
   width: 100%;
-  height: 70mm;
+  max-width: 100%;
+  height: 180pt;        /* slightly shorter than single recipe (220pt)
+                           to leave more room for content on first page */
+  position: relative;
   overflow: hidden;
   border-radius: 4pt;
-  margin: 8pt auto 15pt;
-  background: var(--accent-soft);
   page-break-inside: avoid;
   break-inside: avoid;
-  box-shadow: 0 1.5pt 5pt rgba(45,31,20,0.10);
+  background: #f6eee3;
 }
 
 .hero-image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center,
+    rgba(250, 246, 240, 0) 55%,
+    rgba(250, 246, 240, 0.45) 100%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   RECIPE SECTIONS
+   ========================================================================== */
+
 .recipe-section {
-  margin-top: 13pt;
-  page-break-inside: auto;
   break-inside: auto;
+  margin-top: 16pt;
+  margin-bottom: 4pt;
+  padding-top: 6pt;     /* padding survives page breaks; margin-top collapses */
+}
+
+.section-intro-block {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .section-header {
   display: flex;
   align-items: center;
-  gap: 8pt;
-  margin: 12pt 0 8pt;
+  gap: 6pt;
+  margin: 0 0 8pt;
   page-break-after: avoid;
   break-after: avoid;
-}
-
-.section-header::before,
-.section-header::after {
-  content: "";
-  flex: 1;
-  height: 1pt;
-  background: var(--accent);
-}
-
-.section-header span {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 13pt;
-  font-weight: 700;
-  color: var(--brown);
-  white-space: nowrap;
-  position: relative;
-}
-
-.section-header span::before,
-.section-header span::after {
-  content: "";
-  display: inline-block;
-  width: 6pt;
-  height: 6pt;
-  background: var(--accent);
-  transform: rotate(45deg);
-  margin: 0 7pt 1pt;
-}
-
-.ingredients-box {
-  width: 78%;
-  margin: 0 auto;
-  background: rgba(255,255,255,0.50);
-  border: 0.9pt solid var(--line);
-  border-radius: 4pt;
-  padding: 9pt 11pt;
-  box-shadow: 0 1pt 4pt rgba(45,31,20,0.08);
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
-.ingredient-group + .ingredient-group {
-  margin-top: 9pt;
-  padding-top: 8pt;
-  border-top: 0.5pt solid var(--line);
+.section-header + * {
+  break-before: avoid;
+  page-break-before: avoid;
 }
 
-.ingredient-group-header,
-.sub-section-header {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 10.6pt;
-  font-weight: 700;
-  color: var(--brown);
-  margin: 8pt 0 5pt;
+.section-intro-line {
+  margin-bottom: 6pt;
   page-break-after: avoid;
   break-after: avoid;
 }
 
-.ingredients-box .ingredient-group:first-child .ingredient-group-header,
-.method-list .sub-section-header:first-child {
-  margin-top: 0;
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6pt;
+  font-family: var(--font-accent);
+  font-size: 12pt;
+  font-weight: 700;
+  color: var(--header-text);
+  letter-spacing: 0.5pt;
+  white-space: nowrap;
 }
 
-ul.ingredients-list {
-  list-style: none;
-  font-size: 9.5pt;
-  line-height: 1.45;
+/* Chapter accent colour on section labels */
+.accent-ink .section-label        { color: #5c3d2e; }
+.accent-olive .section-label      { color: #4a5e30; }
+.accent-terracotta .section-label { color: #a05530; }
+
+.section-mark {
+  width: 5pt;
+  height: 5pt;
+  flex: 0 0 5pt;
 }
 
-ul.ingredients-list.two-columns {
-  columns: 2;
-  column-gap: 18pt;
+/* ==========================================================================
+   PROSE
+   ========================================================================== */
+
+.prose {
+  font-family: var(--font-body);
+  font-size: 10.5pt;
+  line-height: 1.72;
+  margin-bottom: 6pt;
+  text-align: left;
+  orphans: 3;
+  widows: 3;
 }
 
-ul.ingredients-list li {
-  position: relative;
-  padding-left: 12pt;
-  margin-bottom: 3.5pt;
+.prose.drop-cap {
+  min-height: 32pt;
+  page-break-inside: avoid;
   break-inside: avoid;
-  border-bottom: 0.45pt solid rgba(196,179,150,0.72);
-  padding-bottom: 2pt;
 }
 
-ul.ingredients-list li::before {
+.drop-cap::first-letter {
+  font-family: var(--font-title);
+  font-size: 34pt;
+  float: left;
+  line-height: 0.85;
+  margin-right: 6pt;
+  margin-top: 1pt;
+  margin-bottom: 0;
+  color: var(--dropcap-color);
+  font-weight: 700;
+}
+
+.prose-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 6pt 0;
+}
+
+.prose-list li {
+  font-family: var(--font-body);
+  font-size: 10.5pt;
+  line-height: 1.6;
+  padding-left: 14pt;
+  margin-bottom: 4pt;
+  position: relative;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.prose-list li::before {
   content: "";
+  position: absolute;
+  left: 2pt;
+  top: 8pt;
+  width: 3pt;
+  height: 3pt;
+  border-radius: 50%;
+  background: var(--bullet-color);
+}
+
+/* ==========================================================================
+   INGREDIENTS
+   Identical logic to single recipe template:
+   - break-inside: avoid on .ingredients-box (never let box split)
+   - two-column via CSS columns (always break-inside: avoid to prevent
+     column context loss in Chromium paged media)
+   - side-by-side via CSS grid for 2 small groups
+   ========================================================================== */
+
+.ingredients-box {
+  border: 1pt solid var(--ingredient-border);
+  border-radius: 3pt;
+  padding: 8pt 12pt;
+  margin: 6pt 20pt;
+  background: var(--ingredient-bg);
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ingredient-groups {
+  display: block;
+}
+
+.ingredient-groups.side-by-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18pt;
+  align-items: start;
+}
+
+/* Stacked: diamond divider between groups */
+.ingredient-groups.stacked .ingredient-group + .ingredient-group {
+  margin-top: 10pt;
+  padding-top: 10pt;
+  position: relative;
+}
+
+.ingredient-groups.stacked .ingredient-group + .ingredient-group::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
   width: 4pt;
   height: 4pt;
-  border-radius: 50%;
-  background: var(--accent);
-  position: absolute;
-  left: 0;
-  top: 6pt;
+  background: var(--accent-secondary);
 }
 
-.method-list {
-  font-size: 10pt;
-  line-height: 1.55;
+/* Side-by-side: vertical rule between groups */
+.ingredient-groups.side-by-side .ingredient-group + .ingredient-group {
+  position: relative;
+  padding-left: 18pt;
+}
+
+.ingredient-groups.side-by-side .ingredient-group + .ingredient-group::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8pt;
+  bottom: 8pt;
+  width: 0.5pt;
+  background: var(--ingredient-border);
+}
+
+.ingredient-group-header {
+  font-family: var(--font-accent);
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: var(--header-text);
+  margin: 0 0 5pt 0;
+  letter-spacing: 0.2pt;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+.ingredients-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  column-gap: 16pt;
+}
+
+.ingredients-list.one-column {
+  columns: 1;
+}
+
+.ingredients-list.two-columns {
+  columns: 2;
+  column-fill: balance;
+}
+
+.ingredients-list li {
+  padding: 2pt 0 2pt 14pt;
+  border-bottom: 0.5pt dotted var(--ingredient-border);
+  font-family: var(--font-body);
+  font-size: 10.5pt;
+  line-height: 1.5;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  position: relative;
+}
+
+.ingredient-bullet {
+  position: absolute;
+  left: 2pt;
+  top: 8pt;
+  width: 3.5pt;
+  height: 3.5pt;
+  border-radius: 50%;
+  background: var(--bullet-color);
+}
+
+/* ==========================================================================
+   PREPARATION STEPS
+   ========================================================================== */
+
+.sub-section-header {
+  font-family: var(--font-accent);
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: var(--header-text);
+  margin-top: 10pt;
+  margin-bottom: 6pt;
+  page-break-after: avoid;
+  break-after: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.sub-section-header + .step {
+  page-break-before: avoid;
+  break-before: avoid;
 }
 
 .step {
   display: flex;
-  gap: 8pt;
-  margin-bottom: 6pt;
+  gap: 6pt;
+  margin-bottom: 5pt;
+  font-family: var(--font-body);
+  font-size: 10.5pt;
+  line-height: 1.6;
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
 .step-number {
-  flex: 0 0 17pt;
-  width: 17pt;
-  height: 17pt;
-  display: inline-flex;
+  flex-shrink: 0;
+  width: 15pt;
+  height: 15pt;
+  border-radius: 50%;
+  background: var(--step-circle);
+  color: var(--step-circle-text);
+  display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: var(--brown);
-  color: #fff;
-  font-size: 7.4pt;
+  font-size: 7pt;
   font-weight: 700;
   margin-top: 1pt;
 }
@@ -511,195 +765,194 @@ ul.ingredients-list li::before {
   flex: 1;
 }
 
-.method-note {
-  margin: 6pt 0 7pt;
-  font-weight: 700;
-  color: var(--brown);
-}
-
-.prose-block.drop-cap p:first-child:first-letter {
-  float: left;
-  font-family: 'Dancing Script', 'Brush Script MT', cursive;
-  font-size: 34pt;
-  line-height: 0.82;
-  margin: 4pt 6pt 0 0;
-  color: var(--brown);
-}
+/* ==========================================================================
+   POLAROID PHOTOS
+   ========================================================================== */
 
 .photo-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: 11pt;
+  gap: 8pt;
+  margin-top: 8pt;
   justify-content: center;
-  margin: 11pt 0 3pt;
-  page-break-inside: avoid;
-  break-inside: avoid;
+  align-items: flex-start;
+}
+
+.photo-strip .polaroid {
+  width: calc(50% - 5pt);
+  max-width: 200pt;
+  min-width: 160pt;
+}
+
+.photo-strip.photo-count-1 .polaroid {
+  width: 72%;
+  max-width: 290pt;
 }
 
 .polaroid {
-  width: calc(50% - 7pt);
   background: #fff;
-  padding: 5pt 5pt 9pt;
-  border: 0.7pt solid var(--line);
-  box-shadow: 0 2pt 7pt rgba(0,0,0,0.12);
+  padding: 4pt 4pt 8pt;
+  border: 0.6pt solid var(--ingredient-border);
+  box-shadow: 0 2pt 6pt rgba(92, 61, 46, 0.10);
+  page-break-inside: avoid;
   break-inside: avoid;
+  overflow: hidden;
 }
 
-.photo-count-1 .polaroid {
-  width: 68%;
-}
-
-.polaroid.tilt-left {
-  transform: rotate(-0.4deg);
-}
-
-.polaroid.tilt-right {
-  transform: rotate(0.4deg);
-}
+.polaroid.tilt-left  { transform: rotate(-0.7deg); }
+.polaroid.tilt-right { transform: rotate(0.6deg); }
 
 .polaroid-img {
   width: 100%;
-  height: 38mm;
+  height: 130pt;
   object-fit: cover;
   display: block;
+  background: #f6eee3;
 }
 
-.photo-count-1 .polaroid-img {
-  height: 45mm;
-}
-
-.polaroid figcaption {
-  font-family: 'Dancing Script', 'Brush Script MT', cursive;
-  font-size: 8.2pt;
+.polaroid-caption {
+  font-family: var(--font-display);
+  font-size: 7.5pt;
   text-align: center;
-  color: var(--muted);
-  margin-top: 4pt;
+  color: #7a6652;
+  margin-top: 3pt;
+  line-height: 1.2;
+  width: 100%;
 }
 
-.recorded-date {
-  font-size: 8pt;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 10pt;
-  font-style: italic;
-}
+/* ==========================================================================
+   RECIPE FOOTER (QR + logo + date stamp)
+   Same structure as single recipe template footer.
+   ========================================================================== */
 
 .recipe-footer {
-  display: flex;
-  gap: 9pt;
-  align-items: center;
-  justify-content: center;
-  margin: 12pt auto 0;
-  padding-top: 8pt;
-  border-top: 0.7pt solid var(--line);
+  margin-top: 10pt;
+  padding-top: 6pt;
   page-break-inside: avoid;
   break-inside: avoid;
-  max-width: 145mm;
+  break-before: avoid;
 }
 
-.mini-qr {
-  width: 42pt;
-  height: 42pt;
-  flex: 0 0 42pt;
-  background: #fff;
-  border: 0.6pt solid var(--line);
-  padding: 2pt;
+.footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20pt;
+  margin-top: 8pt;
+  margin-bottom: 6pt;
 }
 
-.mini-qr img {
-  width: 100% !important;
-  height: 100% !important;
+.footer-qr {
+  flex-shrink: 0;
+}
+
+.footer-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-logo img {
+  height: 40pt;
+  width: auto;
+  opacity: 1.0;
   display: block;
 }
 
-.qr-copy {
+.footer-qr-frame {
+  margin: 6pt auto 6pt;
+  max-width: 240pt;
+  padding: 6pt;
+  border: 1.2pt solid var(--rule-light);
+  border-radius: 6pt;
+  background: var(--ingredient-bg);
+}
+
+.footer-qr-inner {
+  border: 0.5pt dashed var(--ingredient-border);
+  border-radius: 3pt;
+  padding: 6pt 7pt;
+  position: relative;
+}
+
+.qr-target-large {
+  width: 56pt;
+  height: 56pt;
+  min-width: 56pt;
+  display: block;
+}
+
+.qr-corner {
+  position: absolute;
+  width: 10pt;
+  height: 10pt;
+}
+
+.qr-corner::before,
+.qr-corner::after {
+  content: "";
+  position: absolute;
+  background: var(--accent-secondary);
+}
+
+.qr-corner::before { width: 10pt; height: 1pt; top: 0; left: 0; }
+.qr-corner::after  { width: 1pt; height: 10pt; top: 0; left: 0; }
+
+.qr-corner.tl { top: -4pt; left: -4pt; }
+.qr-corner.tr { top: -4pt; right: -4pt; transform: scaleX(-1); }
+.qr-corner.bl { bottom: -4pt; left: -4pt; transform: scaleY(-1); }
+.qr-corner.br { bottom: -4pt; right: -4pt; transform: scale(-1); }
+
+.footer-qr-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10pt;
+}
+
+.footer-qr-text {
   text-align: left;
 }
 
-.qr-heading {
-  font-size: 8pt;
-  font-weight: 700;
-  color: var(--brown);
+.footer-qr-heading {
+  font-family: var(--font-accent);
+  font-size: 8.5pt;
+  color: var(--header-text);
+  font-weight: 600;
+  margin-bottom: 2pt;
 }
 
-.qr-subtitle {
+.footer-qr-sub {
+  font-family: var(--font-body);
   font-size: 7pt;
-  color: var(--muted);
-  margin-top: 1pt;
+  font-style: italic;
+  color: #9a8b7a;
 }
 
-.qr-url {
-  font-size: 5.6pt;
-  color: var(--muted);
-  max-width: 100mm;
-  word-break: break-all;
+/* ==========================================================================
+   FLOURISH & DATE STAMP
+   ========================================================================== */
+
+.flourish {
+  text-align: center;
+  margin: 5pt 0;
+}
+
+.flourish span {
+  display: inline-block;
+  width: 5pt;
+  height: 5pt;
+  margin: 0 3pt;
+  background: var(--accent-secondary);
+  border-radius: 50%;
+}
+
+.date-stamp {
+  font-family: var(--font-body);
+  font-size: 7pt;
+  font-style: italic;
+  color: var(--accent-secondary);
+  text-align: center;
   margin-top: 2pt;
-}
-
-.closing-logo {
-  width: 56mm;
-  height: auto;
-  margin-bottom: 8pt;
-}
-
-.closing-page p {
-  font-size: 9pt;
-  color: var(--muted);
-}
-
-/* Secondary styles retained, but launch focus is classic. */
-.style-modern .cookbook-title,
-.style-modern .recipe-title,
-.style-modern .chapter-divider h2 {
-  font-family: 'Playfair Display', Georgia, serif;
-  letter-spacing: -0.4pt;
-}
-
-.style-modern .hero-container,
-.style-modern .ingredients-box {
-  border-radius: 10pt;
-}
-
-.style-modern .polaroid,
-.style-minimalist .polaroid,
-.style-minimilalist .polaroid {
-  transform: none;
-}
-
-.style-minimalist .cookbook-title,
-.style-minimalist .recipe-title,
-.style-minimalist .chapter-divider h2,
-.style-minimilalist .cookbook-title,
-.style-minimilalist .recipe-title,
-.style-minimilalist .chapter-divider h2 {
-  font-family: 'Inter', Arial, sans-serif;
-  letter-spacing: -0.8pt;
-  font-weight: 700;
-}
-
-.style-minimalist .page-frame,
-.style-minimilalist .page-frame,
-.style-modern .page-frame {
-  display: none;
-}
-
-.style-minimalist .title-rule span,
-.style-minimalist .book-ornament span,
-.style-minimilalist .title-rule span,
-.style-minimilalist .book-ornament span,
-.style-modern .title-rule span,
-.style-modern .book-ornament span {
-  display: none;
-}
-
-.style-minimalist .book-page,
-.style-minimilalist .book-page {
-  background: var(--paper);
-}
-
-.style-minimalist .section-header span::before,
-.style-minimalist .section-header span::after,
-.style-minimilalist .section-header span::before,
-.style-minimilalist .section-header span::after {
-  display: none;
 }
