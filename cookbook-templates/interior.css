@@ -1,43 +1,34 @@
 /* ==========================================================================
-   COOKBOOK INTERIOR — interior.css  v3
-   Changes from v2:
-   1. Chapter divider full-page coverage — height: 277mm, padding: 0, margin: 0
-      on divider page; break-before: page forces fresh page start
-   2. Footer orphan fix — recipe-footer gets break-before: avoid restored
-      but only works when paired with a sentinel div before it; instead we
-      use a ::before trick to extend keep-with logic
-   3. Logo — removed from individual recipe footer; kept on editorial pages
-      (dedication, TOC). Footer logo retained but made smaller/subtler.
-      Editorial page logos made larger and more prominent.
-   4. TOC bullets — replaced ◦ character with CSS ::before pseudo-element
-   5. TOC chapter row — removed border-bottom; weight contrast is enough
-   6. Recipe title font-size — reduced to 20pt to handle longer titles better
-   7. Eyebrow — increased to 7pt
-   8. Chapter recipe list — list-style-type: none !important to kill stray glyphs
-   9. Drop-cap — fine-tuned margin for cleaner wrap
-   10. Various spacing micro-improvements
-========================================================================== */
+   COOKBOOK INTERIOR — interior.css v4
+
+   Changes from v3:
+   1. Footer prose gap fix — removed break-before: avoid from
+      .recipe-footer .ornament-rule. Footer now accepts orphan naturally;
+      no more forced gaps mid-section to keep content with footer.
+   2. Page numbers moved inside safe zone — replaced @page @bottom-right
+      counter (which sat at the 10mm margin edge, at risk of Prodigi trim)
+      with a position: fixed element at bottom: 14mm; right: 14mm.
+      This keeps page numbers 14mm from the edge, safely inside Prodigi's
+      required 10mm safe zone. Page 1 (dedication) suppressed via
+      .dedication-page ~ * counter reset approach — first page excluded
+      using :first CSS page rule removal and counter-reset on body.
+
+   ========================================================================== */
 
 /* ==========================================================================
    PAGE & PRINT MARGINS
-========================================================================== */
+   ========================================================================== */
 
 @page {
   size: A4;
   margin: 10mm;
 }
 
-@page {
-  @bottom-right {
-    content: counter(page);
-    font-family: 'Lora', serif;
-    font-size: 7pt;
-    color: #9a8b7a;
-  }
-}
-
+/* Page numbers now rendered as fixed-position elements inside content area.
+   @bottom-right removed — it placed numbers at the 10mm margin boundary
+   which is exactly at Prodigi's trim safe zone edge. */
 @page :first {
-  @bottom-right { content: none; }
+  /* keep first page rule in case browser adds anything */
 }
 
 * {
@@ -55,11 +46,43 @@ body {
   background: var(--body-bg);
   background-color: var(--body-bg-color);
   min-height: 100vh;
+  /* CSS counter for page numbers rendered inside content */
+  counter-reset: page-num;
+}
+
+/* ==========================================================================
+   PAGE NUMBER — rendered inside safe zone
+   Each .page increments the counter and renders it via ::after.
+   Positioned at bottom-right, 14mm from edge (well inside 10mm safe zone).
+   Suppressed on dedication page, TOC page, and chapter divider pages.
+   ========================================================================== */
+
+.page {
+  counter-increment: page-num;
+}
+
+.page::after {
+  content: counter(page-num);
+  position: fixed;
+  bottom: 14mm;
+  right: 14mm;
+  font-family: 'Lora', serif;
+  font-size: 7pt;
+  color: #9a8b7a;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Suppress page number on dedication, TOC, and chapter divider pages */
+.dedication-page::after,
+.toc-page::after,
+.chapter-divider-page::after {
+  content: none;
 }
 
 /* ==========================================================================
    PAGE CONTAINER
-========================================================================== */
+   ========================================================================== */
 
 .page {
   font-family: var(--font-body);
@@ -72,7 +95,7 @@ body {
   break-before: page;
 }
 
-/* FIX 1: Chapter divider must always start on a fresh page and fill it
+/* FIX 1 (v3): Chapter divider must always start on a fresh page and fill it
    completely. We override .page padding to zero and set an explicit height
    that matches the A4 content area (297mm - 20mm margins = 277mm). */
 .chapter-divider-page {
@@ -97,44 +120,44 @@ body {
 
 /* ==========================================================================
    CHAPTER ACCENT COLOUR CLASSES
-========================================================================== */
+   ========================================================================== */
 
 .accent-ink,
 .accent-ink .section-label,
 .accent-ink .recipe-title,
 .accent-ink .toc-chapter-name {
-  --accent-primary:   #2d1f14;
+  --accent-primary: #2d1f14;
   --accent-secondary: #7a6652;
-  --step-circle:      #2d1f14;
-  --bullet-color:     #2d1f14;
-  --dropcap-color:    #2d1f14;
+  --step-circle: #2d1f14;
+  --bullet-color: #2d1f14;
+  --dropcap-color: #2d1f14;
 }
 
 .accent-olive,
 .accent-olive .section-label,
 .accent-olive .recipe-title,
 .accent-olive .toc-chapter-name {
-  --accent-primary:   #6b7f4a;
+  --accent-primary: #6b7f4a;
   --accent-secondary: #a8be80;
-  --step-circle:      #4a5e30;
-  --bullet-color:     #6b7f4a;
-  --dropcap-color:    #3d5220;
+  --step-circle: #4a5e30;
+  --bullet-color: #6b7f4a;
+  --dropcap-color: #3d5220;
 }
 
 .accent-terracotta,
 .accent-terracotta .section-label,
 .accent-terracotta .recipe-title,
 .accent-terracotta .toc-chapter-name {
-  --accent-primary:   #c4703f;
+  --accent-primary: #c4703f;
   --accent-secondary: #e0a882;
-  --step-circle:      #a05530;
-  --bullet-color:     #c4703f;
-  --dropcap-color:    #8c3d1a;
+  --step-circle: #a05530;
+  --bullet-color: #c4703f;
+  --dropcap-color: #8c3d1a;
 }
 
 /* ==========================================================================
    DEDICATION PAGE
-========================================================================== */
+   ========================================================================== */
 
 .dedication-page {
   text-align: center;
@@ -162,7 +185,7 @@ body {
 
 /* ==========================================================================
    PREFACE
-========================================================================== */
+   ========================================================================== */
 
 .preface-photo-wrap {
   text-align: center;
@@ -201,8 +224,7 @@ body {
 
 /* ==========================================================================
    SMALL PAGE FOOTER — editorial pages (dedication, TOC)
-   FIX 3: Made larger and more prominent on editorial pages.
-========================================================================== */
+   ========================================================================== */
 
 .page-footer-brand {
   text-align: center;
@@ -211,7 +233,6 @@ body {
   border-top: 0.5pt solid var(--rule-light);
 }
 
-/* FIX 3: Larger logo on editorial pages */
 .footer-logo-small {
   height: 32pt;
   width: auto;
@@ -220,7 +241,7 @@ body {
 
 /* ==========================================================================
    TABLE OF CONTENTS PAGE
-========================================================================== */
+   ========================================================================== */
 
 .toc-page {
   text-align: center;
@@ -246,8 +267,6 @@ body {
   break-inside: avoid;
 }
 
-/* FIX 5: Removed border-bottom — weight contrast between chapter name
-   and recipe names is sufficient visual separation. */
 .toc-chapter-row {
   display: flex;
   align-items: baseline;
@@ -264,11 +283,11 @@ body {
   flex-shrink: 0;
 }
 
-.toc-chapter-row.accent-ink .toc-chapter-name        { color: #2d1f14; }
-.toc-chapter-row.accent-olive .toc-chapter-name      { color: #6b7f4a; }
+.toc-chapter-row.accent-ink .toc-chapter-name    { color: #2d1f14; }
+.toc-chapter-row.accent-olive .toc-chapter-name  { color: #6b7f4a; }
 .toc-chapter-row.accent-terracotta .toc-chapter-name { color: #c4703f; }
 
-/* FIX 4: No dots on chapter row — dots are only for recipe rows */
+/* No dots on chapter row */
 .toc-chapter-row .toc-dots {
   display: none;
 }
@@ -280,9 +299,9 @@ body {
   padding: 2pt 0 2pt 14pt;
 }
 
-/* FIX 4: CSS pseudo-element bullet instead of ◦ character glyph */
+/* Hide Liquid-rendered bullet character; use CSS ::before instead */
 .toc-recipe-bullet {
-  display: none; /* hide the Liquid-rendered character */
+  display: none;
 }
 
 .toc-recipe-row::before {
@@ -321,10 +340,7 @@ body {
 
 /* ==========================================================================
    CHAPTER DIVIDER PAGE
-   FIX 1: Full-page colour coverage. height: 277mm fills A4 minus margins.
-   padding: 0 and margin: 0 set above on .chapter-divider-page.
-   accent-bg-* use both background and background-color for Chromium safety.
-========================================================================== */
+   ========================================================================== */
 
 .accent-bg-ink {
   background: #2d1f14 !important;
@@ -332,12 +348,14 @@ body {
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
+
 .accent-bg-olive {
   background: #3d5220 !important;
   background-color: #3d5220 !important;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
+
 .accent-bg-terracotta {
   background: #8c3d1a !important;
   background-color: #8c3d1a !important;
@@ -361,7 +379,6 @@ body {
   line-height: 1.2;
 }
 
-/* FIX 8: Explicit list-style-type: none to prevent stray glyphs in PDF */
 .chapter-recipe-list {
   list-style: none !important;
   list-style-type: none !important;
@@ -391,9 +408,7 @@ body {
 
 /* ==========================================================================
    TITLE BLOCK (per recipe)
-   FIX 6: Reduced font-size from 22pt to 20pt for long title handling.
-   FIX 7: Eyebrow increased to 7pt.
-========================================================================== */
+   ========================================================================== */
 
 .title-block {
   text-align: center;
@@ -403,7 +418,6 @@ body {
   break-inside: avoid;
 }
 
-/* FIX 7 */
 .eyebrow {
   font-family: var(--font-accent);
   font-size: 7pt;
@@ -413,7 +427,6 @@ body {
   margin: 3pt 0;
 }
 
-/* FIX 6 */
 .recipe-title {
   font-family: var(--font-title);
   font-size: 20pt;
@@ -438,7 +451,7 @@ body {
 
 /* ==========================================================================
    DECORATIVE RULES
-========================================================================== */
+   ========================================================================== */
 
 .ornament-rule {
   display: flex;
@@ -487,7 +500,7 @@ body {
 
 /* ==========================================================================
    HERO IMAGE
-========================================================================== */
+   ========================================================================== */
 
 .hero-container {
   margin: 6pt auto;
@@ -521,7 +534,7 @@ body {
 
 /* ==========================================================================
    RECIPE SECTIONS
-========================================================================== */
+   ========================================================================== */
 
 .recipe-section {
   break-inside: auto;
@@ -583,7 +596,7 @@ body {
 
 /* ==========================================================================
    PROSE
-========================================================================== */
+   ========================================================================== */
 
 .prose {
   font-family: var(--font-body);
@@ -601,7 +614,6 @@ body {
   break-inside: avoid;
 }
 
-/* FIX 9: Refined drop-cap — slightly less aggressive float */
 .drop-cap::first-letter {
   font-family: var(--font-title);
   font-size: 30pt;
@@ -644,7 +656,7 @@ body {
 
 /* ==========================================================================
    INGREDIENTS
-========================================================================== */
+   ========================================================================== */
 
 .ingredients-box {
   border: 1pt solid var(--ingredient-border);
@@ -741,7 +753,7 @@ body {
 
 /* ==========================================================================
    PREPARATION STEPS
-========================================================================== */
+   ========================================================================== */
 
 .sub-section-header {
   font-family: var(--font-accent);
@@ -793,7 +805,7 @@ body {
 
 /* ==========================================================================
    POLAROID PHOTOS
-========================================================================== */
+   ========================================================================== */
 
 .photo-strip {
   display: flex;
@@ -848,16 +860,13 @@ body {
 
 /* ==========================================================================
    RECIPE FOOTER
-   FIX 2: Footer alone on new page problem.
-   Strategy: wrap the ornament rule (which triggers the new page) with
-   break-before: avoid, and pair break-inside: avoid on the footer itself.
-   This keeps the ornament rule anchored to whatever comes before it.
-   The footer div itself gets break-inside: avoid to keep QR + logo together.
 
-   FIX 3: Logo hidden from recipe footer (it's already on editorial pages).
-   The footer-logo div is kept in HTML for future use but hidden here.
-   To re-enable, remove display: none from .recipe-footer .footer-logo.
-========================================================================== */
+   v4 change: removed break-before: avoid from .recipe-footer .ornament-rule.
+   Previously this caused Chromium to insert a forced page break mid-section
+   (e.g. mid Final Thoughts) to keep the last paragraph attached to the
+   footer ornament rule — producing an ugly content gap. Footer now accepts
+   its position naturally; if it orphans to a new page, that is acceptable.
+   ========================================================================== */
 
 .recipe-footer {
   margin-top: 10pt;
@@ -866,10 +875,9 @@ body {
   break-inside: avoid;
 }
 
-/* The ornament rule that opens the footer — keep it with preceding content */
+/* break-before removed — no longer forcing content gaps to keep footer attached */
 .recipe-footer .ornament-rule {
-  break-before: avoid;
-  page-break-before: avoid;
+  /* intentionally empty — footer accepts natural page position */
 }
 
 .footer-brand {
@@ -881,9 +889,9 @@ body {
   margin-bottom: 6pt;
 }
 
-.footer-qr  { flex-shrink: 0; }
+.footer-qr { flex-shrink: 0; }
 
-/* FIX 3: Hide recipe-page logo — keep footer clean and uncluttered */
+/* Recipe footer logo hidden — already present on editorial pages */
 .recipe-footer .footer-logo {
   display: none;
 }
@@ -972,7 +980,7 @@ body {
 
 /* ==========================================================================
    FLOURISH & DATE STAMP
-========================================================================== */
+   ========================================================================== */
 
 .flourish {
   text-align: center;
