@@ -5,113 +5,96 @@
 <title>{{ cookbook_title | default: "Family Cookbook" }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-{% comment %}
-  ═══════════════════════════════════════════════════════════
-  STYLE THEMING — inject CSS custom property overrides based
-  on cover_style. All rules in the CSS use var(--token) so
-  swapping the :root block here changes the entire look.
-  Currently: classic (matches single recipe card aesthetic).
-  Future: modern, minimalist — just add elsif blocks below.
-  ═══════════════════════════════════════════════════════════
-{% endcomment %}
-
 <style>
 {% if cover_style == "modern" %}
 :root {
-  --body-bg:          #f8f8f8;
-  --body-bg-color:    #f0f0f0;
-  --body-text:        #1a1a1a;
-  --header-text:      #1a1a1a;
-  --accent-primary:   #2c5282;
+  --body-bg: #f8f8f8;
+  --body-bg-color: #f0f0f0;
+  --body-text: #1a1a1a;
+  --header-text: #1a1a1a;
+  --accent-primary: #2c5282;
   --accent-secondary: #90cdf4;
-  --rule-heavy:       #2c5282;
-  --rule-light:       #bee3f8;
-  --ingredient-bg:    #f7fafc;
+  --rule-heavy: #2c5282;
+  --rule-light: #bee3f8;
+  --ingredient-bg: #f7fafc;
   --ingredient-border:#bee3f8;
-  --step-circle:      #2c5282;
+  --step-circle: #2c5282;
   --step-circle-text: #ffffff;
-  --bullet-color:     #2c5282;
-  --font-display:     'Playfair Display', serif;
-  --font-title:       'Playfair Display', serif;
-  --font-body:        'Lora', serif;
-  --font-accent:      'Playfair Display', serif;
-  --dropcap-color:    #1a365d;
+  --bullet-color: #2c5282;
+  --font-display: 'Playfair Display', serif;
+  --font-title: 'Playfair Display', serif;
+  --font-body: 'Lora', serif;
+  --font-accent: 'Playfair Display', serif;
+  --dropcap-color: #1a365d;
   --chapter-divider-bg: #2c5282;
   --chapter-divider-text: #ffffff;
   --toc-chapter-color: #2c5282;
-  --ornament-char:    "◆";
+  --ornament-char: "◆";
 }
 {% elsif cover_style == "minimalist" %}
 :root {
-  --body-bg:          #ffffff;
-  --body-bg-color:    #fafafa;
-  --body-text:        #111111;
-  --header-text:      #111111;
-  --accent-primary:   #555555;
+  --body-bg: #ffffff;
+  --body-bg-color: #fafafa;
+  --body-text: #111111;
+  --header-text: #111111;
+  --accent-primary: #555555;
   --accent-secondary: #cccccc;
-  --rule-heavy:       #111111;
-  --rule-light:       #dddddd;
-  --ingredient-bg:    #fafafa;
+  --rule-heavy: #111111;
+  --rule-light: #dddddd;
+  --ingredient-bg: #fafafa;
   --ingredient-border:#dddddd;
-  --step-circle:      #111111;
+  --step-circle: #111111;
   --step-circle-text: #ffffff;
-  --bullet-color:     #555555;
-  --font-display:     'Lora', serif;
-  --font-title:       'Lora', serif;
-  --font-body:        'Lora', serif;
-  --font-accent:      'Lora', serif;
-  --dropcap-color:    #111111;
+  --bullet-color: #555555;
+  --font-display: 'Lora', serif;
+  --font-title: 'Lora', serif;
+  --font-body: 'Lora', serif;
+  --font-accent: 'Lora', serif;
+  --dropcap-color: #111111;
   --chapter-divider-bg: #111111;
   --chapter-divider-text: #ffffff;
   --toc-chapter-color: #111111;
-  --ornament-char:    "—";
+  --ornament-char: "—";
 }
 {% else %}
-/* DEFAULT: classic — matches single recipe card */
+/* DEFAULT: classic
+   Horizontal linear gradient — lighter centre, darker edges.
+   Same gradient used on body AND @page margin boxes for seamless blending.
+   Stops at 25%/75% so darkening starts earlier and survives Prodigi trim. */
 :root {
-  --body-bg:          radial-gradient(ellipse at center, #faf6f0 35%, #e6d5be 100%);
-  --body-bg-color:    #f4ead9;
-  --body-text:        #2d1f14;
-  --header-text:      #5c3d2e;
-  --accent-primary:   #6b7f4a;
+  --body-bg: linear-gradient(to right, #e6d5be 0%, #faf6f0 25%, #faf6f0 75%, #e6d5be 100%);
+  --body-bg-color: #f4ead9;
+  --body-text: #2d1f14;
+  --header-text: #5c3d2e;
+  --accent-primary: #6b7f4a;
   --accent-secondary: #b8a080;
-  --rule-heavy:       #6b7f4a;
-  --rule-light:       #c4b396;
-  --ingredient-bg:    #fdf9f3;
+  --rule-heavy: #6b7f4a;
+  --rule-light: #c4b396;
+  --ingredient-bg: #fdf9f3;
   --ingredient-border:#d4c5a9;
-  --step-circle:      #5c3d2e;
+  --step-circle: #5c3d2e;
   --step-circle-text: #faf6f0;
-  --bullet-color:     #6b7f4a;
-  --font-display:     'Dancing Script', cursive;
-  --font-title:       'Dancing Script', cursive;
-  --font-body:        'Lora', serif;
-  --font-accent:      'Playfair Display', serif;
-  --dropcap-color:    #4a2d20;
+  --bullet-color: #6b7f4a;
+  --font-display: 'Dancing Script', cursive;
+  --font-title: 'Dancing Script', cursive;
+  --font-body: 'Lora', serif;
+  --font-accent: 'Playfair Display', serif;
+  --dropcap-color: #4a2d20;
   --chapter-divider-bg: #2d1f14;
   --chapter-divider-text: #faf6f0;
   --toc-chapter-color: #5c3d2e;
-  --ornament-char:    "◆";
+  --ornament-char: "◆";
 }
 {% endif %}
 </style>
-
 </head>
+
 <body class="style-{{ cover_style | default: 'classic' }}">
 
-{% comment %}
-  ═══════════════════════════════════════════════════════════════
-  GUARD: only render if we have a cookbook title
-  ═══════════════════════════════════════════════════════════════
-{% endcomment %}
 {% if cookbook_title %}
 
-{% comment %}
-  ═══════════════════════════════════════════════════════════════
-  PAGE 1: DEDICATION + PREFACE
-  Combined on one page (or dedication alone if preface disabled).
-  ═══════════════════════════════════════════════════════════════
-{% endcomment %}
 <div class="page dedication-page">
+
   <div class="dedication-ornament">
     <div class="ornament-rule">
       <div class="rule-line thick"></div>
@@ -128,14 +111,15 @@
 
   {% if preface %}
   {% if preface.enabled %}
+
     {% if preface.photo %}
-      {% if preface.photo.enabled %}
-        {% if preface.photo.url != blank %}
+    {% if preface.photo.enabled %}
+    {% if preface.photo.url != blank %}
     <div class="preface-photo-wrap">
       <img src="{{ preface.photo.url }}" alt="{{ author_name | default: 'Author' }}" class="preface-photo">
     </div>
-        {% endif %}
-      {% endif %}
+    {% endif %}
+    {% endif %}
     {% endif %}
 
     {% if preface.title != blank %}
@@ -163,32 +147,31 @@
     {% if author_name != blank %}
     <p class="preface-signature">— {{ author_name }}</p>
     {% endif %}
+
   {% endif %}
   {% endif %}
 
   <div class="page-footer-brand">
     <img src="https://nldppctlsbazaleojhyc.supabase.co/storage/v1/object/public/brand-assets/final-logo.svg" alt="The Family Table" class="footer-logo-small">
   </div>
+
 </div>
 
-{% comment %}
-  ═══════════════════════════════════════════════════════════════
-  TABLE OF CONTENTS PAGE
-  ═══════════════════════════════════════════════════════════════
-{% endcomment %}
 {% if include_toc %}
 {% if table_of_contents %}
+
 <div class="page toc-page">
+
   <div class="ornament-rule">
     <div class="rule-line thick"></div>
     <span class="rule-star" aria-hidden="true"></span>
     <div class="rule-line thick"></div>
   </div>
+
   <div class="thin-rule"></div>
-
   <h2 class="toc-title">Contents</h2>
-
   <div class="thin-rule bottom"></div>
+
   <div class="ornament-rule">
     <div class="rule-line thick"></div>
     <span class="rule-star" aria-hidden="true"></span>
@@ -200,10 +183,7 @@
   <div class="toc-entries">
     {% for entry in table_of_contents.entries %}
     <div class="toc-chapter-block">
-
-      {% comment %} Chapter accent colour classes {% endcomment %}
       {% assign ch_accent = entry.accent_colour | default: "classic" %}
-
       <div class="toc-chapter-row accent-{{ ch_accent }}">
         <span class="toc-chapter-name">{{ entry.chapter_name }}</span>
         {% if entry.page %}
@@ -211,7 +191,6 @@
         <span class="toc-page-num">{{ entry.page }}</span>
         {% endif %}
       </div>
-
       {% if entry.recipes %}
       {% if entry.recipes != empty %}
       {% for recipe in entry.recipes %}
@@ -226,7 +205,6 @@
       {% endfor %}
       {% endif %}
       {% endif %}
-
     </div>
     {% endfor %}
   </div>
@@ -236,505 +214,449 @@
   <div class="page-footer-brand">
     <img src="https://nldppctlsbazaleojhyc.supabase.co/storage/v1/object/public/brand-assets/final-logo.svg" alt="The Family Table" class="footer-logo-small">
   </div>
+
 </div>
+
 {% endif %}
 {% endif %}
 
-{% comment %}
-  ═══════════════════════════════════════════════════════════════
-  CHAPTERS LOOP
-  Each chapter gets:
-    1. A chapter divider page (if divider_page == true)
-    2. One recipe page per recipe (mirrors single recipe template)
-  ═══════════════════════════════════════════════════════════════
-{% endcomment %}
 {% if chapters %}
 {% if chapters != empty %}
+
 {% for chapter in chapters %}
 
-  {% assign ch_accent = chapter.accent_colour | default: "classic" %}
+{% assign ch_accent = chapter.accent_colour | default: "classic" %}
 
-  {% comment %}
-    ─────────────────────────────────────────────
-    CHAPTER DIVIDER PAGE
-    ─────────────────────────────────────────────
-  {% endcomment %}
-  {% if chapter.divider_page %}
-  <div class="page chapter-divider-page accent-bg-{{ ch_accent }}">
-    <div class="chapter-divider-inner">
-      <div class="chapter-divider-ornament">
-        <div class="ornament-rule light">
-          <div class="rule-line thick light"></div>
-          <span class="rule-star light" aria-hidden="true"></span>
-          <div class="rule-line thick light"></div>
-        </div>
+{% if chapter.divider_page %}
+<div class="page chapter-divider-page accent-bg-{{ ch_accent }}">
+  <div class="chapter-divider-inner">
+
+    <div class="chapter-divider-ornament">
+      <div class="ornament-rule light">
+        <div class="rule-line thick light"></div>
+        <span class="rule-star light" aria-hidden="true"></span>
+        <div class="rule-line thick light"></div>
       </div>
-      <h2 class="chapter-divider-name">{{ chapter.name }}</h2>
-      <div class="chapter-divider-ornament">
-        <div class="ornament-rule light">
-          <div class="rule-line thick light"></div>
-          <span class="rule-star light" aria-hidden="true"></span>
-          <div class="rule-line thick light"></div>
-        </div>
-      </div>
-      {% if chapter.recipes %}
-      {% if chapter.recipes != empty %}
-      <ul class="chapter-recipe-list">
-        {% for recipe in chapter.recipes %}
-        <li>{{ recipe.recipe_title }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-      {% endif %}
     </div>
+
+    <h2 class="chapter-divider-name">{{ chapter.name }}</h2>
+
+    <div class="chapter-divider-ornament">
+      <div class="ornament-rule light">
+        <div class="rule-line thick light"></div>
+        <span class="rule-star light" aria-hidden="true"></span>
+        <div class="rule-line thick light"></div>
+      </div>
+    </div>
+
+    {% if chapter.recipes %}
+    {% if chapter.recipes != empty %}
+    <ul class="chapter-recipe-list">
+      {% for recipe in chapter.recipes %}
+      <li>{{ recipe.recipe_title }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endif %}
+
+  </div>
+</div>
+{% endif %}
+
+{% if chapter.recipes %}
+{% if chapter.recipes != empty %}
+
+{% for recipe in chapter.recipes %}
+
+<div class="page recipe-page accent-{{ ch_accent }}">
+
+  <div class="title-block">
+    <div class="ornament-rule">
+      <div class="rule-line thick"></div>
+      <span class="rule-star" aria-hidden="true"></span>
+      <div class="rule-line thick"></div>
+    </div>
+    <div class="thin-rule"></div>
+    <p class="eyebrow">{{ chapter.name }}</p>
+    <h1 class="recipe-title">{{ recipe.recipe_title }}</h1>
+    {% if recipe.category_tags != blank %}
+    <p class="category-tags">{{ recipe.category_tags }}</p>
+    {% endif %}
+    <div class="thin-rule bottom"></div>
+    <div class="ornament-rule">
+      <div class="rule-line thick"></div>
+      <span class="rule-star" aria-hidden="true"></span>
+      <div class="rule-line thick"></div>
+    </div>
+  </div>
+
+  {% if recipe.hero_image_url != blank %}
+  <div class="hero-container">
+    <img src="{{ recipe.hero_image_url }}" alt="{{ recipe.recipe_title }}" class="hero-image">
+    <div class="hero-overlay" aria-hidden="true"></div>
   </div>
   {% endif %}
 
-  {% comment %}
-    ─────────────────────────────────────────────
-    RECIPES LOOP — each recipe is its own page(s)
-    ─────────────────────────────────────────────
-  {% endcomment %}
-  {% if chapter.recipes %}
-      {% if chapter.recipes != empty %}
-  {% for recipe in chapter.recipes %}
+  {% if recipe.sections %}
+  {% if recipe.sections != empty %}
 
-  <div class="page recipe-page accent-{{ ch_accent }}">
+  {% for section in recipe.sections %}
+  <div class="recipe-section">
 
-    {% comment %} ── RECIPE TITLE BLOCK ── {% endcomment %}
-    <div class="title-block">
-      <div class="ornament-rule">
-        <div class="rule-line thick"></div>
-        <span class="rule-star" aria-hidden="true"></span>
-        <div class="rule-line thick"></div>
+    <div class="section-intro-block">
+      <div class="section-header">
+        <div class="rule-line thin"></div>
+        <span class="section-label">
+          <span class="section-mark" aria-hidden="true"></span>
+          <span class="section-label-text">{{ section.label }}</span>
+          <span class="section-mark" aria-hidden="true"></span>
+        </span>
+        <div class="rule-line thin"></div>
       </div>
-      <div class="thin-rule"></div>
-      <p class="eyebrow">{{ chapter.name }}</p>
-      <h1 class="recipe-title">{{ recipe.recipe_title }}</h1>
-      {% if recipe.category_tags != blank %}
-      <p class="category-tags">{{ recipe.category_tags }}</p>
-      {% endif %}
-      <div class="thin-rule bottom"></div>
-      <div class="ornament-rule">
-        <div class="rule-line thick"></div>
-        <span class="rule-star" aria-hidden="true"></span>
-        <div class="rule-line thick"></div>
-      </div>
-    </div>
-
-    {% comment %} ── HERO IMAGE ── {% endcomment %}
-    {% if recipe.hero_image_url != blank %}
-    <div class="hero-container">
-      <img src="{{ recipe.hero_image_url }}" alt="{{ recipe.recipe_title }}" class="hero-image">
-      <div class="hero-overlay" aria-hidden="true"></div>
-    </div>
-    {% endif %}
-
-    {% comment %} ── SECTIONS LOOP ── {% endcomment %}
-    {% if recipe.sections %}
-    {% if recipe.sections != empty %}
-    {% for section in recipe.sections %}
-    <div class="recipe-section">
-
-      {% comment %} Section header + intro line — kept together {% endcomment %}
-      <div class="section-intro-block">
-        <div class="section-header">
-          <div class="rule-line thin"></div>
-          <span class="section-label">
-            <span class="section-mark" aria-hidden="true"></span>
-            <span class="section-label-text">{{ section.label }}</span>
-            <span class="section-mark" aria-hidden="true"></span>
-          </span>
-          <div class="rule-line thin"></div>
-        </div>
-        {% if section.type == "ingredients" %}
-        <p class="prose section-intro-line">Here's everything you'll need to get started:</p>
-        {% endif %}
-        {% if section.type == "preparation" %}
-        <p class="prose section-intro-line">Follow these steps to bring it all together:</p>
-        {% endif %}
-      </div>
-
-      {% comment %}
-        ══════════════════════════════════════════════
-        SECTION TYPE RENDERING
-        Each type is a separate self-contained if block.
-        NO elsif/else — PDFMonkey's Liquid parser cannot
-        reliably handle elsif branches that contain nested
-        for loops inside multiple outer for loops.
-        assign section_rendered = true as a marker so the
-        prose fallback block knows not to double-render.
-        ══════════════════════════════════════════════
-      {% endcomment %}
-      {% assign section_rendered = false %}
-
-      {% comment %} ── INGREDIENTS ── {% endcomment %}
       {% if section.type == "ingredients" %}
-        {% assign section_rendered = true %}
+      <p class="prose section-intro-line">Here's everything you'll need to get started:</p>
+      {% endif %}
+      {% if section.type == "preparation" %}
+      <p class="prose section-intro-line">Follow these steps to bring it all together:</p>
+      {% endif %}
+    </div>
 
-        {% if section.sub_sections %}
-        {% if section.sub_sections != empty %}
+    {% assign section_rendered = false %}
 
-          {% assign group_count = section.sub_sections.size %}
-          {% assign has_large_group = false %}
+    {% if section.type == "ingredients" %}
+    {% assign section_rendered = true %}
 
-          {% for group in section.sub_sections %}
-            {% assign g_check = 0 %}
-            {% for item in group.items %}
-              {% assign trimmed_item = item | strip %}
-              {% if trimmed_item != "" %}
-                {% assign g_check = g_check | plus: 1 %}
-                {% if g_check == 10 %}
-                  {% assign has_large_group = true %}
+      {% if section.sub_sections %}
+      {% if section.sub_sections != empty %}
+
+        {% assign group_count = section.sub_sections.size %}
+        {% assign has_large_group = false %}
+
+        {% for group in section.sub_sections %}
+          {% assign g_check = 0 %}
+          {% for item in group.items %}
+            {% assign trimmed_item = item | strip %}
+            {% if trimmed_item != "" %}
+              {% assign g_check = g_check | plus: 1 %}
+              {% if g_check == 10 %}
+                {% assign has_large_group = true %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+
+        {% assign use_side_by_side = false %}
+        {% assign layout_class = "stacked" %}
+        {% if group_count == 2 %}
+          {% if has_large_group == false %}
+            {% assign layout_class = "side-by-side" %}
+            {% assign use_side_by_side = true %}
+          {% endif %}
+        {% endif %}
+
+        <div class="ingredients-box">
+          <div class="ingredient-groups {{ layout_class }}">
+            {% for group in section.sub_sections %}
+              {% assign item_count = 0 %}
+              {% assign group_is_large = false %}
+              {% assign group_has_items = false %}
+              {% for item in group.items %}
+                {% assign trimmed_item = item | strip %}
+                {% if trimmed_item != "" %}
+                  {% assign group_has_items = true %}
+                  {% assign item_count = item_count | plus: 1 %}
+                  {% if item_count == 10 %}
+                    {% assign group_is_large = true %}
+                  {% endif %}
                 {% endif %}
+              {% endfor %}
+
+              {% if group_has_items %}
+              <div class="ingredient-group">
+                {% if group.header != blank %}
+                <p class="ingredient-group-header">{{ group.header }}</p>
+                {% endif %}
+
+                {% assign use_two_cols = false %}
+                {% if group_is_large %}
+                  {% if use_side_by_side == false %}
+                    {% assign use_two_cols = true %}
+                  {% endif %}
+                {% endif %}
+
+                {% assign ingredient_col_class = "one-column" %}
+                {% if use_two_cols %}
+                  {% assign ingredient_col_class = "two-columns" %}
+                {% endif %}
+
+                <ul class="ingredients-list {{ ingredient_col_class }}">
+                  {% for item in group.items %}
+                    {% assign trimmed_item = item | strip %}
+                    {% if trimmed_item != "" %}
+                    <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ trimmed_item }}</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+
+            {% endfor %}
+          </div>
+        </div>
+
+      {% endif %}
+      {% endif %}
+
+      {% assign has_sub_sections = false %}
+      {% if section.sub_sections %}
+      {% if section.sub_sections != empty %}
+        {% assign has_sub_sections = true %}
+      {% endif %}
+      {% endif %}
+
+      {% if has_sub_sections == false %}
+        {% assign ingredient_lines = section.content | newline_to_br | split: '<br />' %}
+        {% assign l_check = 0 %}
+        {% assign legacy_is_large = false %}
+        {% for line in ingredient_lines %}
+          {% assign trimmed = line | strip %}
+          {% if trimmed != "" %}
+            {% assign l_check = l_check | plus: 1 %}
+            {% if l_check == 10 %}
+              {% assign legacy_is_large = true %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        <div class="ingredients-box">
+          {% assign legacy_col_class = "one-column" %}
+          {% if legacy_is_large %}
+            {% assign legacy_col_class = "two-columns" %}
+          {% endif %}
+          <ul class="ingredients-list {{ legacy_col_class }}">
+            {% for line in ingredient_lines %}
+              {% assign trimmed = line | strip %}
+              {% if trimmed != "" %}
+                {% assign clean = trimmed | remove_first: "- " | remove_first: "• " | remove_first: "* " %}
+                <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ clean }}</li>
               {% endif %}
             {% endfor %}
-          {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
 
-          {% assign use_side_by_side = false %}
-          {% assign layout_class = "stacked" %}
-          {% if group_count == 2 %}
-            {% if has_large_group == false %}
-              {% assign layout_class = "side-by-side" %}
-              {% assign use_side_by_side = true %}
-            {% endif %}
+    {% endif %}
+
+    {% if section.type == "preparation" %}
+    {% assign section_rendered = true %}
+
+      {% if section.steps %}
+      {% if section.steps != empty %}
+        {% assign step_counter = 0 %}
+        {% for step in section.steps %}
+          {% if step.header != blank %}
+          <p class="sub-section-header">{{ step.header }}</p>
           {% endif %}
-
-          <div class="ingredients-box">
-            <div class="ingredient-groups {{ layout_class }}">
-              {% for group in section.sub_sections %}
-                {% assign item_count = 0 %}
-                {% assign group_is_large = false %}
-                {% assign group_has_items = false %}
-                {% for item in group.items %}
-                  {% assign trimmed_item = item | strip %}
-                  {% if trimmed_item != "" %}
-                    {% assign group_has_items = true %}
-                    {% assign item_count = item_count | plus: 1 %}
-                    {% if item_count == 10 %}
-                      {% assign group_is_large = true %}
-                    {% endif %}
-                  {% endif %}
-                {% endfor %}
-
-                {% if group_has_items %}
-                <div class="ingredient-group">
-                  {% if group.header != blank %}
-                  <p class="ingredient-group-header">{{ group.header }}</p>
-                  {% endif %}
-
-                  {% assign use_two_cols = false %}
-                  {% if group_is_large %}
-                    {% if use_side_by_side == false %}
-                      {% assign use_two_cols = true %}
-                    {% endif %}
-                  {% endif %}
-
-                  {% assign ingredient_col_class = "one-column" %}
-                  {% if use_two_cols %}
-                    {% assign ingredient_col_class = "two-columns" %}
-                  {% endif %}
-                  <ul class="ingredients-list {{ ingredient_col_class }}">
-                    {% for item in group.items %}
-                      {% assign trimmed_item = item | strip %}
-                      {% if trimmed_item != "" %}
-                      <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ trimmed_item }}</li>
-                      {% endif %}
-                    {% endfor %}
-                  </ul>
-                </div>
-                {% endif %}
-              {% endfor %}
+          {% if step.header == blank %}
+            {% assign step_counter = step_counter | plus: 1 %}
+            <div class="step">
+              <span class="step-number">{{ step_counter }}</span>
+              <span class="step-text">{{ step.text }}</span>
             </div>
-          </div>
-
-        {% endif %}
-        {% endif %}
-        {% comment %} end structured sub_sections path {% endcomment %}
-
-        {% comment %} Legacy flat content fallback — only if no sub_sections {% endcomment %}
-        {% assign has_sub_sections = false %}
-        {% if section.sub_sections %}
-          {% if section.sub_sections != empty %}
-            {% assign has_sub_sections = true %}
           {% endif %}
-        {% endif %}
-        {% if has_sub_sections == false %}
-          {% assign ingredient_lines = section.content | newline_to_br | split: '<br />' %}
-          {% assign l_check = 0 %}
-          {% assign legacy_is_large = false %}
-          {% for line in ingredient_lines %}
-            {% assign trimmed = line | strip %}
-            {% if trimmed != "" %}
-              {% assign l_check = l_check | plus: 1 %}
-              {% if l_check == 10 %}
-                {% assign legacy_is_large = true %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-          <div class="ingredients-box">
-            {% assign legacy_col_class = "one-column" %}
-            {% if legacy_is_large %}
-              {% assign legacy_col_class = "two-columns" %}
-            {% endif %}
-            <ul class="ingredients-list {{ legacy_col_class }}">
-              {% for line in ingredient_lines %}
-                {% assign trimmed = line | strip %}
-                {% if trimmed != "" %}
-                  {% assign clean = trimmed | remove_first: "- " | remove_first: "• " | remove_first: "* " %}
-                  <li><span class="ingredient-bullet" aria-hidden="true"></span>{{ clean }}</li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-          </div>
-        {% endif %}
-        {% comment %} end legacy fallback path {% endcomment %}
-
+        {% endfor %}
       {% endif %}
-      {% comment %} end ingredients {% endcomment %}
-
-      {% comment %} ── PREPARATION ── {% endcomment %}
-      {% if section.type == "preparation" %}
-        {% assign section_rendered = true %}
-
-        {% if section.steps %}
-          {% if section.steps != empty %}
-          {% assign step_counter = 0 %}
-          {% for step in section.steps %}
-            {% if step.header != blank %}
-            <p class="sub-section-header">{{ step.header }}</p>
-            {% endif %}
-            {% if step.header == blank %}
-              {% assign step_counter = step_counter | plus: 1 %}
-              <div class="step">
-                <span class="step-number">{{ step_counter }}</span>
-                <span class="step-text">{{ step.text }}</span>
-              </div>
-            {% endif %}
-          {% endfor %}
-          {% endif %}
-        {% endif %}
-
-        {% comment %} Legacy flat content fallback — only if no steps {% endcomment %}
-        {% assign has_steps = false %}
-        {% if section.steps %}
-          {% if section.steps != empty %}
-            {% assign has_steps = true %}
-          {% endif %}
-        {% endif %}
-        {% if has_steps == false %}
-          {% assign prep_lines = section.content | newline_to_br | split: '<br />' %}
-          {% assign step_num = 0 %}
-          {% for line in prep_lines %}
-            {% assign trimmed = line | strip %}
-            {% if trimmed != "" %}
-              {% assign first_char = trimmed | slice: 0, 1 %}
-              {% assign is_digit = false %}
-              {% if first_char == "1" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if first_char == "2" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if first_char == "3" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if first_char == "4" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if first_char == "5" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if first_char == "6" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if first_char == "7" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if first_char == "8" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if first_char == "9" %}
-                {% assign is_digit = true %}
-              {% endif %}
-              {% if is_digit %}
-                {% assign step_num = step_num | plus: 1 %}
-                {% assign step_text = trimmed %}
-                {% if step_text contains ". " %}
-                  {% assign dot_prefix_size = step_text | split: ". " | first | size %}
-                  {% assign prefix_len = dot_prefix_size | plus: 2 %}
-                  {% assign step_text = step_text | slice: prefix_len, 9999 %}
-                {% endif %}
-                <div class="step">
-                  <span class="step-number">{{ step_num }}</span>
-                  <span class="step-text">{{ step_text }}</span>
-                </div>
-              {% endif %}
-              {% if is_digit == false %}
-                {% assign step_num = 0 %}
-                <p class="sub-section-header">{{ trimmed }}</p>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-        {% comment %} end preparation legacy fallback {% endcomment %}
-
       {% endif %}
-      {% comment %} end preparation {% endcomment %}
 
-      {% comment %}
-        ── PROSE SECTIONS: backstory, tips, final_thoughts, and any other type ──
-        Renders if section_rendered is still false (not ingredients or preparation).
-        Drop-caps only on backstory. Bullet detection for tips.
-      {% endcomment %}
-      {% if section_rendered == false %}
+      {% assign has_steps = false %}
+      {% if section.steps %}
+      {% if section.steps != empty %}
+        {% assign has_steps = true %}
+      {% endif %}
+      {% endif %}
 
-        {% assign prose_lines = section.content | newline_to_br | split: '<br />' %}
-        {% assign in_list = false %}
-        {% assign is_first_para = true %}
-
-        {% for para in prose_lines %}
-          {% assign trimmed = para | strip %}
+      {% if has_steps == false %}
+        {% assign prep_lines = section.content | newline_to_br | split: '<br />' %}
+        {% assign step_num = 0 %}
+        {% for line in prep_lines %}
+          {% assign trimmed = line | strip %}
           {% if trimmed != "" %}
             {% assign first_char = trimmed | slice: 0, 1 %}
-            {% assign second_char = trimmed | slice: 1, 1 %}
-            {% assign is_bullet_line = false %}
-            {% if first_char == "-" %}
-              {% if second_char == " " %}
-                {% assign is_bullet_line = true %}
+            {% assign is_digit = false %}
+            {% if first_char == "1" %}{% assign is_digit = true %}{% endif %}
+            {% if first_char == "2" %}{% assign is_digit = true %}{% endif %}
+            {% if first_char == "3" %}{% assign is_digit = true %}{% endif %}
+            {% if first_char == "4" %}{% assign is_digit = true %}{% endif %}
+            {% if first_char == "5" %}{% assign is_digit = true %}{% endif %}
+            {% if first_char == "6" %}{% assign is_digit = true %}{% endif %}
+            {% if first_char == "7" %}{% assign is_digit = true %}{% endif %}
+            {% if first_char == "8" %}{% assign is_digit = true %}{% endif %}
+            {% if first_char == "9" %}{% assign is_digit = true %}{% endif %}
+            {% if is_digit %}
+              {% assign step_num = step_num | plus: 1 %}
+              {% assign step_text = trimmed %}
+              {% if step_text contains ". " %}
+                {% assign dot_prefix_size = step_text | split: ". " | first | size %}
+                {% assign prefix_len = dot_prefix_size | plus: 2 %}
+                {% assign step_text = step_text | slice: prefix_len, 9999 %}
               {% endif %}
+              <div class="step">
+                <span class="step-number">{{ step_num }}</span>
+                <span class="step-text">{{ step_text }}</span>
+              </div>
             {% endif %}
-            {% if first_char == "*" %}
-              {% if second_char == " " %}
-                {% assign is_bullet_line = true %}
-              {% endif %}
+            {% if is_digit == false %}
+              {% assign step_num = 0 %}
+              <p class="sub-section-header">{{ trimmed }}</p>
             {% endif %}
-            {% if first_char == "•" %}
-              {% if second_char == " " %}
-                {% assign is_bullet_line = true %}
-              {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+    {% endif %}
+
+    {% if section_rendered == false %}
+      {% assign prose_lines = section.content | newline_to_br | split: '<br />' %}
+      {% assign in_list = false %}
+      {% assign is_first_para = true %}
+
+      {% for para in prose_lines %}
+        {% assign trimmed = para | strip %}
+        {% if trimmed != "" %}
+
+          {% assign first_char = trimmed | slice: 0, 1 %}
+          {% assign second_char = trimmed | slice: 1, 1 %}
+          {% assign is_bullet_line = false %}
+
+          {% if first_char == "-" %}
+            {% if second_char == " " %}{% assign is_bullet_line = true %}{% endif %}
+          {% endif %}
+          {% if first_char == "*" %}
+            {% if second_char == " " %}{% assign is_bullet_line = true %}{% endif %}
+          {% endif %}
+          {% if first_char == "•" %}
+            {% if second_char == " " %}{% assign is_bullet_line = true %}{% endif %}
+          {% endif %}
+
+          {% if is_bullet_line %}
+            {% if in_list == false %}
+            <ul class="prose-list">
+            {% assign in_list = true %}
+            {% endif %}
+            {% assign bullet_text = trimmed | slice: 2, 9999 | strip %}
+            <li>{{ bullet_text }}</li>
+          {% endif %}
+
+          {% if is_bullet_line == false %}
+            {% if in_list %}
+            </ul>
+            {% assign in_list = false %}
             {% endif %}
 
-            {% if is_bullet_line %}
-              {% if in_list == false %}
-              <ul class="prose-list">
-              {% assign in_list = true %}
-              {% endif %}
-              {% assign bullet_text = trimmed | slice: 2, 9999 | strip %}
-              <li>{{ bullet_text }}</li>
-            {% endif %}
-            {% if is_bullet_line == false %}
-              {% if in_list %}
-              </ul>
-              {% assign in_list = false %}
-              {% endif %}
-              {% assign apply_dropcap = false %}
-              {% assign char_at_120 = trimmed | slice: 120, 1 %}
-              {% if is_first_para %}
-                {% if char_at_120 != "" %}
-                  {% if section.type == "backstory" %}
-                    {% assign apply_dropcap = true %}
-                  {% endif %}
+            {% assign apply_dropcap = false %}
+            {% assign char_at_120 = trimmed | slice: 120, 1 %}
+            {% if is_first_para %}
+              {% if char_at_120 != "" %}
+                {% if section.type == "backstory" %}
+                  {% assign apply_dropcap = true %}
                 {% endif %}
               {% endif %}
-              {% assign prose_class = "prose" %}
-              {% if apply_dropcap %}
-                {% assign prose_class = "prose drop-cap" %}
-              {% endif %}
-              <p class="{{ prose_class }}">{{ trimmed }}</p>
-              {% assign is_first_para = false %}
             {% endif %}
+
+            {% assign prose_class = "prose" %}
+            {% if apply_dropcap %}
+              {% assign prose_class = "prose drop-cap" %}
+            {% endif %}
+
+            <p class="{{ prose_class }}">{{ trimmed }}</p>
+            {% assign is_first_para = false %}
           {% endif %}
-        {% endfor %}
-        {% if in_list %}
-        </ul>
+
         {% endif %}
+      {% endfor %}
 
+      {% if in_list %}
+      </ul>
       {% endif %}
-      {% comment %} end prose {% endcomment %}
 
-      {% comment %} ── SECTION PHOTOS (polaroids) ── {% endcomment %}
-      {% if section.photos %}
-      {% if section.photos != empty %}
-      <div class="photo-strip photo-count-{{ section.photos.size }}">
-        {% for photo in section.photos %}
-        <div class="polaroid {% cycle 'tilt-left', 'tilt-right' %}">
-          <img src="{{ photo.url }}" alt="{{ photo.description | default: recipe.recipe_title }}" class="polaroid-img">
-          {% if photo.description != blank %}
-          <p class="polaroid-caption">{{ photo.description }}</p>
-          {% endif %}
-        </div>
-        {% endfor %}
+    {% endif %}
+
+    {% if section.photos %}
+    {% if section.photos != empty %}
+    <div class="photo-strip photo-count-{{ section.photos.size }}">
+      {% for photo in section.photos %}
+      <div class="polaroid {% cycle 'tilt-left', 'tilt-right' %}">
+        <img src="{{ photo.url }}" alt="{{ photo.description | default: recipe.recipe_title }}" class="polaroid-img">
+        {% if photo.description != blank %}
+        <p class="polaroid-caption">{{ photo.description }}</p>
+        {% endif %}
       </div>
-      {% endif %}
-      {% endif %}
-
+      {% endfor %}
     </div>
-    {% comment %} end recipe-section {% endcomment %}
-    {% endfor %}
-    {% comment %} end sections loop {% endcomment %}
     {% endif %}
     {% endif %}
-    {% comment %} end sections guard {% endcomment %}
 
-    {% comment %} ── RECIPE FOOTER with QR code ── {% endcomment %}
-    {% if recipe.recipe_url != blank %}
-    <div class="recipe-footer">
-      <div class="ornament-rule">
-        <div class="rule-line thick"></div>
-        <span class="rule-star" aria-hidden="true"></span>
-        <div class="rule-line thick"></div>
-      </div>
-      <div class="footer-brand">
-        {% if include_qr_codes %}
-        {% if recipe.qr_image_url != blank %}
-        <div class="footer-qr">
-          <div class="footer-qr-frame">
-            <div class="footer-qr-inner">
-              <span class="qr-corner tl" aria-hidden="true"></span>
-              <span class="qr-corner tr" aria-hidden="true"></span>
-              <span class="qr-corner bl" aria-hidden="true"></span>
-              <span class="qr-corner br" aria-hidden="true"></span>
-              <div class="footer-qr-content">
-                <img src="{{ recipe.qr_image_url }}" alt="QR code for full digital recipe" class="qr-target-large">
-                <div class="footer-qr-text">
-                  <p class="footer-qr-heading">Scan for the full digital recipe</p>
-                  <p class="footer-qr-sub">With all audio, video &amp; photos</p>
-                </div>
+  </div>
+
+  {% endfor %}
+
+  {% endif %}
+  {% endif %}
+
+  {% if recipe.recipe_url != blank %}
+  <div class="recipe-footer">
+    <div class="ornament-rule">
+      <div class="rule-line thick"></div>
+      <span class="rule-star" aria-hidden="true"></span>
+      <div class="rule-line thick"></div>
+    </div>
+    <div class="footer-brand">
+      {% if include_qr_codes %}
+      {% if recipe.qr_image_url != blank %}
+      <div class="footer-qr">
+        <div class="footer-qr-frame">
+          <div class="footer-qr-inner">
+            <span class="qr-corner tl" aria-hidden="true"></span>
+            <span class="qr-corner tr" aria-hidden="true"></span>
+            <span class="qr-corner bl" aria-hidden="true"></span>
+            <span class="qr-corner br" aria-hidden="true"></span>
+            <div class="footer-qr-content">
+              <img src="{{ recipe.qr_image_url }}" alt="QR code for full digital recipe" class="qr-target-large">
+              <div class="footer-qr-text">
+                <p class="footer-qr-heading">Scan for the full digital recipe</p>
+                <p class="footer-qr-sub">With all audio, video &amp; photos</p>
               </div>
             </div>
           </div>
         </div>
-        {% endif %}
-        {% endif %}
-        <div class="footer-logo">
-          <img src="https://nldppctlsbazaleojhyc.supabase.co/storage/v1/object/public/brand-assets/final-logo.svg" alt="The Family Table">
-        </div>
       </div>
-      <div class="flourish" aria-hidden="true">
-        <span></span><span></span><span></span>
-      </div>
-      {% if recipe.recorded_date != blank %}
-      <p class="date-stamp">Recorded {{ recipe.recorded_date }}</p>
       {% endif %}
+      {% endif %}
+      <div class="footer-logo">
+        <img src="https://nldppctlsbazaleojhyc.supabase.co/storage/v1/object/public/brand-assets/final-logo.svg" alt="The Family Table">
+      </div>
     </div>
+    <div class="flourish" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    {% if recipe.recorded_date != blank %}
+    <p class="date-stamp">Recorded {{ recipe.recorded_date }}</p>
     {% endif %}
-
-    </div>
-    {% comment %} end recipe-page div {% endcomment %}
-
-  {% endfor %}
-  {% comment %} end recipes loop {% endcomment %}
+  </div>
   {% endif %}
-  {% endif %}
+
+</div>
 
 {% endfor %}
-{% comment %} end chapters loop {% endcomment %}
+
+{% endif %}
+{% endif %}
+
+{% endfor %}
+
 {% endif %}
 {% endif %}
 
 {% endif %}
-{% comment %} end cookbook_title guard {% endcomment %}
 
 </body>
 </html>
