@@ -1,34 +1,84 @@
 /* ==========================================================================
-   COOKBOOK INTERIOR — interior.css v4
+   COOKBOOK INTERIOR — interior.css v6
 
-   Changes from v3:
-   1. Footer prose gap fix — removed break-before: avoid from
-      .recipe-footer .ornament-rule. Footer now accepts orphan naturally;
-      no more forced gaps mid-section to keep content with footer.
-   2. Page numbers moved inside safe zone — replaced @page @bottom-right
-      counter (which sat at the 10mm margin edge, at risk of Prodigi trim)
-      with a position: fixed element at bottom: 14mm; right: 14mm.
-      This keeps page numbers 14mm from the edge, safely inside Prodigi's
-      required 10mm safe zone. Page 1 (dedication) suppressed via
-      .dedication-page ~ * counter reset approach — first page excluded
-      using :first CSS page rule removal and counter-reset on body.
+   MAJOR CHANGES from v5:
 
+   1. Top/bottom padding now via @page margin (not .page padding).
+      Previously .page { padding-top/padding-bottom } only worked on the
+      first/last physical page of each div — Chromium drops these at page
+      break boundaries. @page { margin: 14mm 0 } applies consistently to
+      EVERY physical page, so top + bottom breathing room is reliable.
+
+   2. Parchment painted into @page margin zones.
+      With @page margin > 0, the body parchment background does NOT paint
+      into the margin areas — producing white strips at top + bottom of
+      every page. To keep edge-to-edge parchment for Prodigi's bleed
+      generation, we use @top-center and @bottom-center margin boxes with
+      the parchment gradient applied directly.
+
+   3. Page numbers REMOVED entirely.
+      Not essential for a family cookbook. TOC handles navigation.
+      Removes all CSS counter machinery and Prodigi safe zone concerns
+      around page numbers.
+
+   v5 changes retained:
+   - @page sides at 0 — parchment fills left/right edges.
+   - Internal .page side padding (18mm) keeps content in Prodigi safe zone.
+   - Chapter divider full-bleed dark background.
+   - Footer prose gap fix (no break-before on .recipe-footer .ornament-rule).
    ========================================================================== */
 
 /* ==========================================================================
    PAGE & PRINT MARGINS
+
+   @page margins: 14mm top + 14mm bottom on every physical page —
+   reliable cross-page breathing room. Sides at 0 so parchment goes
+   edge-to-edge horizontally; vertical safe zone created by these margins
+   + content padding.
+
+   Parchment painted into @top-center and @bottom-center margin boxes so
+   the entire page surface (including the margin zones) appears as
+   continuous parchment for Prodigi's bleed extension.
    ========================================================================== */
 
 @page {
   size: A4;
-  margin: 10mm;
-}
+  margin: 14mm 0;
 
-/* Page numbers now rendered as fixed-position elements inside content area.
-   @bottom-right removed — it placed numbers at the 10mm margin boundary
-   which is exactly at Prodigi's trim safe zone edge. */
+  @top-center {
+    content: "";
+    width: 100%;
+    height: 14mm;
+    background: linear-gradient(to right, #e6d5be 0%, #faf6f0 25%, #faf6f0 75%, #e6d5be 100%);
+    background-color: #f4ead9;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @bottom-center {
+    content: "";
+    width: 100%;
+    height: 14mm;
+    background: linear-gradient(to right, #e6d5be 0%, #faf6f0 25%, #faf6f0 75%, #e6d5be 100%);
+    background-color: #f4ead9;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /*
+    @bottom-right {
+    content: counter(page);
+    margin: 0 20mm 4mm 0;
+    font-family: 'Lora', serif;
+    font-size: 8pt;
+    color: #9a8b7a;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
 @page :first {
-  /* keep first page rule in case browser adds anything */
+  @bottom-right { content: none; }
+}
+*/
 }
 
 * {
@@ -46,48 +96,20 @@ body {
   background: var(--body-bg);
   background-color: var(--body-bg-color);
   min-height: 100vh;
-  /* CSS counter for page numbers rendered inside content */
-  counter-reset: page-num;
-}
-
-/* ==========================================================================
-   PAGE NUMBER — rendered inside safe zone
-   Each .page increments the counter and renders it via ::after.
-   Positioned at bottom-right, 14mm from edge (well inside 10mm safe zone).
-   Suppressed on dedication page, TOC page, and chapter divider pages.
-   ========================================================================== */
-
-.page {
-  counter-increment: page-num;
-}
-
-.page::after {
-  content: counter(page-num);
-  position: fixed;
-  bottom: 14mm;
-  right: 14mm;
-  font-family: 'Lora', serif;
-  font-size: 7pt;
-  color: #9a8b7a;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-
-/* Suppress page number on dedication, TOC, and chapter divider pages */
-.dedication-page::after,
-.toc-page::after,
-.chapter-divider-page::after {
-  content: none;
 }
 
 /* ==========================================================================
    PAGE CONTAINER
+
+   Only horizontal padding here. Vertical breathing room comes from @page
+   margins which apply on every physical page. Removed padding-top/bottom
+   to avoid them being unreliable at page breaks.
    ========================================================================== */
 
 .page {
   font-family: var(--font-body);
   color: var(--body-text);
-  padding: 8mm 10mm 0;
+  padding: 0 20mm;
 }
 
 .dedication-page,
@@ -95,15 +117,16 @@ body {
   break-before: page;
 }
 
-/* FIX 1 (v3): Chapter divider must always start on a fresh page and fill it
-   completely. We override .page padding to zero and set an explicit height
-   that matches the A4 content area (297mm - 20mm margins = 277mm). */
+/* Chapter divider — full-bleed dark background. @page margins create
+   14mm strips at top and bottom of every page; for divider pages we
+   want the dark background to fill those strips too. The @top-center
+   and @bottom-center boxes are parchment-painted globally though, so
+   the divider page will have a parchment strip top + bottom by default.
+   Acceptable visual: dark page with a thin parchment frame top/bottom. */
 .chapter-divider-page {
   break-before: page;
-  padding: 0 !important;
-  margin: 0 !important;
-  height: 277mm;
-  min-height: 277mm;
+  height: 269mm; /* A4 297mm - 14mm top - 14mm bottom */
+  min-height: 269mm;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,10 +135,13 @@ body {
   print-color-adjust: exact;
   background: var(--chapter-divider-bg);
   background-color: var(--chapter-divider-bg);
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .recipe-page {
   break-before: page;
+  padding-top: 6mm;
 }
 
 /* ==========================================================================
@@ -161,7 +187,7 @@ body {
 
 .dedication-page {
   text-align: center;
-  padding-top: 20mm;
+  padding-top: 10mm;
 }
 
 .dedication-ornament {
@@ -245,7 +271,6 @@ body {
 
 .toc-page {
   text-align: center;
-  padding-top: 8mm;
 }
 
 .toc-title {
@@ -283,14 +308,11 @@ body {
   flex-shrink: 0;
 }
 
-.toc-chapter-row.accent-ink .toc-chapter-name    { color: #2d1f14; }
-.toc-chapter-row.accent-olive .toc-chapter-name  { color: #6b7f4a; }
+.toc-chapter-row.accent-ink .toc-chapter-name        { color: #2d1f14; }
+.toc-chapter-row.accent-olive .toc-chapter-name      { color: #6b7f4a; }
 .toc-chapter-row.accent-terracotta .toc-chapter-name { color: #c4703f; }
 
-/* No dots on chapter row */
-.toc-chapter-row .toc-dots {
-  display: none;
-}
+.toc-chapter-row .toc-dots { display: none; }
 
 .toc-recipe-row {
   display: flex;
@@ -299,10 +321,7 @@ body {
   padding: 2pt 0 2pt 14pt;
 }
 
-/* Hide Liquid-rendered bullet character; use CSS ::before instead */
-.toc-recipe-bullet {
-  display: none;
-}
+.toc-recipe-bullet { display: none; }
 
 .toc-recipe-row::before {
   content: "";
@@ -365,7 +384,7 @@ body {
 
 .chapter-divider-inner {
   text-align: center;
-  padding: 20mm;
+  padding: 30mm 25mm;
   width: 100%;
 }
 
@@ -860,12 +879,6 @@ body {
 
 /* ==========================================================================
    RECIPE FOOTER
-
-   v4 change: removed break-before: avoid from .recipe-footer .ornament-rule.
-   Previously this caused Chromium to insert a forced page break mid-section
-   (e.g. mid Final Thoughts) to keep the last paragraph attached to the
-   footer ornament rule — producing an ugly content gap. Footer now accepts
-   its position naturally; if it orphans to a new page, that is acceptable.
    ========================================================================== */
 
 .recipe-footer {
@@ -875,10 +888,7 @@ body {
   break-inside: avoid;
 }
 
-/* break-before removed — no longer forcing content gaps to keep footer attached */
-.recipe-footer .ornament-rule {
-  /* intentionally empty — footer accepts natural page position */
-}
+.recipe-footer .ornament-rule {}
 
 .footer-brand {
   display: flex;
@@ -891,10 +901,7 @@ body {
 
 .footer-qr { flex-shrink: 0; }
 
-/* Recipe footer logo hidden — already present on editorial pages */
-.recipe-footer .footer-logo {
-  display: none;
-}
+.recipe-footer .footer-logo { display: none; }
 
 .footer-logo {
   flex-shrink: 0;
