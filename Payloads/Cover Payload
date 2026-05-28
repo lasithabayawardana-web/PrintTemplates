@@ -1,11 +1,11 @@
 {
-  "cookbook_title": "Lilani's Family Cookbook",
-  "cookbook_subtitle": null,
+  "cookbook_title": "Lilani's Family Recipes V4",
+  "cookbook_subtitle": "subtitle - my favorite recipes",
   "author_name": "Lilani Abeygunawardane",
   "cover_style": "classic",
   "style_hint": "Serif typography (Cormorant / Playfair). Warm cream background (#f5ecd9). Ornamental rule under title.",
   "cover_layout": "photo_full_with_overlay",
-  "front_cover_photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/brand-assets/cookbook-covers/front/farmhouse-feast.jpg?width=2200&height=3000&resize=contain&quality=88",
+  "front_cover_photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/recipe-photos/969f8a45-371b-49ed-bdb6-15b6b1baa9f1/cookbooks/67bac885-3732-4ed7-9986-acfaaeb95f69/ai-cover-front-1779865189633.png?width=2200&height=3000&resize=contain&quality=88",
   "title_block": {
     "position": "centered_overlay",
     "overlay_opacity": 0.45,
@@ -13,12 +13,12 @@
     "text_colour": "#ffffff"
   },
   "back_cover": {
-    "photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/brand-assets/cookbook-covers/back/wooden-board.jpg?width=2200&height=3000&resize=contain&quality=88",
-    "blurb": "It is such a great pleasure that I am able to pass down my recipes to my next generations.  I hope these are enjoyed by everyone over the years!",
+    "photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/brand-assets/cookbook-covers/back/copper-pots.jpg?width=2200&height=3000&resize=contain&quality=88",
+    "blurb": "Hope you all enjoy for generations to come!",
     "blurb_source": "custom",
     "author_name": "Lilani Abeygunawardane",
-    "cookbook_title": "Lilani's Family Cookbook",
-    "recipe_count": 15,
+    "cookbook_title": "Lilani's Family Recipes V4",
+    "recipe_count": 8,
     "chapter_count": 3,
     "footer_text": "Made with TheFamilyTable.com.au",
     "title_block": {
@@ -28,10 +28,10 @@
       "text_colour": "#ffffff"
     }
   },
-  "back_cover_photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/brand-assets/cookbook-covers/back/wooden-board.jpg?width=2200&height=3000&resize=contain&quality=88",
-  "back_cover_blurb": "It is such a great pleasure that I am able to pass down my recipes to my next generations.  I hope these are enjoyed by everyone over the years!",
-  "spine_width_mm": 9.8,
-  "page_count": 54,
+  "back_cover_photo_url": "https://nldppctlsbazaleojhyc.supabase.co/storage/v1/render/image/public/brand-assets/cookbook-covers/back/copper-pots.jpg?width=2200&height=3000&resize=contain&quality=88",
+  "back_cover_blurb": "Hope you all enjoy for generations to come!",
+  "spine_width_mm": 6.756,
+  "page_count": 34,
   "front_width_mm": 210,
   "back_width_mm": 210,
   "height_mm": 297,
