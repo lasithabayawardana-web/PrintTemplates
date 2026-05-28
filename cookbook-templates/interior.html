@@ -186,10 +186,7 @@
       {% assign ch_accent = entry.accent_colour | default: "classic" %}
       <div class="toc-chapter-row accent-{{ ch_accent }}">
         <span class="toc-chapter-name">{{ entry.chapter_name }}</span>
-        {% if entry.page %}
-        <span class="toc-dots"></span>
-        <span class="toc-page-num">{{ entry.page }}</span>
-        {% endif %}
+
       </div>
       {% if entry.recipes %}
       {% if entry.recipes != empty %}
@@ -197,10 +194,7 @@
       <div class="toc-recipe-row">
         <span class="toc-recipe-bullet" aria-hidden="true">◦</span>
         <span class="toc-recipe-name">{{ recipe.title }}</span>
-        {% if recipe.page %}
-        <span class="toc-dots"></span>
-        <span class="toc-page-num">{{ recipe.page }}</span>
-        {% endif %}
+
       </div>
       {% endfor %}
       {% endif %}
