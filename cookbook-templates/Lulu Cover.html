@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ cookbook_title | default: "Family Cookbook" }} — Wraparound Cover</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+
+/* ============================================================
+  LULU WRAPAROUND COVER TEMPLATE
+  
+  DOCUMENT GEOMETRY (all in mm):
+    Trim:    A4 portrait = 210 x 297mm
+    Bleed:   3mm on all four outer edges (Lulu requirement — unlike
+             Prodigi, bleed must be baked into the PDF dimensions)
+    Spine:   spine_width_mm passed from Edge Function
+             Formula: page_count / 444 * 25.4
+  
+  Total canvas width  = 3 + 210 + spine_width_mm + 210 + 3
+  Total canvas height = 3 + 297 + 3 = 303mm
+  
+  Zone layout (left to right):
+    [3mm bleed] [210mm back] [spine_width_mm spine] [210mm front] [3mm bleed]
+  
+  Liquid computes all widths from spine_width_mm.
+  Content safe zone: 10mm inset from each trim edge
+  (so 13mm from the canvas left/right outer edges).
+  
+  PDFMonkey Liquid quirks observed in this codebase:
+  - | plus: returns strings — avoid >= comparisons
+  - Use -webkit-print-color-adjust: exact on all coloured elements
+  - @page margin: 0 always; internal padding for safe zones
+  - Liquid only processed in HTML file, not in linked CSS
+  ============================================================ */
+
+/* ============================================================
+  COVER STYLE TOKENS
+  Mirrors the Prodigi cover.html token system exactly.
+  cover_style: classic | modern | minimal
+  ============================================================ */
+
+{% if cover_style == "modern" %}
+:root {
+  --body-text:      #1a1a1a;
+  --title-font:     'Playfair Display', serif;
+  --accent-font:    'Playfair Display', serif;
+  --body-font:      'Lora', serif;
+  --style-bg:       #f0ece0;
+  --rule-colour:    #1a1a1a;
+}
+{% elsif cover_style == "minimal" %}
+:root {
+  --body-text:      #111111;
+  --title-font:     'Lora', serif;
+  --accent-font:    'Lora', serif;
+  --body-font:      'Lora', serif;
+  --style-bg:       #fafafa;
+  --rule-colour:    #111111;
+}
+{% else %}
+/* classic (default) */
+:root {
+  --body-text:      #2d1f14;
+  --title-font:     'Dancing Script', cursive;
+  --accent-font:    'Playfair Display', serif;
+  --body-font:      'Lora', serif;
+  --style-bg:       #f5ecd9;
+  --rule-colour:    #6b7f4a;
+}
+{% endif %}
+
+/* ============================================================
+  COMPUTED GEOMETRY — all derived from spine_width_mm
+  We use CSS custom properties set via Liquid inline style
+  on the .wraparound element (see body tag below).
+  ============================================================ */
+
+@page {
+  /* Page size = full canvas including bleed.
+     Width  = 3 + 210 + spine + 210 + 3 = 426 + spine_width_mm
+     Height = 3 + 297 + 3 = 303mm
+     Chromium requires the @page size to be a literal value,
+     so we set it inline on the html element instead (see below).
+     Margin 0 always for bleed-to-edge rendering. */
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ============================================================
+  WRAPAROUND CANVAS
+  Single page — width and height set via inline style (Liquid).
+  Everything is absolutely positioned within this container.
+  ============================================================ */
+
+.wraparound {
+  position: relative;
+  overflow: hidden;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ============================================================
+  ZONE CONTAINERS
+  Three absolutely positioned zones:
+    .zone-back   — left panel (back cover)
+    .zone-spine  — centre strip
+    .zone-front  — right panel (front cover)
+  Heights always 303mm (full canvas incl. bleed).
+  ============================================================ */
+
+.zone-back,
+.zone-spine,
+.zone-front {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Widths and left offsets set via inline style (Liquid) on each zone */
+
+/* ============================================================
+  BACKGROUND / PHOTO LAYERS (per zone)
+  ============================================================ */
+
+.zone-photo {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.zone-bg-solid {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--style-bg);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ============================================================
+  OVERLAY LAYERS
+  ============================================================ */
+
+.overlay-full {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.overlay-band-bottom {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.overlay-title-strip {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 68mm;
+  transform: translateY(-50%);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ============================================================
+  CONTENT LAYERS
+  Safe zone: 10mm from trim edge on back and front.
+  On bleed edges (left of back, right of front): 13mm padding
+  to compensate for the 3mm bleed added to canvas.
+  On spine-adjacent edges: 5mm padding minimum.
+  ============================================================ */
+
+.back-content {
+  position: absolute;
+  top: 3mm; left: 3mm;   /* bleed offset */
+  width: calc(100% - 3mm);
+  height: calc(100% - 6mm);
+  padding: 10mm 5mm 10mm 10mm;  /* top | spine-side | bottom | bleed-side */
+  display: flex;
+  flex-direction: column;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.front-content {
+  position: absolute;
+  top: 3mm; left: 0;
+  width: calc(100% - 3mm);  /* 3mm bleed on right */
+  height: calc(100% - 6mm);
+  padding: 10mm 10mm 10mm 5mm;  /* top | bleed-side | bottom | spine-side */
+  display: flex;
+  flex-direction: column;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.spine-content {
+  position: absolute;
+  top: 3mm;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 6mm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ============================================================
+  DECORATIVE ORNAMENT RULE — mirrors interior + cover exactly
+  ============================================================ */
+
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+  margin: 6pt 0;
+}
+
+.rule-line {
+  flex: 1;
+  height: 1.5pt;
+  background: var(--rule-colour);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.rule-star {
+  display: inline-block;
+  width: 7pt; height: 7pt;
+  flex: 0 0 7pt;
+  background: var(--rule-colour);
+  transform: rotate(45deg);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.ornament-rule.light .rule-line { background: rgba(250, 246, 240, 0.6); }
+.ornament-rule.light .rule-star { background: rgba(250, 246, 240, 0.8); }
+
+/* ============================================================
+  FRONT COVER TYPOGRAPHY + LAYOUT
+  ============================================================ */
+
+/* photo_full_with_overlay */
+.front-layout-overlay {
+  justify-content: space-between;
+}
+
+.title-area-overlay {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 4mm;
+}
+
+.author-area-overlay {
+  flex: 0 0 auto;
+  text-align: center;
+  padding-bottom: 6mm;
+}
+
+/* photo_top */
+.front-layout-photo-top {
+  justify-content: flex-start;
+}
+
+.photo-top-frame {
+  flex: 0 0 56%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 3pt;
+  margin-bottom: 5mm;
+}
+
+.photo-top-frame img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.title-area-below-photo {
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 2mm 0;
+}
+
+.author-area-below-photo {
+  flex: 0 0 auto;
+  text-align: center;
+  padding-bottom: 6mm;
+}
+
+/* template (typographic) */
+.front-layout-template {
+  justify-content: space-between;
+}
+
+.title-area-template {
+  flex: 0 0 auto;
+  text-align: center;
+  padding-top: 8mm;
+}
+
+.photo-card-area {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4mm 0;
+}
+
+.photo-card {
+  display: block;
+  max-width: 130mm;
+  max-height: 110mm;
+  overflow: hidden;
+  border-radius: 3pt;
+  border: 1pt solid rgba(180, 160, 128, 0.5);
+}
+
+.photo-card img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.author-area-template {
+  flex: 0 0 auto;
+  text-align: center;
+  padding-bottom: 6mm;
+}
+
+/* ============================================================
+  SHARED TYPOGRAPHY CLASSES
+  ============================================================ */
+
+.cover-title {
+  font-family: var(--title-font);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 4pt;
+}
+
+.cover-subtitle {
+  font-family: var(--accent-font);
+  font-style: italic;
+  font-size: 11pt;
+  margin-top: 4pt;
+  margin-bottom: 6pt;
+}
+
+.cover-author {
+  font-family: var(--accent-font);
+  letter-spacing: 1pt;
+}
+
+/* ============================================================
+  BACK COVER CONTENT
+  ============================================================ */
+
+.back-text-area {
+  margin-top: auto;
+  padding: 6mm 4mm 6mm;
+  text-align: center;
+}
+
+.back-blurb {
+  font-family: var(--body-font);
+  font-style: italic;
+  font-size: 13pt;
+  line-height: 1.65;
+  margin-bottom: 8pt;
+}
+
+.back-stats {
+  font-family: var(--accent-font);
+  font-size: 9pt;
+  letter-spacing: 1.5pt;
+  text-transform: uppercase;
+  margin-bottom: 6pt;
+  opacity: 0.85;
+}
+
+.back-author {
+  font-family: var(--accent-font);
+  font-size: 10pt;
+  margin-top: 4pt;
+}
+
+.back-footer {
+  font-family: var(--accent-font);
+  font-size: 8pt;
+  letter-spacing: 1pt;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 10pt;
+}
+
+.back-logo {
+  display: block;
+  height: 40pt;
+  width: auto;
+  margin: 8pt auto 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ============================================================
+  SPINE TEXT
+  Rotated 90deg — reads bottom-to-top (standard book convention).
+  Font size capped small; spine may be as narrow as 2mm.
+  Only renders title + author if spine_width_mm >= 6.
+  ============================================================ */
+
+.spine-title {
+  font-family: var(--title-font);
+  font-weight: 700;
+  font-size: 8pt;
+  letter-spacing: 0.5pt;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  line-height: 1;
+}
+
+.spine-author {
+  font-family: var(--accent-font);
+  font-size: 6.5pt;
+  letter-spacing: 0.5pt;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  margin-top: 4pt;
+  opacity: 0.85;
+}
+
+/* ============================================================
+  BLEED GUIDE ZONES (visible in debug only)
+  Not rendered in production — commented out
+  ============================================================ */
+/*
+.bleed-guide-left  { position: absolute; top: 0; left: 0;   width: 3mm; height: 100%; background: rgba(255,0,0,0.15); }
+.bleed-guide-right { position: absolute; top: 0; right: 0;  width: 3mm; height: 100%; background: rgba(255,0,0,0.15); }
+.bleed-guide-top   { position: absolute; top: 0; left: 0;   width: 100%; height: 3mm; background: rgba(255,0,0,0.15); }
+.bleed-guide-bot   { position: absolute; bottom: 0; left: 0; width: 100%; height: 3mm; background: rgba(255,0,0,0.15); }
+*/
+
+</style>
+</head>
+
+{%- comment -%}
+============================================================
+GEOMETRY CALCULATIONS
+
+spine_width_mm and page_count come from the Edge Function payload.
+All other widths derived here.
+
+Canvas total width  = 3 + 210 + spine + 210 + 3 = 426 + spine
+Canvas total height = 303mm (= 297 + 6mm bleed top+bottom)
+
+Back zone:  left=0,          width=213mm (210 trim + 3mm left bleed)
+Spine zone: left=213mm,      width=spine_width_mm
+Front zone: left=213+spine,  width=213mm (210 trim + 3mm right bleed)
+============================================================
+{%- endcomment -%}
+
+{% assign bleed = 3 %}
+{% assign trim_w = 210 %}
+{% assign trim_h = 297 %}
+{% assign spine  = spine_width_mm | default: 5 %}
+
+{% assign canvas_w = trim_w | times: 2 %}
+{% assign canvas_w = canvas_w | plus: spine %}
+{% assign canvas_w = canvas_w | plus: bleed %}
+{% assign canvas_w = canvas_w | plus: bleed %}
+
+{% assign canvas_h = trim_h | plus: bleed %}
+{% assign canvas_h = canvas_h | plus: bleed %}
+
+{% assign back_w   = trim_w | plus: bleed %}
+{% assign spine_left = back_w %}
+{% assign front_left = spine_left | plus: spine %}
+{% assign front_w  = trim_w | plus: bleed %}
+
+{%- comment %} Resolve effective front cover layout {%- endcomment %}
+{% assign effective_layout = cover_layout | default: "centred_card" %}
+{% if front_cover_photo_url == blank %}
+  {% assign effective_layout = "centred_card" %}
+{% endif %}
+
+{%- comment %} Resolve front cover text colour {%- endcomment %}
+{% assign front_txt = title_block.text_colour | default: "#ffffff" %}
+{% if effective_layout != "photo_full_with_overlay" %}
+  {% assign front_txt = title_block.text_colour | default: "#2d1f14" %}
+{% endif %}
+
+{%- comment %} Resolve back cover values {%- endcomment %}
+{% assign bc_photo     = back_cover.photo_url %}
+{% assign bc_blurb     = back_cover.blurb %}
+{% assign bc_enabled   = back_cover.blurb_enabled %}
+{% assign bc_source    = back_cover.blurb_source | default: "none" %}
+{% assign bc_author    = back_cover.author_name | default: author_name %}
+{% assign bc_recipes   = back_cover.recipe_count %}
+{% assign bc_chapters  = back_cover.chapter_count %}
+{% assign bc_footer    = back_cover.footer_text | default: "Made with TheFamilyTable.com.au" %}
+{% assign bc_pos       = back_cover.title_block.position | default: "none" %}
+{% assign bc_opacity   = back_cover.title_block.overlay_opacity | default: 0.45 %}
+{% assign bc_ov_colour = back_cover.title_block.overlay_colour | default: "#000000" %}
+{% assign bc_txt       = back_cover.title_block.text_colour | default: "#ffffff" %}
+
+{% assign render_back_overlay = false %}
+{% if bc_pos == "bottom_overlay" %}
+  {% if bc_enabled %}
+    {% if bc_source != "none" %}
+      {% assign render_back_overlay = true %}
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{%- comment %} Spine text visibility: only if spine >= 6mm {%- endcomment %}
+{% assign show_spine_text = false %}
+{% assign spine_int = spine_width_mm | round %}
+{% if spine_int == 6 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 7 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 8 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 9 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 10 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 11 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 12 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 13 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 14 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 15 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 16 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 17 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 18 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 19 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 20 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 21 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 22 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 23 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 24 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 25 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 26 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 27 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 28 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 29 %}{% assign show_spine_text = true %}{% endif %}
+{% if spine_int == 30 %}{% assign show_spine_text = true %}{% endif %}
+
+<body>
+
+<!--
+  CANVAS: single element, full wraparound spread.
+  @page size is set here as inline style on html because Chromium
+  requires a literal value — Liquid cannot inject into @page {} blocks.
+  PDFMonkey will render this as a single-page PDF of the canvas dimensions.
+-->
+
+<html style="
+  width: {{ canvas_w }}mm;
+  height: {{ canvas_h }}mm;
+">
+
+<style>
+  @page {
+    size: {{ canvas_w }}mm {{ canvas_h }}mm;
+    margin: 0;
+  }
+  body {
+    width: {{ canvas_w }}mm;
+    height: {{ canvas_h }}mm;
+  }
+</style>
+
+<div class="wraparound"
+     style="width: {{ canvas_w }}mm; height: {{ canvas_h }}mm;">
+
+
+  <!-- ============================================================
+       BACK COVER ZONE
+       ============================================================ -->
+
+  <div class="zone-back"
+       style="left: 0; width: {{ back_w }}mm;">
+
+    {%- comment %} Background layer {%- endcomment %}
+    {% if bc_photo != blank %}
+      <img src="{{ bc_photo }}" alt="Back cover" class="zone-photo">
+    {% else %}
+      <div class="zone-bg-solid"></div>
+    {% endif %}
+
+    {%- comment %} Bottom overlay band {%- endcomment %}
+    {% if render_back_overlay %}
+      <div class="overlay-band-bottom"
+           style="background-color: {{ bc_ov_colour }}; opacity: {{ bc_opacity }}; height: 88mm;">
+      </div>
+    {% endif %}
+
+    {%- comment %} Back content {%- endcomment %}
+    <div class="back-content">
+
+      <div class="back-text-area">
+
+        <div class="ornament-rule light">
+          <div class="rule-line"></div>
+          <span class="rule-star"></span>
+          <div class="rule-line"></div>
+        </div>
+
+        {% if bc_blurb != blank %}
+          <p class="back-blurb" style="color: {{ bc_txt }};">{{ bc_blurb }}</p>
+        {% endif %}
+
+        {% assign show_stats = false %}
+        {% if bc_recipes != blank %}
+          {% if bc_recipes != 0 %}
+            {% assign show_stats = true %}
+          {% endif %}
+        {% endif %}
+
+        {% if show_stats %}
+          {% assign stats_str = bc_recipes | append: " recipes" %}
+          {% if bc_chapters != blank %}
+            {% if bc_chapters != 0 %}
+              {% assign stats_str = stats_str | append: " across " | append: bc_chapters | append: " chapters" %}
+            {% endif %}
+          {% endif %}
+          <p class="back-stats" style="color: {{ bc_txt }};">{{ stats_str }}</p>
+        {% endif %}
+
+        {% if bc_author != blank %}
+          <p class="back-author" style="color: {{ bc_txt }};">{{ bc_author }}</p>
+        {% endif %}
+
+        <div class="ornament-rule light">
+          <div class="rule-line"></div>
+          <span class="rule-star"></span>
+          <div class="rule-line"></div>
+        </div>
+
+        <p class="back-footer" style="color: {{ bc_txt }};">{{ bc_footer }}</p>
+
+        <div style="display: inline-block; background: rgba(255,255,255,0.75); border-radius: 6pt; padding: 5pt 10pt; margin: 8pt auto 0;">
+          <img src="https://nldppctlsbazaleojhyc.supabase.co/storage/v1/object/public/brand-assets/final-logo.svg"
+               alt="The Family Table"
+               class="back-logo"
+               style="margin: 0; display: block;">
+        </div>
+
+      </div>
+    </div>
+
+  </div>{%- comment -%} end .zone-back {%- endcomment -%}
+
+
+  <!-- ============================================================
+       SPINE ZONE
+       ============================================================ -->
+
+  <div class="zone-spine"
+       style="left: {{ spine_left }}mm; width: {{ spine }}mm; background-color: var(--style-bg);">
+
+    {%- comment -%}
+    Spine colour: use the back cover image dominant colour if available,
+    otherwise fall back to the style token background.
+    For now we use a solid fill from the style token. This could be
+    enhanced later with a user-selectable spine colour in the payload.
+    {%- endcomment -%}
+
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                background-color: var(--style-bg);
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+    </div>
+
+    {% if show_spine_text %}
+    <div class="spine-content">
+      <span class="spine-title"
+            style="color: var(--body-text);">{{ cookbook_title }}</span>
+      {% if author_name != blank %}
+        <span class="spine-author"
+              style="color: var(--body-text);">{{ author_name }}</span>
+      {% endif %}
+    </div>
+    {% endif %}
+
+  </div>{%- comment -%} end .zone-spine {%- endcomment -%}
+
+
+  <!-- ============================================================
+       FRONT COVER ZONE
+       ============================================================ -->
+
+  <div class="zone-front"
+       style="left: {{ front_left }}mm; width: {{ front_w }}mm;">
+
+    {%- comment %} Background / photo layer {%- endcomment %}
+    {% if effective_layout == "photo_full_with_overlay" %}
+      <img src="{{ front_cover_photo_url }}" alt="{{ cookbook_title }}" class="zone-photo">
+    {% else %}
+      <div class="zone-bg-solid"></div>
+    {% endif %}
+
+    {%- comment %} Title strip overlay (photo_full_with_overlay only) {%- endcomment %}
+    {% if effective_layout == "photo_full_with_overlay" %}
+      {% assign ov_opacity = title_block.overlay_opacity | default: 0.45 %}
+      {% assign ov_colour  = title_block.overlay_colour  | default: "#1a1a1a" %}
+      <div class="overlay-title-strip"
+           style="background-color: {{ ov_colour }}; opacity: {{ ov_opacity }};">
+      </div>
+    {% endif %}
+
+    {%- comment %} Front content {%- endcomment %}
+
+    {% if effective_layout == "photo_full_with_overlay" %}
+
+      <div class="front-content front-layout-overlay"
+           style="color: {{ front_txt }};">
+
+        <div style="flex: 1 1 auto;"></div>
+
+        <div class="title-area-overlay">
+          <div>
+            <div class="ornament-rule light">
+              <div class="rule-line"></div>
+              <span class="rule-star"></span>
+              <div class="rule-line"></div>
+            </div>
+            <h1 class="cover-title"
+                style="font-size: 38pt; color: {{ front_txt }};">{{ cookbook_title }}</h1>
+            {% if cookbook_subtitle != blank %}
+              <p class="cover-subtitle"
+                 style="color: {{ front_txt }};">{{ cookbook_subtitle }}</p>
+            {% endif %}
+            <div class="ornament-rule light">
+              <div class="rule-line"></div>
+              <span class="rule-star"></span>
+              <div class="rule-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex: 1 1 auto;"></div>
+
+        {% if author_name != blank %}
+          <div class="author-area-overlay">
+            <p class="cover-author"
+               style="font-size: 11pt; letter-spacing: 2pt; text-transform: uppercase; color: {{ front_txt }};">{{ author_name }}</p>
+          </div>
+        {% endif %}
+
+      </div>
+
+    {% elsif effective_layout == "photo_top" %}
+
+      {% assign front_txt = title_block.text_colour | default: "#2d1f14" %}
+      <div class="front-content front-layout-photo-top"
+           style="color: {{ front_txt }};">
+
+        <div class="photo-top-frame">
+          <img src="{{ front_cover_photo_url }}" alt="{{ cookbook_title }}">
+        </div>
+
+        <div class="title-area-below-photo">
+          <div class="ornament-rule">
+            <div class="rule-line"></div>
+            <span class="rule-star"></span>
+            <div class="rule-line"></div>
+          </div>
+          <h1 class="cover-title"
+              style="font-size: 28pt; color: {{ front_txt }};">{{ cookbook_title }}</h1>
+          {% if cookbook_subtitle != blank %}
+            <p class="cover-subtitle"
+               style="color: {{ front_txt }};">{{ cookbook_subtitle }}</p>
+          {% endif %}
+          <div class="ornament-rule">
+            <div class="rule-line"></div>
+            <span class="rule-star"></span>
+            <div class="rule-line"></div>
+          </div>
+        </div>
+
+        {% if author_name != blank %}
+          <div class="author-area-below-photo">
+            <p class="cover-author"
+               style="font-size: 12pt; color: {{ front_txt }};">{{ author_name }}</p>
+          </div>
+        {% endif %}
+
+      </div>
+
+    {% else %}
+
+      {%- comment %} template / typographic fallback {%- endcomment %}
+      {% assign front_txt = title_block.text_colour | default: "#2d1f14" %}
+      <div class="front-content front-layout-template"
+           style="color: {{ front_txt }};">
+
+        <div class="title-area-template">
+          <div class="ornament-rule">
+            <div class="rule-line"></div>
+            <span class="rule-star"></span>
+            <div class="rule-line"></div>
+          </div>
+          <h1 class="cover-title"
+              style="font-size: 38pt; color: {{ front_txt }};">{{ cookbook_title }}</h1>
+          {% if cookbook_subtitle != blank %}
+            <p class="cover-subtitle"
+               style="color: {{ front_txt }};">{{ cookbook_subtitle }}</p>
+          {% endif %}
+          <div class="ornament-rule">
+            <div class="rule-line"></div>
+            <span class="rule-star"></span>
+            <div class="rule-line"></div>
+          </div>
+        </div>
+
+        {% if front_cover_photo_url != blank %}
+          <div class="photo-card-area">
+            <div class="photo-card">
+              <img src="{{ front_cover_photo_url }}" alt="{{ cookbook_title }}">
+            </div>
+          </div>
+        {% endif %}
+
+        {% if author_name != blank %}
+          <div class="author-area-template">
+            <p class="cover-author"
+               style="font-size: 12pt; color: {{ front_txt }};">{{ author_name }}</p>
+          </div>
+        {% endif %}
+
+      </div>
+
+    {% endif %}
+
+  </div>{%- comment -%} end .zone-front {%- endcomment -%}
+
+</div>{%- comment -%} end .wraparound {%- endcomment -%}
+
+</body>
+</html>
