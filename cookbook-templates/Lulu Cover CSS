@@ -1,0 +1,316 @@
+/* ==========================================================================
+   COOKBOOK COVER — cookbook-cover.css v1
+
+   This file is loaded as an external stylesheet in PDFMonkey.
+   All Liquid token logic lives in cookbook-cover.html <style> block
+   (PDFMonkey processes Liquid only inside the HTML file).
+
+   This CSS handles print-specific rules and structural layout that
+   don't depend on Liquid variables.
+   ========================================================================== */
+
+/* ==========================================================================
+   PRINT BASELINE
+   ========================================================================== */
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ==========================================================================
+   COVER PAGE
+   Two pages: page 1 = front, page 2 = back.
+   break-after: page on .cover-page forces the second page break.
+   ========================================================================== */
+
+.cover-page {
+  width: 210mm;
+  height: 297mm;
+  position: relative;
+  overflow: hidden;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  break-after: page;
+  page-break-after: always; /* legacy fallback */
+}
+
+/* ==========================================================================
+   BACKGROUND LAYERS
+   ========================================================================== */
+
+.cover-photo {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.cover-bg-typographic {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ==========================================================================
+   OVERLAY LAYERS
+   ========================================================================== */
+
+.overlay-full,
+.overlay-band-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.overlay-full {
+  top: 0;
+  height: 100%;
+}
+
+.overlay-band-bottom {
+  bottom: 0;
+  /* height set inline via Liquid */
+}
+
+/* Centred horizontal strip for photo_full_with_overlay front cover title.
+   Vertically centred at 35% from top, height sized to wrap title content. */
+.overlay-title-strip {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 68mm;
+  transform: translateY(-50%);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ==========================================================================
+   CONTENT LAYER
+   12mm padding keeps all content inside Prodigi's 10mm safe zone.
+   ========================================================================== */
+
+.cover-content {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  padding: 12mm 14mm;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   ORNAMENT RULE — mirrors interior template exactly
+   ========================================================================== */
+
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+  margin: 6pt 0;
+}
+
+.rule-line {
+  flex: 1;
+  height: 1.5pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.rule-star {
+  display: inline-block;
+  width: 7pt; height: 7pt;
+  flex: 0 0 7pt;
+  transform: rotate(45deg);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY BASE
+   ========================================================================== */
+
+.cover-title {
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 4pt;
+}
+
+.cover-subtitle {
+  font-style: italic;
+  font-size: 11pt;
+  margin-top: 4pt;
+  margin-bottom: 6pt;
+}
+
+.cover-author {
+  letter-spacing: 1pt;
+}
+
+/* ==========================================================================
+   FRONT LAYOUT — photo_full_with_overlay
+   ========================================================================== */
+
+.front-layout-overlay {
+  justify-content: space-between;
+}
+
+.title-area-overlay {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 8mm;
+}
+
+.author-area-overlay {
+  flex: 0 0 auto;
+  text-align: center;
+  padding-bottom: 8mm;
+}
+
+/* ==========================================================================
+   FRONT LAYOUT — photo_top
+   ========================================================================== */
+
+.front-layout-photo-top {
+  justify-content: flex-start;
+}
+
+.photo-top-frame {
+  flex: 0 0 56%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 3pt;
+  margin-bottom: 5mm;
+}
+
+.photo-top-frame img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.title-area-below-photo {
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 2mm 0;
+}
+
+.author-area-below-photo {
+  flex: 0 0 auto;
+  text-align: center;
+  padding-bottom: 6mm;
+}
+
+/* ==========================================================================
+   FRONT LAYOUT — template (typographic / no full-bleed photo)
+   ========================================================================== */
+
+.front-layout-template {
+  justify-content: space-between;
+}
+
+.title-area-template {
+  flex: 0 0 auto;
+  text-align: center;
+  padding-top: 10mm;
+}
+
+.photo-card-area {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4mm 0;
+}
+
+.photo-card {
+  display: block;
+  max-width: 138mm;
+  max-height: 110mm;
+  overflow: hidden;
+  border-radius: 3pt;
+  border: 1pt solid rgba(180, 160, 128, 0.5);
+}
+
+.photo-card img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.author-area-template {
+  flex: 0 0 auto;
+  text-align: center;
+  padding-bottom: 8mm;
+}
+
+/* ==========================================================================
+   BACK COVER
+   ========================================================================== */
+
+.back-text-area {
+  margin-top: auto;
+  padding: 8mm 6mm 8mm;
+  text-align: center;
+}
+
+.back-blurb {
+  font-style: italic;
+  font-size: 13pt;
+  line-height: 1.65;
+  margin-bottom: 8pt;
+}
+
+.back-stats {
+  font-size: 9pt;
+  letter-spacing: 1.5pt;
+  text-transform: uppercase;
+  margin-bottom: 6pt;
+  opacity: 0.85;
+}
+
+.back-author {
+  font-size: 10pt;
+  margin-top: 4pt;
+}
+
+.back-footer {
+  font-size: 8pt;
+  letter-spacing: 1pt;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 10pt;
+}
+
+.back-logo {
+  display: block;
+  height: 40pt;
+  width: auto;
+  margin: 8pt auto 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
